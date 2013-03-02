@@ -1,34 +1,59 @@
+require "lib/hardoncollider"
+require "lib/middleclass"
+require "player"
+
 function love.load()
-	-- Load content
-end
-
-function love.mousepressed(x, y, button)
-	-- Mouse button pressed
-end
-
-function love.mousereleased(x, y, button)
-	-- Mouse button released
+	player = Player:new()
 end
 
 function love.keypressed(key, unicode)
 	if key == "escape" then
 		love.event.push("quit")
 	end
+	
+	if key == "left" then
+		player.leftPressed = true
+	end
+	
+	if key == "right" then
+		player.rightPressed = true
+	end
+	
+	if key == "up" then
+		player.upPressed = true
+	end
+	
+	if key == "down" then
+		player.downPressed = true
+	end
 end
 
 function love.keyreleased(key, unicode)
-	-- Key released
+	if key == "left" then
+		player.leftPressed = false
+	end
+	
+	if key == "right" then
+		player.rightPressed = false
+	end
+	
+	if key == "up" then
+		player.upPressed = false
+	end
+	
+	if key == "down" then
+		player.downPressed = false
+	end
 end
 
 function love.update(dt)
-	-- Update Game
-	-- dt = Delta Time. Time elapsed since last update in seconds
+	player:update(dt)
 end
 
 function love.draw()
-	-- Draw game
+	player:draw()
 end
 
 function love.quit()
-	-- Called when game is quit
+	
 end
