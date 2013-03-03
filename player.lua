@@ -2,12 +2,18 @@ Player = class("Player")
 
 PLAYER_WIDTH = 32
 PLAYER_HEIGHT = 32
-PLAYER_SPEED = 300
+PLAYER_SPEED = 200
 
 function Player:initialize()
-	self.position = { x = 100, y = 100 }
-	self.boundedBox = Collider:addRectangle(self.position.x, self.position.y, PLAYER_WIDTH, PLAYER_HEIGHT)
-	self.boundedBox.parent = self
+	self.boundedBox = {
+		x = 100,
+		y = 100,
+		width = PLAYER_WIDTH,
+		height = PLAYER_HEIGHT,
+		parent = self
+	}
+	BUMP.add(self.boundedBox)
+	
 	self.velocity = { x = 0, y = 0 }
 	
 	self.image = love.graphics.newImage("Graphic/Player.png")
@@ -21,10 +27,10 @@ end
 
 function Player:onCollision(dt, other, dx, dy)
 	if instanceOf(Wall, other) then
-		self.position.x = self.position.x + dx
-		self.position.y = self.position.y + dy
+		self.boundedBox.x = self.boundedBox.x + dx
+		self.boundedBox.y = self.boundedBox.y + dy
 		
-		self.boundedBox:moveTo(self.position.x, self.position.y)
+		print(dx .. ", " .. dy)
 	end
 end
 
@@ -72,22 +78,12 @@ function Player:updateRotation()
 end
 
 function Player:updatePosition(dt)
-	self.position.x = self.position.x + self.velocity.x * dt
-	self.boundedBox:moveTo(
-		self.position.x,
-		self.position.y
-	)
-	--Collider:update(dt)
+	self.boundedBox.x = self.boundedBox.x + self.velocity.x * dt
 	
-	self.position.y = self.position.y + self.velocity.y * dt
-	self.boundedBox:moveTo(
-		self.position.x,
-		self.position.y
-	)
-	--Collider:update(dt)
+	self.boundedBox.y = self.boundedBox.y + self.velocity.y * dt
 end
 
 function Player:draw()
-	self.boundedBox:draw("fill")
-	love.graphics.draw(self.image, self.position.x, self.position.y, self.rotation, 1, 1, PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2)
+	love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
+	love.graphics.draw(self.image, self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2, self.rotation, 1, 1, PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2)
 end

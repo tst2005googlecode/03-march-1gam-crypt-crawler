@@ -1,9 +1,14 @@
 Wall = class("Wall")
 
 function Wall:initialize(x, y, w, h)
-	self.boundedBox = Collider:addRectangle(x, y, w, h)
-	Collider:setPassive(self.boundedBox)
-	self.boundedBox.parent = self
+	self.boundedBox = {
+		x = x,
+		y = y,
+		width = w,
+		height = h,
+		parent = self
+	}
+	BUMP.add(self.boundedBox)
 	
 	self.colliding = false;
 end
@@ -23,5 +28,5 @@ function Wall:draw()
 		love.graphics.setColor(255, 0, 0)
 	end
 	
-	self.boundedBox:draw("line")
+	love.graphics.rectangle("line", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
 end
