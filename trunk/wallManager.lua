@@ -21,6 +21,12 @@ function WallManager:initialize()
 	end
 end
 
+function WallManager:update(dt)
+	for index, wall in ipairs(self.walls) do
+		wall:update(dt)
+	end
+end
+
 function WallManager:draw()
 	for index, wall in ipairs(self.walls) do
 		wall:draw()
