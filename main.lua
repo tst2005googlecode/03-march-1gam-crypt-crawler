@@ -9,16 +9,16 @@ SCREEN_HEIGHT = 600
 TILE_SIZE = 32
 
 function love.load()
-	Collider = HC(100, onCollision)
+	Collider = HC(16, onCollision)
 	
 	player = Player:new()
 	wallManager = WallManager:new()
 end
 
-function onCollision(dt, shapeA, shapeB, dx, dy)
+function onCollision(dt, shapeA, shapeB, dx, dy)	
 	if shapeA.parent and shapeB.parent then
-		shapeA.parent:onCollision(shapeB.parent, dx, dy, true)
-		shapeB.parent:onCollision(shapeA.parent, dx, dy, false)
+		shapeA.parent:onCollision(dt, shapeB.parent, dx, dy)
+		shapeB.parent:onCollision(dt, shapeA.parent, -dx, -dy)
 	end
 end
 
@@ -64,6 +64,7 @@ end
 
 function love.update(dt)
 	player:update(dt)
+	wallManager:update(dt)
 	
 	Collider:update(dt)
 end

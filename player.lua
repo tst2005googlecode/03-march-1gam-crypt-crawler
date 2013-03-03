@@ -2,7 +2,7 @@ Player = class("Player")
 
 PLAYER_WIDTH = 32
 PLAYER_HEIGHT = 32
-PLAYER_SPEED = 200
+PLAYER_SPEED = 300
 
 function Player:initialize()
 	self.position = { x = 100, y = 100 }
@@ -19,15 +19,10 @@ function Player:initialize()
 	self.downPressed = false;
 end
 
-function Player:onCollision(other, dx, dy, isFirst)
+function Player:onCollision(dt, other, dx, dy)
 	if instanceOf(Wall, other) then
-		if isFirst then
-			self.position.x = self.position.x + dx
-			self.position.y = self.position.y + dy
-		else
-			self.position.x = self.position.x - dx
-			self.position.y = self.position.y - dy
-		end
+		self.position.x = self.position.x + dx
+		self.position.y = self.position.y + dy
 		
 		self.boundedBox:moveTo(self.position.x, self.position.y)
 	end
@@ -78,12 +73,18 @@ end
 
 function Player:updatePosition(dt)
 	self.position.x = self.position.x + self.velocity.x * dt
-	self.position.y = self.position.y + self.velocity.y * dt
-	
 	self.boundedBox:moveTo(
 		self.position.x,
 		self.position.y
 	)
+	--Collider:update(dt)
+	
+	self.position.y = self.position.y + self.velocity.y * dt
+	self.boundedBox:moveTo(
+		self.position.x,
+		self.position.y
+	)
+	--Collider:update(dt)
 end
 
 function Player:draw()
