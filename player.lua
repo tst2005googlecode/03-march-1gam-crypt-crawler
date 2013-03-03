@@ -6,6 +6,8 @@ PLAYER_SPEED = 200
 
 function Player:initialize()
 	self.position = { x = 100, y = 100 }
+	self.boundedBox = Collider:addRectangle(self.position.x, self.position.y, PLAYER_WIDTH, PLAYER_HEIGHT)
+	self.boundedBox.parent = self
 	self.velocity = { x = 0, y = 0 }
 	
 	self.image = love.graphics.newImage("Graphic/Player.png")
@@ -15,6 +17,20 @@ function Player:initialize()
 	self.rightPressed = false;
 	self.upPressed = false;
 	self.downPressed = false;
+end
+
+function Player:onCollision(other, dx, dy, isFirst)
+	if instanceOf(Wall, other) then
+		if isFirst then
+			self.position.x = self.position.x + dx
+			self.position.y = self.position.y + dy
+		else
+			self.position.x = self.position.x - dx
+			self.position.y = self.position.y - dy
+		end
+		
+		self.boundedBox:moveTo(self.position.x, self.position.y)
+	end
 end
 
 function Player:update(dt)
@@ -63,8 +79,14 @@ end
 function Player:updatePosition(dt)
 	self.position.x = self.position.x + self.velocity.x * dt
 	self.position.y = self.position.y + self.velocity.y * dt
+	
+	self.boundedBox:moveTo(
+		self.position.x,
+		self.position.y
+	)
 end
 
 function Player:draw()
-	love.graphics.draw(self.image, self.position.x + PLAYER_WIDTH / 2, self.position.y + PLAYER_HEIGHT / 2, self.rotation, 1, 1, PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2)
+	self.boundedBox:draw("fill")
+	love.graphics.draw(self.image, self.position.x, self.position.y, self.rotation, 1, 1, PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2)
 end

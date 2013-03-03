@@ -1,9 +1,24 @@
-require "lib/hardoncollider"
+HC = require "lib/hardoncollider"
 require "lib/middleclass"
 require "player"
+require "wallManager"
+
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+TILE_SIZE = 32
 
 function love.load()
+	Collider = HC(100, onCollision)
+	
 	player = Player:new()
+	wallManager = WallManager:new()
+end
+
+function onCollision(dt, shapeA, shapeB, dx, dy)
+	if shapeA.parent and shapeB.parent then
+		shapeA.parent:onCollision(shapeB.parent, dx, dy, true)
+		shapeB.parent:onCollision(shapeA.parent, dx, dy, false)
+	end
 end
 
 function love.keypressed(key, unicode)
@@ -48,10 +63,14 @@ end
 
 function love.update(dt)
 	player:update(dt)
+	
+	Collider:update(dt)
 end
 
 function love.draw()
+	love.graphics.setColor(255, 255, 255)
 	player:draw()
+	wallManager:draw()
 end
 
 function love.quit()
