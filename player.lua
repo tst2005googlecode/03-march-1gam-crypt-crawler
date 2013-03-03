@@ -83,4 +83,5 @@ end
 
 function Player:draw()
 	love.graphics.draw(self.image, self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2, self.rotation, 1, 1, PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2)
+	--love.graphics.print(self.boundedBox.x .. ", " .. self.boundedBox.y, self.boundedBox.x, self.boundedBox.y)
 end

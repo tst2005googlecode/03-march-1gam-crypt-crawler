@@ -11,7 +11,7 @@ function WallManager:initialize()
 	wallFile:open('r')
 	fileContents = wallFile:read()
 	
-	local lineData = string.explode(fileContents, "\r\n")
+	local lineData = string.explode(fileContents:sub(0, string.len(fileContents) - 2), "\r\n")
 	self.height = #lineData
 	
 	for y, line in ipairs(lineData) do
@@ -24,7 +24,7 @@ function WallManager:initialize()
 		end
 	end
 	
-	print(self.height .. ", " .. self.width)
+	print(self.width .. ", " .. self.height)
 end
 
 function WallManager:update(dt)
