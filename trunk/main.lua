@@ -1,4 +1,4 @@
-HC = require "lib/hardoncollider"
+bump = require "lib/bump"
 require "lib/middleclass"
 require "lib/general"
 require "player"
@@ -9,17 +9,21 @@ SCREEN_HEIGHT = 600
 TILE_SIZE = 32
 
 function love.load()
-	Collider = HC(16, onCollision)
+	bump.initialize(32)
 	
 	player = Player:new()
 	wallManager = WallManager:new()
 end
 
-function onCollision(dt, shapeA, shapeB, dx, dy)	
+function bump.collision(shapeA, shapeB, dx, dy)
 	if shapeA.parent and shapeB.parent then
 		shapeA.parent:onCollision(dt, shapeB.parent, dx, dy)
 		shapeB.parent:onCollision(dt, shapeA.parent, -dx, -dy)
 	end
+end
+
+function bump.getBBox(item)
+	return item.x, item.y, item.width, item.height
 end
 
 function love.keypressed(key, unicode)
@@ -64,9 +68,8 @@ end
 
 function love.update(dt)
 	player:update(dt)
-	wallManager:update(dt)
 	
-	Collider:update(dt)
+	bump.collide()
 end
 
 function love.draw()
