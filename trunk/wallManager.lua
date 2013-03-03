@@ -5,10 +5,20 @@ require "wall"
 function WallManager:initialize()
 	self.walls = {}
 	
-	table.insert(self.walls, Wall:new(0, 0, SCREEN_WIDTH, TILE_SIZE)) --Top
-	table.insert(self.walls, Wall:new(0, SCREEN_HEIGHT - TILE_SIZE, SCREEN_WIDTH, TILE_SIZE)) --Bottom
-	table.insert(self.walls, Wall:new(0, 0, TILE_SIZE, SCREEN_HEIGHT)) --Left
-	table.insert(self.walls, Wall:new(SCREEN_WIDTH - TILE_SIZE, 0, TILE_SIZE, SCREEN_HEIGHT)) --Right
+	wallFile = love.filesystem.newFile("Data/Level1.csv")
+	wallFile:open('r')
+	fileContents = wallFile:read()
+	
+	local lineData = string.explode(fileContents, "\r\n")
+	
+	for y, line in ipairs(lineData) do
+		local data = string.explode(line, ",")
+		for x, value in ipairs(data) do
+			if string.find(value, "1") ~= nil then
+				table.insert(self.walls, Wall:new((x - 1) * TILE_SIZE, (y - 1) * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+			end
+		end
+	end
 end
 
 function WallManager:draw()
