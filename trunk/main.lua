@@ -70,14 +70,19 @@ end
 
 function love.update(dt)
 	player:update(dt)
+	camera:update(player.boundedBox.x, player.boundedBox.y)
 	
 	bump.collide()
 end
 
 function love.draw()
+	camera:set()
+	
 	love.graphics.setColor(255, 255, 255)
 	player:draw()
 	wallManager:draw()
+	
+	camera:unset()
 end
 
 function love.quit()
