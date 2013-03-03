@@ -2,7 +2,7 @@ Player = class("Player")
 
 PLAYER_WIDTH = 32
 PLAYER_HEIGHT = 32
-PLAYER_SPEED = 200
+PLAYER_SPEED = 300
 
 function Player:initialize()
 	self.boundedBox = {
@@ -12,7 +12,7 @@ function Player:initialize()
 		height = PLAYER_HEIGHT,
 		parent = self
 	}
-	BUMP.add(self.boundedBox)
+	bump.add(self.boundedBox)
 	
 	self.velocity = { x = 0, y = 0 }
 	
@@ -29,8 +29,6 @@ function Player:onCollision(dt, other, dx, dy)
 	if instanceOf(Wall, other) then
 		self.boundedBox.x = self.boundedBox.x + dx
 		self.boundedBox.y = self.boundedBox.y + dy
-		
-		print(dx .. ", " .. dy)
 	end
 end
 
@@ -84,6 +82,5 @@ function Player:updatePosition(dt)
 end
 
 function Player:draw()
-	love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
 	love.graphics.draw(self.image, self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2, self.rotation, 1, 1, PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2)
 end
