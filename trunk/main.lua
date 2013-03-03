@@ -3,6 +3,7 @@ require "lib/middleclass"
 require "lib/general"
 require "player"
 require "wallManager"
+require "camera"
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -13,6 +14,7 @@ function love.load()
 	
 	player = Player:new()
 	wallManager = WallManager:new()
+	camera = Camera:new(wallManager.width, wallManager.height)
 end
 
 function bump.collision(shapeA, shapeB, dx, dy)
