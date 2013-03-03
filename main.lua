@@ -1,5 +1,6 @@
 HC = require "lib/hardoncollider"
 require "lib/middleclass"
+require "lib/general"
 require "player"
 require "wallManager"
 
