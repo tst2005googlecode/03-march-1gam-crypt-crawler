@@ -22,8 +22,6 @@ function Camera:initialize(width, height)
 		right = SCREEN_WIDTH - followBoxHMargin,
 		bottom = SCREEN_HEIGHT - followBoxVMargin
 	}
-	
-	print(self.bounds.x2)
 end
 
 function Camera:set()

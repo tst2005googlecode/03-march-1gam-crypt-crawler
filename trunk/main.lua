@@ -2,6 +2,7 @@ bump = require "lib/bump"
 require "lib/middleclass"
 require "lib/general"
 require "player"
+require "bullet"
 require "wallManager"
 require "camera"
 
@@ -15,6 +16,10 @@ function love.load()
 	player = Player:new()
 	wallManager = WallManager:new()
 	camera = Camera:new(wallManager.width, wallManager.height)
+	bullets = {}
+	bulletImage = love.graphics.newImage("Graphic/Bullet.png")
+	
+	bulletPressed = false;
 end
 
 function bump.collision(shapeA, shapeB, dx, dy)
@@ -48,6 +53,10 @@ function love.keypressed(key, unicode)
 	if key == "down" then
 		player.downPressed = true
 	end
+	
+	if key == " " then
+		bulletPressed = true
+	end
 end
 
 function love.keyreleased(key, unicode)
@@ -66,13 +75,36 @@ function love.keyreleased(key, unicode)
 	if key == "down" then
 		player.downPressed = false
 	end
+	
+	if key == " " then
+		bulletPressed = false
+	end
 end
 
 function love.update(dt)
 	player:update(dt)
 	camera:update(player.boundedBox.x, player.boundedBox.y)
 	
+	for index, bullet in ipairs(bullets) do
+		bullet:update(dt)
+		
+		if not bullet.alive then
+			bump.remove(bullet.boundedBox)
+			table.remove(bullets, index)
+		end
+	end
+	
+	if bulletPressed then
+		fireBullet()
+	end
+	
 	bump.collide()
+end
+
+function fireBullet()
+	if #bullets == 0 then
+		table.insert(bullets, Bullet:new(player.boundedBox.x + PLAYER_WIDTH / 2, player.boundedBox.y + PLAYER_HEIGHT / 2, player.rotation, bulletImage))
+	end
 end
 
 function love.draw()
@@ -81,6 +113,9 @@ function love.draw()
 	love.graphics.setColor(255, 255, 255)
 	player:draw()
 	wallManager:draw()
+	for index, bullet in pairs(bullets) do
+		bullet:draw()
+	end
 	
 	camera:unset()
 end
