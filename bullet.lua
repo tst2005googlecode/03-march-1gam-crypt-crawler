@@ -32,10 +32,15 @@ function Bullet:onCollision(dt, other, dx, dy)
 	end
 end
 
-function Bullet:update(dt)
+function Bullet:update(dt, screenX, screenY, screenWidth, screenHeight)
 	if self.alive then
 		self.boundedBox.x = self.boundedBox.x + self.velocity.x * dt
 		self.boundedBox.y = self.boundedBox.y + self.velocity.y * dt
+		
+		if self.boundedBox.x + BULLET_WIDTH < screenX or self.boundedBox.x > screenX + screenWidth or
+		self.boundedBox.y + BULLET_HEIGHT < screenY or self.boundedBox.y > screenY + screenHeight then
+			self.alive = false
+		end
 	end
 end
 

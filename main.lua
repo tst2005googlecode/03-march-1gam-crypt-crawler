@@ -86,7 +86,7 @@ function love.update(dt)
 	camera:update(player.boundedBox.x, player.boundedBox.y)
 	
 	for index, bullet in ipairs(bullets) do
-		bullet:update(dt)
+		bullet:update(dt, camera.x, camera.y, SCREEN_WIDTH, SCREEN_HEIGHT)
 		
 		if not bullet.alive then
 			bump.remove(bullet.boundedBox)
