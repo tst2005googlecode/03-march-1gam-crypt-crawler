@@ -23,8 +23,6 @@ function WallManager:initialize()
 			end
 		end
 	end
-	
-	print(self.width .. ", " .. self.height)
 end
 
 function WallManager:update(dt)
