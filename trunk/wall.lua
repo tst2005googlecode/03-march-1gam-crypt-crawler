@@ -8,7 +8,7 @@ function Wall:initialize(x, y, w, h)
 		height = h,
 		parent = self
 	}
-	bump.add(self.boundedBox)
+	bump.addStatic(self.boundedBox)
 end
 
 function Wall:onCollision(dt, other, dx, dy)
