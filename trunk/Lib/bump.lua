@@ -381,6 +381,12 @@ function bump.getCellSize()
   return __cellSize
 end
 
+function bump.doesCollide(box1, box2)
+	local l1, t1, w1, h1 = bump.getBBox(box1)
+	local l2, t2, w2, h2 = bump.getBBox(box2)
+	return _boxesIntersect(l1, t1, w1, h1, l2, t2, w2, h2)
+end
+
 bump.initialize()
 
 return bump
