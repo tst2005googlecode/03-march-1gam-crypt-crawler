@@ -99,6 +99,8 @@ function love.update(dt)
 	end
 	
 	bump.collide()
+	
+	player:updateSolidCollisions(dt)
 end
 
 function fireBullet()
