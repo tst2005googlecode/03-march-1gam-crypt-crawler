@@ -2,8 +2,9 @@ bump = require "lib/bump"
 require "lib/middleclass"
 require "lib/general"
 require "player"
-require "bullet"
+require "bulletManager"
 require "wallManager"
+require "enemyManager"
 require "camera"
 
 SCREEN_WIDTH = 800
@@ -15,9 +16,10 @@ function love.load()
 	
 	player = Player:new()
 	wallManager = WallManager:new()
+	bulletManager = BulletManager:new(love.graphics.newImage("Graphic/Bullet.png"))
+	enemyManager = EnemyManager:new()
+	
 	camera = Camera:new(wallManager.width, wallManager.height)
-	bullets = {}
-	bulletImage = love.graphics.newImage("Graphic/Bullet.png")
 	
 	bulletPressed = false;
 end
@@ -84,29 +86,20 @@ end
 function love.update(dt)
 	player:update(dt)
 	camera:update(player.boundedBox.x, player.boundedBox.y)
-	
-	for index, bullet in ipairs(bullets) do
-		bullet:update(dt, camera.x, camera.y, SCREEN_WIDTH, SCREEN_HEIGHT)
-		
-		if not bullet.alive then
-			bump.remove(bullet.boundedBox)
-			table.remove(bullets, index)
-		end
-	end
+	bulletManager:update(dt, camera.x, camera.y, SCREEN_WIDTH, SCREEN_HEIGHT)
+	enemyManager:update(
+		dt,
+		{ x = camera.x, y = camera.y, width = SCREEN_WIDTH, height = SCREEN_HEIGHT },
+		{ x = player.boundedBox.x, y = player.boundedBox.y }
+	)
 	
 	if bulletPressed then
-		fireBullet()
+		bulletManager:fireBullet(player.boundedBox.x + PLAYER_WIDTH / 2, player.boundedBox.y + PLAYER_HEIGHT / 2, player.rotation)
 	end
 	
 	bump.collide()
 	
 	player:updateSolidCollisions(dt)
-end
-
-function fireBullet()
-	if #bullets == 0 then
-		table.insert(bullets, Bullet:new(player.boundedBox.x + PLAYER_WIDTH / 2, player.boundedBox.y + PLAYER_HEIGHT / 2, player.rotation, bulletImage))
-	end
 end
 
 function love.draw()
@@ -115,9 +108,8 @@ function love.draw()
 	love.graphics.setColor(255, 255, 255)
 	player:draw()
 	wallManager:draw()
-	for index, bullet in pairs(bullets) do
-		bullet:draw()
-	end
+	bulletManager:draw()
+	enemyManager:draw({ x = camera.x, y = camera.y, width = SCREEN_WIDTH, height = SCREEN_HEIGHT })
 	
 	camera:unset()
 end

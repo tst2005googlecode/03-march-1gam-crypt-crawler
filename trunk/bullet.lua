@@ -5,7 +5,7 @@ BULLET_HEIGHT = 16
 
 BULLET_SPEED = 500
 
-function Bullet:initialize(x, y, direction, image)
+function Bullet:initialize(x, y, direction)
 	self.boundedBox = {
 		x = x - BULLET_WIDTH / 2,
 		y = y - BULLET_HEIGHT / 2,
@@ -15,7 +15,6 @@ function Bullet:initialize(x, y, direction, image)
 	}
 	
 	bump.add(self.boundedBox)
-	self.image = image
 	self.alive = true
 	
 	self.velocity = {
@@ -41,11 +40,5 @@ function Bullet:update(dt, screenX, screenY, screenWidth, screenHeight)
 		self.boundedBox.y + BULLET_HEIGHT < screenY or self.boundedBox.y > screenY + screenHeight then
 			self.alive = false
 		end
-	end
-end
-
-function Bullet:draw()
-	if self.alive then
-		love.graphics.draw(self.image, self.boundedBox.x, self.boundedBox.y)
 	end
 end
