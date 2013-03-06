@@ -7,7 +7,7 @@ PLAYER_SPEED = 100
 function Player:initialize()
 	self.boundedBox = {
 		x = 100,
-		y = 100,
+		y = 150,
 		width = PLAYER_WIDTH,
 		height = PLAYER_HEIGHT,
 		parent = self
@@ -15,6 +15,7 @@ function Player:initialize()
 	bump.add(self.boundedBox)
 	
 	self.velocity = { x = 0, y = 0 }
+	self.curHealth = 100
 	
 	self.image = love.graphics.newImage("Graphic/Player.png")
 	self.rotation = 0
@@ -30,6 +31,8 @@ end
 function Player:onCollision(dt, other, dx, dy)
 	if instanceOf(Wall, other) or instanceOf(EnemySpawner, other) then
 		table.insert(self.solidCollisions, other.boundedBox)
+	elseif instanceOf(Enemy, other) then
+		-- Reduce Health
 	end
 end
 

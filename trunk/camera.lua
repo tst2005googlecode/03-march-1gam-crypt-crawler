@@ -97,3 +97,8 @@ function Camera:update(followX, followY)
 		self:setY(followY - self.followBox.bottom)
 	end
 end
+
+function Camera:draw()
+	love.graphics.setColor(150, 150, 150)
+	love.graphics.rectangle("line", self.x + self.followBox.left, self.y + self.followBox.top, self.followBox.right - self.followBox.left, self.followBox.bottom - self.followBox.top)
+end
