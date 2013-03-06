@@ -5,8 +5,6 @@ EnemyManager = class("EnemyManager")
 function EnemyManager:initialize()
 	self.enemies = {}
 	self.spawners = {}
-	
-	table.insert(self.enemies, Enemy:new(200, 200, 1))
 end
 
 function EnemyManager:update(dt, cameraBox, playerPosition)

@@ -25,7 +25,7 @@ end
 
 function Bullet:onCollision(dt, other, dx, dy)
 	if self.alive then
-		if instanceOf(Wall, other) then
+		if instanceOf(Wall, other) or instanceOf(Enemy, other) then
 			self.alive = false
 		end
 	end
