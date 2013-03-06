@@ -4,6 +4,7 @@ BULLET_WIDTH = 16
 BULLET_HEIGHT = 16
 
 BULLET_SPEED = 500
+BULLET_IMAGE = love.graphics.newImage("Graphic/Bullet.png")
 
 function Bullet:initialize(x, y, direction)
 	self.boundedBox = {
@@ -25,7 +26,7 @@ end
 
 function Bullet:onCollision(dt, other, dx, dy)
 	if self.alive then
-		if instanceOf(Wall, other) or instanceOf(Enemy, other) then
+		if instanceOf(Wall, other) or instanceOf(Enemy, other) or instanceOf(EnemySpawner, other) then
 			self.alive = false
 		end
 	end
@@ -41,4 +42,9 @@ function Bullet:update(dt, screenX, screenY, screenWidth, screenHeight)
 			self.alive = false
 		end
 	end
+end
+
+function Bullet:draw()
+	love.graphics.setColor(255, 255, 255)
+	love.graphics.draw(BULLET_IMAGE, self.boundedBox.x, self.boundedBox.y)
 end

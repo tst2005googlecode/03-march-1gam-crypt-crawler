@@ -16,7 +16,7 @@ function love.load()
 	
 	player = Player:new()
 	wallManager = WallManager:new()
-	bulletManager = BulletManager:new(love.graphics.newImage("Graphic/Bullet.png"))
+	bulletManager = BulletManager:new()
 	enemyManager = EnemyManager:new()
 	
 	camera = Camera:new(wallManager.width, wallManager.height)

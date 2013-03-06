@@ -28,7 +28,7 @@ function Player:initialize()
 end
 
 function Player:onCollision(dt, other, dx, dy)
-	if instanceOf(Wall, other) then
+	if instanceOf(Wall, other) or instanceOf(EnemySpawner, other) then
 		table.insert(self.solidCollisions, other.boundedBox)
 	end
 end
@@ -130,6 +130,6 @@ function Player:updateSolidCollisions(dt)
 end
 
 function Player:draw()
+	love.graphics.setColor(255, 255, 255)
 	love.graphics.draw(self.image, self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2, self.rotation, 1, 1, PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2)
-	--love.graphics.print(self.boundedBox.x .. ", " .. self.boundedBox.y, self.boundedBox.x, self.boundedBox.y)
 end

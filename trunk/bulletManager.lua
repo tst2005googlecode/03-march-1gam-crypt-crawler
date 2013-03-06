@@ -2,9 +2,7 @@ require "bullet"
 
 BulletManager = class("BulletManager")
 
-function BulletManager:initialize(image)
-	self.bulletImage = image
-	
+function BulletManager:initialize()
 	bullets = {}
 end
 
@@ -28,7 +26,7 @@ end
 function BulletManager:draw()
 	for index, bullet in ipairs(bullets) do
 		if bullet.alive then
-			love.graphics.draw(self.bulletImage, bullet.boundedBox.x, bullet.boundedBox.y)
+			bullet:draw()
 		end
 	end
 end
