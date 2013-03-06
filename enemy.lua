@@ -36,7 +36,7 @@ function Enemy:initialize(x, y, level)
 end
 
 function Enemy:onCollision(dt, other, dx, dy)
-	if instanceOf(Wall, other) or instanceOf(Enemy, other) then
+	if instanceOf(Wall, other) or instanceOf(Enemy, other) or instanceOf(EnemySpawner, other) then
 		table.insert(self.solidCollisions, other.boundedBox)
 	elseif instanceOf(Bullet, other) then
 		self.level = self.level - 1
@@ -121,29 +121,6 @@ function Enemy:updatePosition(dt)
 	self.boundedBox.y = self.boundedBox.y + self.velocity.y * dt
 end
 
-function Enemy:draw()
-	local quad = love.graphics.newQuad(
-		(self.level - 1) * ENEMY_WIDTH,
-		0,
-		ENEMY_WIDTH,
-		ENEMY_HEIGHT,
-		ENEMY_SPRITESHEET:getWidth(),
-		ENEMY_SPRITESHEET:getHeight()
-	)
-	
-	love.graphics.drawq(
-		ENEMY_SPRITESHEET,
-		quad,
-		self.boundedBox.x + ENEMY_WIDTH / 2,
-		self.boundedBox.y + ENEMY_HEIGHT / 2,
-		self.rotation,
-		1,
-		1,
-		ENEMY_WIDTH / 2,
-		ENEMY_HEIGHT / 2
-	)
-end
-
 function Enemy:updateSolidCollisions(dt)
 	if #self.solidCollisions > 0 then
 		self.boundedBox.x = self.boundedBox.x - self.velocity.x * dt
@@ -189,4 +166,28 @@ function Enemy:updateSolidCollisions(dt)
 			end
 		end
 	end
+end
+
+function Enemy:draw()
+	love.graphics.setColor(255, 255, 255)
+	local quad = love.graphics.newQuad(
+		(self.level - 1) * ENEMY_WIDTH,
+		0,
+		ENEMY_WIDTH,
+		ENEMY_HEIGHT,
+		ENEMY_SPRITESHEET:getWidth(),
+		ENEMY_SPRITESHEET:getHeight()
+	)
+	
+	love.graphics.drawq(
+		ENEMY_SPRITESHEET,
+		quad,
+		self.boundedBox.x + ENEMY_WIDTH / 2,
+		self.boundedBox.y + ENEMY_HEIGHT / 2,
+		self.rotation,
+		1,
+		1,
+		ENEMY_WIDTH / 2,
+		ENEMY_HEIGHT / 2
+	)
 end
