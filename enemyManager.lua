@@ -31,6 +31,14 @@ function EnemyManager:updateEnemies(dt, cameraBox, playerPosition)
 	end
 end
 
+function EnemyManager:updateSolidCollisions(dt, cameraBox)
+	for index, enemy in ipairs(self.enemies) do
+		if bump.doesCollide(enemy.boundedBox, cameraBox) and enemy.alive then
+			enemy:updateSolidCollisions(dt)
+		end
+	end
+end
+
 function EnemyManager:draw(cameraBox)
 	for index, enemy in ipairs(self.enemies) do
 		if enemy.alive and bump.doesCollide(enemy.boundedBox, cameraBox) then

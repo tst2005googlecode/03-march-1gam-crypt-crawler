@@ -2,7 +2,7 @@ Player = class("Player")
 
 PLAYER_WIDTH = 32
 PLAYER_HEIGHT = 32
-PLAYER_SPEED = 300
+PLAYER_SPEED = 100
 
 function Player:initialize()
 	self.boundedBox = {

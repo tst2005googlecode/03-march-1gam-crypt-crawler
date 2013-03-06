@@ -3,7 +3,11 @@ Enemy = class("Enemy")
 ENEMY_WIDTH = 32
 ENEMY_HEIGHT = 32
 
-ENEMY_SPEED = 200
+ENEMY_SPEED = 50
+ENEMY_STATE_TIMER_MIN = 1.0
+ENEMY_STATE_TIMER_MAX = 1.5
+
+ENEMY_PURSUE_PLAYER_DISTANCE = 96
 
 ENEMY_SPRITESHEET = love.graphics.newImage("Graphic/EnemySpriteSheet.png")
 
@@ -25,6 +29,8 @@ function Enemy:initialize(x, y, level)
 	
 	self.solidCollisions = {}
 	
+	self.changeStateTimer = math.random(ENEMY_STATE_TIMER_MIN, ENEMY_STATE_TIMER_MAX)
+	
 	self.level = level
 	self.alive = true
 end
@@ -37,19 +43,66 @@ end
 
 function Enemy:update(dt, playerPosition)
 	self.solidCollisions = {}
-	self:updateVelocity(playerPosition)
+	self:updateVelocity(dt, playerPosition)
 	self:updateRotation()
 	self:updatePosition(dt)
 end
 
-function Enemy:updateVelocity(playerPosition)
+function Enemy:updateVelocity(dt, playerPosition)
 	local vx = 0
 	local vy = 0
 	
-	-- Move around randomly or move towards (playerPosition.x, playerPosition.y)
-	
-	self.velocity.x = vx * ENEMY_SPEED
-	self.velocity.y = vy * ENEMY_SPEED
+	if math.dist(playerPosition.x, playerPosition.y, self.boundedBox.x, self.boundedBox.y) > ENEMY_PURSUE_PLAYER_DISTANCE then
+		-- Move Randomly
+		self.changeStateTimer = self.changeStateTimer - dt
+		
+		if self.changeStateTimer <= 0 then
+			self.changeStateTimer = math.random(ENEMY_STATE_TIMER_MIN, ENEMY_STATE_TIMER_MAX)
+			local newState = math.random(3)
+			
+			if newState == 1  or newState == 2 then --Move
+				local newDirection = math.rad(math.random(0, 7) * 45)
+			
+				vx = math.cos(newDirection)
+				vy = math.sin(newDirection)
+				
+				self.velocity.x = vx * ENEMY_SPEED
+				self.velocity.y = vy * ENEMY_SPEED
+			elseif newState == 3 then --Wait
+				self.velocity.x = 0
+				self.velocity.y = 0
+			end
+		end
+	else
+		-- Chase Player
+		local newDirection = math.atan2(self.boundedBox.y - playerPosition.y, self.boundedBox.x - playerPosition.x) + math.pi
+		
+		if newDirection < math.pi * 1/8 then
+			newDirection = 0
+		elseif newDirection < math.pi * 3/8 then
+			newDirection = math.pi * 2/8
+		elseif newDirection < math.pi * 5/8 then
+			newDirection = math.pi * 4/8
+		elseif newDirection < math.pi * 7/8 then
+			newDirection = math.pi * 6/8
+		elseif newDirection < math.pi * 9/8 then
+			newDirection = math.pi * 8/8
+		elseif newDirection < math.pi * 11/8 then
+			newDirection = math.pi * 10/8
+		elseif newDirection < math.pi * 13/8 then
+			newDirection = math.pi * 12/8
+		elseif newDirection < math.pi * 15/8 then
+			newDirection = math.pi * 14/8
+		else
+			newDirection = math.pi * 2
+		end
+		
+		vx = math.cos(newDirection)
+		vy = math.sin(newDirection)
+		
+		self.velocity.x = vx * ENEMY_SPEED
+		self.velocity.y = vy * ENEMY_SPEED
+	end
 end
 
 function Enemy:updateRotation()
