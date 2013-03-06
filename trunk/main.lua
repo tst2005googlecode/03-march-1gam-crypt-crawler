@@ -84,12 +84,14 @@ function love.keyreleased(key, unicode)
 end
 
 function love.update(dt)
+	local cameraBox = { x = camera.x, y = camera.y, width = SCREEN_WIDTH, height = SCREEN_HEIGHT }
+	
 	player:update(dt)
 	camera:update(player.boundedBox.x, player.boundedBox.y)
 	bulletManager:update(dt, camera.x, camera.y, SCREEN_WIDTH, SCREEN_HEIGHT)
 	enemyManager:update(
 		dt,
-		{ x = camera.x, y = camera.y, width = SCREEN_WIDTH, height = SCREEN_HEIGHT },
+		cameraBox,
 		{ x = player.boundedBox.x, y = player.boundedBox.y }
 	)
 	
@@ -100,6 +102,7 @@ function love.update(dt)
 	bump.collide()
 	
 	player:updateSolidCollisions(dt)
+	enemyManager:updateSolidCollisions(dt, cameraBox)
 end
 
 function love.draw()
