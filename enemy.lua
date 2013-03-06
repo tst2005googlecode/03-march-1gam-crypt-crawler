@@ -38,7 +38,7 @@ end
 function Enemy:onCollision(dt, other, dx, dy)
 	if instanceOf(Wall, other) or instanceOf(Enemy, other) or instanceOf(EnemySpawner, other) then
 		table.insert(self.solidCollisions, other.boundedBox)
-	elseif instanceOf(Bullet, other) then
+	elseif instanceOf(Bullet, other) or instanceOf(Player, other) then
 		self.level = self.level - 1
 		if self.level <= 0 then
 			self.alive = false

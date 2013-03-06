@@ -6,6 +6,7 @@ require "bulletManager"
 require "wallManager"
 require "enemyManager"
 require "camera"
+require "hud"
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -18,6 +19,7 @@ function love.load()
 	wallManager = WallManager:new()
 	bulletManager = BulletManager:new()
 	enemyManager = EnemyManager:new()
+	hud = HUD:new()
 	
 	camera = Camera:new(wallManager.width, wallManager.height)
 	
@@ -113,6 +115,7 @@ function love.draw()
 	wallManager:draw()
 	bulletManager:draw()
 	enemyManager:draw({ x = camera.x, y = camera.y, width = SCREEN_WIDTH, height = SCREEN_HEIGHT })
+	hud:draw(camera.x, camera.y, player.curHealth, "A", 50)
 	
 	camera:unset()
 end
