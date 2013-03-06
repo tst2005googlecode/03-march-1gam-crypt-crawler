@@ -36,8 +36,13 @@ function Enemy:initialize(x, y, level)
 end
 
 function Enemy:onCollision(dt, other, dx, dy)
-	if instanceOf(Wall, other) then
+	if instanceOf(Wall, other) or instanceOf(Enemy, other) then
 		table.insert(self.solidCollisions, other.boundedBox)
+	elseif instanceOf(Bullet, other) then
+		self.level = self.level - 1
+		if self.level <= 0 then
+			self.alive = false
+		end
 	end
 end
 
@@ -117,8 +122,6 @@ function Enemy:updatePosition(dt)
 end
 
 function Enemy:draw()
-	love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
-	
 	local quad = love.graphics.newQuad(
 		(self.level - 1) * ENEMY_WIDTH,
 		0,
