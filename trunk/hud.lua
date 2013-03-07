@@ -1,7 +1,7 @@
 HUD = class("HUD")
 
 HUD_WIDTH = 800
-HUD_HEIGHT = 96
+HUD_HEIGHT = 64
 
 function HUD:draw(x, y, playerHealth, curLevel, score)
 	love.graphics.setColor(0, 0, 0)
