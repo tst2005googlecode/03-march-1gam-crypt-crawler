@@ -64,10 +64,7 @@ function Player:updateVelocity()
 	end
 	
 	if vx ~= 0 or vy ~= 0 then
-		local vectorLength = math.sqrt(vx^2 + vy^2)
-		
-		vx = vx / vectorLength
-		vy = vy / vectorLength
+		vx, vy = math.normalize(vx, vy)
 	end
 		
 	self.velocity.x = vx * PLAYER_SPEED
