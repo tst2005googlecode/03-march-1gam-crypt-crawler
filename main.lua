@@ -14,12 +14,13 @@ TILE_SIZE = 32
 
 function love.load()
 	bump.initialize(32)
+	defaultFont = love.graphics.newFont(12)
 	
 	player = Player:new()
 	wallManager = WallManager:new()
 	bulletManager = BulletManager:new()
 	enemyManager = EnemyManager:new()
-	hud = HUD:new()
+	hud = HUD:new(love.graphics.newFont("Font/8bitlim.ttf", 32))
 	
 	camera = Camera:new(wallManager.width, wallManager.height)
 	
@@ -115,7 +116,12 @@ function love.draw()
 	wallManager:draw()
 	bulletManager:draw()
 	enemyManager:draw({ x = camera.x, y = camera.y, width = SCREEN_WIDTH, height = SCREEN_HEIGHT })
-	hud:draw(camera.x, camera.y, player.curHealth, "A", 50)
+	hud:draw(camera.x, camera.y, player.curHealth, "A")
+	
+	-- Debug Stuff
+	love.graphics.setColor(255, 255, 255)
+	love.graphics.setFont(defaultFont)
+	love.graphics.print(love.mouse.getX() .. ", " .. love.mouse.getY(), 0, 0)
 	
 	camera:unset()
 end
