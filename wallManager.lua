@@ -19,9 +19,7 @@ function WallManager:addWall(x, y)
 end
 
 function WallManager:update(dt)
-	for index, wall in ipairs(self.walls) do
-		wall:update(dt)
-	end
+	
 end
 
 function WallManager:draw()
