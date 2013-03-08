@@ -8,6 +8,7 @@ require "camera"
 require "hud"
 
 function Game:initialize()
+	self.levelNames = { "A", "B", "C", "D", "E" }
 	self.player = Player:new()
 	self.wallManager = WallManager:new()
 	self.bulletManager = BulletManager:new()
@@ -15,6 +16,7 @@ function Game:initialize()
 	self.hud = HUD:new(love.graphics.newFont("Font/8bitlim.ttf", 32))
 	
 	self.camera = Camera:new()
+	self.curLevel = ""
 	
 	self.bulletPressed = false;
 end
@@ -26,6 +28,7 @@ function Game:reset()
 	self.enemyManager:reset()
 	self.hud:reset()
 	self.camera:reset()
+	self.curLevel = ""
 	
 	bump.reset()
 	
@@ -33,7 +36,8 @@ function Game:reset()
 end
 
 function Game:loadLevel(levelNum)
-	levelFile = love.filesystem.newFile("Data/Level1.csv")
+	self.curLevel = self.levelNames[levelNum]
+	levelFile = love.filesystem.newFile("Data/Level" .. levelNum .. ".csv")
 	levelFile:open('r')
 	fileContents = levelFile:read()
 	
@@ -149,5 +153,5 @@ function Game:draw()
 	
 	self.camera:unset()
 	
-	self.hud:draw(self.player.curHealth, "A")
+	self.hud:draw(self.player.curHealth, self.curLevel)
 end
