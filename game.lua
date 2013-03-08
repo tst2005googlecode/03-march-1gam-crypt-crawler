@@ -14,13 +14,45 @@ function Game:initialize()
 	self.enemyManager = EnemyManager:new()
 	self.hud = HUD:new(love.graphics.newFont("Font/8bitlim.ttf", 32))
 	
-	self.camera = Camera:new(self.wallManager.width, self.wallManager.height)
+	self.camera = Camera:new()
 	
 	self.bulletPressed = false;
 end
 
 function Game:reset()
+	self.player:reset()
+	self.wallManager:reset()
+	self.bulletManager:reset()
+	self.enemyManager:reset()
+	self.hud:reset()
+	self.camera:reset()
 	
+	bump.reset()
+	
+	self.bulletPressed = false;
+end
+
+function Game:loadLevel(levelNum)
+	levelFile = love.filesystem.newFile("Data/Level1.csv")
+	levelFile:open('r')
+	fileContents = levelFile:read()
+	
+	local lineData = string.explode(fileContents:sub(0, string.len(fileContents) - 2), "\r\n")
+	self.height = #lineData
+	
+	for y, line in ipairs(lineData) do
+		local data = string.explode(line, ",")
+		self.width = #data
+		for x, value in ipairs(data) do
+			if string.find(value, "1") ~= nil then
+				self.wallManager:addWall(x, y)
+			end
+		end
+	end
+	
+	self.camera:setBounds(self.width, self.height)
+	
+	levelFile:close()
 end
 
 function Game:getNextState()

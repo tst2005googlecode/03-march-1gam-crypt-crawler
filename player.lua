@@ -28,6 +28,23 @@ function Player:initialize()
 	self.solidCollisions = {}
 end
 
+function Player:reset()
+	self.boundedBox.x = 100
+	self.boundedBox.y = 150
+	self.velocity = { x = 0, y = 0 }
+	self.rotation = 0
+	self.curHealth = 100
+	
+	self.leftPressed = false;
+	self.rightPressed = false;
+	self.upPressed = false;
+	self.downPressed = false;
+	
+	self.solidCollisions = {}
+	
+	bump.add(self.boundedBox)
+end
+
 function Player:onCollision(dt, other, dx, dy)
 	if instanceOf(Wall, other) or instanceOf(EnemySpawner, other) then
 		table.insert(self.solidCollisions, other.boundedBox)

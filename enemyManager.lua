@@ -8,6 +8,11 @@ function EnemyManager:initialize()
 	self.spawners = {}
 end
 
+function EnemyManager:reset()
+	self.enemies = {}
+	self.spawners = {}
+end
+
 function EnemyManager:update(dt, cameraBox, playerPosition)
 	self:spawnEnemies(dt, cameraBox)
 	self:updateEnemies(dt, cameraBox, playerPosition)
