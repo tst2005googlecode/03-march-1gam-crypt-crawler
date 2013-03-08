@@ -1,6 +1,6 @@
 Camera = class("Camera")
 
-function Camera:initialize(width, height)
+function Camera:initialize()
 	self.x = 0
 	self.y = 0
 	self.scaleX = 1
@@ -9,8 +9,8 @@ function Camera:initialize(width, height)
 	self.bounds = {
 		x1 = 0,
 		y1 = 0,
-		x2 = width * TILE_SIZE - SCREEN_WIDTH,
-		y2 = height * TILE_SIZE - SCREEN_HEIGHT
+		x2 = 0,
+		y2 = 0
 	}
 	
 	local followBoxHMargin = 300
@@ -22,6 +22,18 @@ function Camera:initialize(width, height)
 		right = SCREEN_WIDTH - followBoxHMargin,
 		bottom = SCREEN_HEIGHT - followBoxVMargin
 	}
+end
+
+function Camera:setBounds(x, y)
+	self.bounds.x2 = x * TILE_SIZE - SCREEN_WIDTH
+	self.bounds.y2 = y * TILE_SIZE - SCREEN_HEIGHT
+end
+
+function Camera:reset()
+	self.x = 0
+	self.y = 0
+	self.bounds.x2 = 0
+	self.bounds.y2 = 0
 end
 
 function Camera:set()

@@ -300,6 +300,12 @@ function bump.initialize(cellSize)
   bump.items = __items
 end
 
+function bump.reset()
+	for i,item in ipairs(__items) do
+		bump.remove(item)
+	end
+end
+
 -- (Overridable). Called when two objects start colliding
 -- dx, dy is how much you have to move item1 so it doesn't
 -- collide any more

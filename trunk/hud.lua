@@ -8,6 +8,10 @@ function HUD:initialize(hudFont)
 	self.curScore = 0
 end
 
+function HUD:reset()
+	self.curScore = 0
+end
+
 function HUD:draw(playerHealth, curLevel)
 	love.graphics.setColor(0, 0, 0)
 	love.graphics.rectangle("fill", 0, 0, HUD_WIDTH, HUD_HEIGHT)

@@ -34,7 +34,7 @@ function math.angle(x1,y1, x2,y2) return math.atan2(x2-x1, y2-y1) end
 function math.multiple(n, size) size = size or 10 return math.round(n/size)*size end
 
 -- Clamps a number to within a certain range.
-function math.clamp(low, n, high) return math.min(math.max(low, n), high) end
+function math.clamp(n, low, high) return math.min(math.max(low, n), high) end
 
 -- Linear interpolation between two numbers.
 function lerp(a,b,t) return a+(b-a)*t end
