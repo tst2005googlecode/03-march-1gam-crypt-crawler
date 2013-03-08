@@ -23,6 +23,8 @@ function WallManager:initialize()
 			end
 		end
 	end
+	
+	wallFile:close()
 end
 
 function WallManager:update(dt)
