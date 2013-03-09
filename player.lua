@@ -1,7 +1,8 @@
 Player = class("Player")
 
-PLAYER_WIDTH = 32
-PLAYER_HEIGHT = 32
+PLAYER_WIDTH = 26
+PLAYER_HEIGHT = 26
+PLAYER_SPRITE_OFFSET = 3
 PLAYER_SPEED = 100
 
 function Player:initialize()
@@ -15,10 +16,11 @@ function Player:initialize()
 	bump.add(self.boundedBox)
 	
 	self.velocity = { x = 0, y = 0 }
-	self.curHealth = 100
-	
-	self.image = love.graphics.newImage("Graphic/Player.png")
 	self.rotation = 0
+	self.image = love.graphics.newImage("Graphic/Player.png")
+	
+	self.curHealth = 100
+	self.numKeys = 0
 	
 	self.leftPressed = false;
 	self.rightPressed = false;
@@ -34,6 +36,7 @@ function Player:reset()
 	self.velocity = { x = 0, y = 0 }
 	self.rotation = 0
 	self.curHealth = 100
+	self.numKeys = 0
 	
 	self.leftPressed = false;
 	self.rightPressed = false;
@@ -48,6 +51,13 @@ end
 function Player:onCollision(dt, other, dx, dy)
 	if instanceOf(Wall, other) or instanceOf(EnemySpawner, other) then
 		table.insert(self.solidCollisions, other.boundedBox)
+	elseif instanceOf(LockedDoor, other) then
+		if self.numKeys > 0 then
+			self.numKeys = self.numKeys - 1
+			other:unlock()
+		else
+			table.insert(self.solidCollisions, other.boundedBox)
+		end
 	elseif instanceOf(Enemy, other) then
 		-- Reduce Health
 	end
@@ -148,5 +158,17 @@ end
 
 function Player:draw()
 	love.graphics.setColor(255, 255, 255)
-	love.graphics.draw(self.image, self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2, self.rotation, 1, 1, PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2)
+	--love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
+	love.graphics.draw(
+		self.image,
+		self.boundedBox.x + PLAYER_WIDTH / 2,
+		self.boundedBox.y + PLAYER_HEIGHT / 2,
+		self.rotation,
+		1,
+		1,
+		PLAYER_WIDTH / 2 + PLAYER_SPRITE_OFFSET,
+		PLAYER_HEIGHT / 2 + PLAYER_SPRITE_OFFSET
+	)
+	
+	
 end

@@ -1,7 +1,8 @@
 Enemy = class("Enemy")
 
-ENEMY_WIDTH = 32
-ENEMY_HEIGHT = 32
+ENEMY_WIDTH = 26
+ENEMY_HEIGHT = 26
+ENEMY_SPRITE_OFFSET = 3
 
 ENEMY_SPEED = 50
 ENEMY_STATE_TIMER_MIN = 1.0
@@ -170,6 +171,7 @@ end
 
 function Enemy:draw()
 	love.graphics.setColor(255, 255, 255)
+	-- love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
 	local quad = love.graphics.newQuad(
 		(self.level - 1) * ENEMY_WIDTH,
 		0,
@@ -187,7 +189,7 @@ function Enemy:draw()
 		self.rotation,
 		1,
 		1,
-		ENEMY_WIDTH / 2,
-		ENEMY_HEIGHT / 2
+		ENEMY_WIDTH / 2 + ENEMY_SPRITE_OFFSET,
+		ENEMY_HEIGHT / 2 + ENEMY_SPRITE_OFFSET
 	)
 end
