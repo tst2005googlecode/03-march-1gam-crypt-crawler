@@ -30,7 +30,7 @@ function Bullet:onCollision(dt, other, dx, dy)
 			self.alive = false
 		elseif instanceOf(Enemy, other) or instanceOf(EnemySpawner, other) then
 			self.alive = false
-			hud.curScore = hud.curScore + 10
+			-- hud.curScore = hud.curScore + 10
 		end
 	end
 end

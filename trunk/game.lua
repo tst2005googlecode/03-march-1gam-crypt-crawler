@@ -54,14 +54,89 @@ function Game:loadLevel(levelNum)
 		local data = string.explode(line, ",")
 		self.width = #data
 		for x, value in ipairs(data) do
-			if string.find(value, "1") ~= nil then
-				self.wallManager:addWall(x, y)
+			local sx = (x - 1) * TILE_SIZE
+			local sy = (y - 1) * TILE_SIZE
+			
+			if string.find(value, "P") ~= nil then
+				self.player.boundedBox.x = sx
+				self.player.boundedBox.y = sy
+			end
+			
+			if string.find(value, "W") ~= nil then
+				self.wallManager:addWall(sx, sy)
+			end
+			
+			if string.find(value, "L") ~= nil then
+				table.insert(self.lockedDoors, LockedDoor:new(sx, sy))
+			end
+			
+			if string.find(value, "K") ~= nil then
+				table.insert(self.keys, Key:new(sx, sy))
+			end
+			
+			if string.find(value, "E1") ~= nil then
+				self.enemyManager:addEnemy(sx, sy, 1)
+			end
+			if string.find(value, "E2") ~= nil then
+				self.enemyManager:addEnemy(sx, sy, 2)
+			end
+			if string.find(value, "E3") ~= nil then
+				self.enemyManager:addEnemy(sx, sy, 3)
+			end
+			if string.find(value, "E4") ~= nil then
+				self.enemyManager:addEnemy(sx, sy, 4)
+			end
+			if string.find(value, "E5") ~= nil then
+				self.enemyManager:addEnemy(sx, sy, 5)
+			end
+			if string.find(value, "E6") ~= nil then
+				self.enemyManager:addEnemy(sx, sy, 6)
+			end
+			if string.find(value, "E7") ~= nil then
+				self.enemyManager:addEnemy(sx, sy, 7)
+			end
+			if string.find(value, "E8") ~= nil then
+				self.enemyManager:addEnemy(sx, sy, 8)
+			end
+			if string.find(value, "E9") ~= nil then
+				self.enemyManager:addEnemy(sx, sy, 9)
+			end
+			if string.find(value, "E10") ~= nil then
+				self.enemyManager:addEnemy(sx, sy, 10)
+			end
+			
+			if string.find(value, "S1") ~= nil then
+				self.enemyManager:addSpawner(sx, sy, 1)
+			end
+			if string.find(value, "S2") ~= nil then
+				self.enemyManager:addSpawner(sx, sy, 2)
+			end
+			if string.find(value, "S3") ~= nil then
+				self.enemyManager:addSpawner(sx, sy, 3)
+			end
+			if string.find(value, "S4") ~= nil then
+				self.enemyManager:addSpawner(sx, sy, 4)
+			end
+			if string.find(value, "S5") ~= nil then
+				self.enemyManager:addSpawner(sx, sy, 5)
+			end
+			if string.find(value, "S6") ~= nil then
+				self.enemyManager:addSpawner(sx, sy, 6)
+			end
+			if string.find(value, "S7") ~= nil then
+				self.enemyManager:addSpawner(sx, sy, 7)
+			end
+			if string.find(value, "S8") ~= nil then
+				self.enemyManager:addSpawner(sx, sy, 8)
+			end
+			if string.find(value, "S9") ~= nil then
+				self.enemyManager:addSpawner(sx, sy, 9)
+			end
+			if string.find(value, "S10") ~= nil then
+				self.enemyManager:addSpawner(sx, sy, 10)
 			end
 		end
 	end
-	
-	table.insert(self.lockedDoors, LockedDoor:new(288, 192))
-	table.insert(self.keys, Key:new(160, 250))
 	
 	self.camera:setBounds(self.width, self.height)
 	

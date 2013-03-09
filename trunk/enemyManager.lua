@@ -13,6 +13,14 @@ function EnemyManager:reset()
 	self.spawners = {}
 end
 
+function EnemyManager:addEnemy(x, y, level)
+	table.insert(self.enemies, Enemy:new(x, y, level))
+end
+
+function EnemyManager:addSpawner(x, y, level)
+	table.insert(self.spawners, EnemySpawner:new(x, y, level))
+end
+
 function EnemyManager:update(dt, cameraBox, playerPosition)
 	self:spawnEnemies(dt, cameraBox)
 	self:updateEnemies(dt, cameraBox, playerPosition)

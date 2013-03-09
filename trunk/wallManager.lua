@@ -15,7 +15,7 @@ function WallManager:reset()
 end
 
 function WallManager:addWall(x, y)
-	table.insert(self.walls, Wall:new((x - 1) * TILE_SIZE, (y - 1) * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+	table.insert(self.walls, Wall:new(x, y, TILE_SIZE, TILE_SIZE))
 end
 
 function WallManager:update(dt)
