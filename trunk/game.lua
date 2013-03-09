@@ -3,6 +3,7 @@ Game = class("Game")
 require "player"
 require "bulletManager"
 require "wallManager"
+require "lockedDoor"
 require "enemyManager"
 require "camera"
 require "hud"
@@ -11,6 +12,7 @@ function Game:initialize()
 	self.levelNames = { "A", "B", "C", "D", "E" }
 	self.player = Player:new()
 	self.wallManager = WallManager:new()
+	self.lockedDoors = {}
 	self.bulletManager = BulletManager:new()
 	self.enemyManager = EnemyManager:new()
 	self.hud = HUD:new(love.graphics.newFont("Font/8bitlim.ttf", 32))
@@ -24,6 +26,7 @@ end
 function Game:reset()
 	self.player:reset()
 	self.wallManager:reset()
+	self.lockedDoors = {}
 	self.bulletManager:reset()
 	self.enemyManager:reset()
 	self.hud:reset()
@@ -53,6 +56,8 @@ function Game:loadLevel(levelNum)
 			end
 		end
 	end
+	
+	table.insert(self.lockedDoors, LockedDoor:new(288, 192))
 	
 	self.camera:setBounds(self.width, self.height)
 	
@@ -150,6 +155,10 @@ function Game:draw()
 	self.wallManager:draw()
 	self.bulletManager:draw()
 	self.enemyManager:draw({ x = self.camera.x, y = self.camera.y, width = SCREEN_WIDTH, height = SCREEN_HEIGHT })
+	
+	for i, lockedDoor in ipairs(self.lockedDoors) do
+		lockedDoor:draw()
+	end
 	
 	self.camera:unset()
 	
