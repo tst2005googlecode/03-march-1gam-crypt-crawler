@@ -58,6 +58,9 @@ function Player:onCollision(dt, other, dx, dy)
 		else
 			table.insert(self.solidCollisions, other.boundedBox)
 		end
+	elseif instanceOf(Key, other) then
+		self.numKeys = self.numKeys + 1
+		other:pickup()
 	elseif instanceOf(Enemy, other) then
 		-- Reduce Health
 	end

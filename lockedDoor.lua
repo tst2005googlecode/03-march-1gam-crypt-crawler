@@ -14,7 +14,7 @@ function LockedDoor:initialize(x, y)
 		parent = self
 	}
 	
-	bump.add(self.boundedBox)
+	bump.addStatic(self.boundedBox)
 	
 	self.alive = true
 end

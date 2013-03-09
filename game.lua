@@ -4,6 +4,7 @@ require "player"
 require "bulletManager"
 require "wallManager"
 require "lockedDoor"
+require "key"
 require "enemyManager"
 require "camera"
 require "hud"
@@ -13,6 +14,7 @@ function Game:initialize()
 	self.player = Player:new()
 	self.wallManager = WallManager:new()
 	self.lockedDoors = {}
+	self.keys = {}
 	self.bulletManager = BulletManager:new()
 	self.enemyManager = EnemyManager:new()
 	self.hud = HUD:new(love.graphics.newFont("Font/8bitlim.ttf", 32))
@@ -27,6 +29,7 @@ function Game:reset()
 	self.player:reset()
 	self.wallManager:reset()
 	self.lockedDoors = {}
+	self.keys = {}
 	self.bulletManager:reset()
 	self.enemyManager:reset()
 	self.hud:reset()
@@ -58,6 +61,7 @@ function Game:loadLevel(levelNum)
 	end
 	
 	table.insert(self.lockedDoors, LockedDoor:new(288, 192))
+	table.insert(self.keys, Key:new(160, 250))
 	
 	self.camera:setBounds(self.width, self.height)
 	
@@ -158,6 +162,10 @@ function Game:draw()
 	
 	for i, lockedDoor in ipairs(self.lockedDoors) do
 		lockedDoor:draw()
+	end
+	
+	for i, key in ipairs(self.keys) do
+		key:draw()
 	end
 	
 	self.camera:unset()
