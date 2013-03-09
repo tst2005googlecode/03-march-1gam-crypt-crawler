@@ -5,6 +5,9 @@ PLAYER_HEIGHT = 26
 PLAYER_SPRITE_OFFSET = 3
 PLAYER_SPEED = 100
 
+PLAYER_HEALTH_TIMER = 5
+PLAYER_HEALTH_DRAIN = 3
+
 function Player:initialize()
 	self.boundedBox = {
 		x = 100,
@@ -20,6 +23,7 @@ function Player:initialize()
 	self.image = love.graphics.newImage("Graphic/Player.png")
 	
 	self.curHealth = 100
+	self.healthTimer = PLAYER_HEALTH_TIMER
 	self.numKeys = 0
 	
 	self.leftPressed = false;
@@ -36,6 +40,7 @@ function Player:reset()
 	self.velocity = { x = 0, y = 0 }
 	self.rotation = 0
 	self.curHealth = 100
+	self.healthTimer = PLAYER_HEALTH_TIMER
 	self.numKeys = 0
 	
 	self.leftPressed = false;
@@ -71,6 +76,7 @@ function Player:update(dt)
 	self:updateVelocity()
 	self:updateRotation()
 	self:updatePosition(dt)
+	self:updateHealthDrain(dt)
 end
 
 function Player:updateVelocity()
@@ -110,6 +116,14 @@ end
 function Player:updatePosition(dt)
 	self.boundedBox.x = self.boundedBox.x + self.velocity.x * dt
 	self.boundedBox.y = self.boundedBox.y + self.velocity.y * dt
+end
+
+function Player:updateHealthDrain(dt)
+	self.healthTimer = self.healthTimer - dt
+	if self.healthTimer <= 0 then
+		self.curHealth = self.curHealth - PLAYER_HEALTH_DRAIN
+		self.healthTimer = PLAYER_HEALTH_TIMER
+	end
 end
 
 function Player:updateSolidCollisions(dt)

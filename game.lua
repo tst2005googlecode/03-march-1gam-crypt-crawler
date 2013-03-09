@@ -58,8 +58,8 @@ function Game:loadLevel(levelNum)
 			local sy = (y - 1) * TILE_SIZE
 			
 			if string.find(value, "P") ~= nil then
-				self.player.boundedBox.x = sx
-				self.player.boundedBox.y = sy
+				self.player.boundedBox.x = sx + PLAYER_SPRITE_OFFSET
+				self.player.boundedBox.y = sy + PLAYER_SPRITE_OFFSET
 			end
 			
 			if string.find(value, "W") ~= nil then
@@ -216,7 +216,8 @@ function Game:update(dt)
 		self.bulletManager:fireBullet(
 			self.player.boundedBox.x + PLAYER_WIDTH / 2,
 			self.player.boundedBox.y + PLAYER_HEIGHT / 2,
-			self.player.rotation
+			self.player.rotation,
+			self.hud
 		)
 	end
 	
