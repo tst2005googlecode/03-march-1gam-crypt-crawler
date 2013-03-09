@@ -35,7 +35,7 @@ function EnemySpawner:resetTimer()
 end
 
 function EnemySpawner:getRandomSpawnPosition()
-	local spawnDirection = math.rad(math.random(0, 7) * 45)
+	local spawnDirection = math.rad(math.random(0, 3) * 90)
 	
 	local spawnX = math.round(math.cos(spawnDirection))
 	local spawnY = math.round(math.sin(spawnDirection))

@@ -1,8 +1,8 @@
 Enemy = class("Enemy")
 
-ENEMY_WIDTH = 26
-ENEMY_HEIGHT = 26
-ENEMY_SPRITE_OFFSET = 3
+ENEMY_WIDTH = 32
+ENEMY_HEIGHT = 32
+ENEMY_SPRITE_OFFSET = 0
 
 ENEMY_SPEED = 50
 ENEMY_STATE_TIMER_MIN = 1.0
@@ -14,8 +14,8 @@ ENEMY_SPRITESHEET = love.graphics.newImage("Graphic/EnemySpriteSheet.png")
 
 function Enemy:initialize(x, y, level)
 	self.boundedBox = {
-		x = x,
-		y = y,
+		x = x + ENEMY_SPRITE_OFFSET,
+		y = y + ENEMY_SPRITE_OFFSET,
 		width = PLAYER_WIDTH,
 		height = PLAYER_HEIGHT,
 		parent = self
@@ -30,7 +30,7 @@ function Enemy:initialize(x, y, level)
 	
 	self.solidCollisions = {}
 	
-	self.changeStateTimer = math.random(ENEMY_STATE_TIMER_MIN, ENEMY_STATE_TIMER_MAX)
+	self.changeStateTimer = 0
 	
 	self.level = level
 	self.alive = true

@@ -6,7 +6,7 @@ BULLET_HEIGHT = 16
 BULLET_SPEED = 500
 BULLET_IMAGE = love.graphics.newImage("Graphic/Bullet.png")
 
-function Bullet:initialize(x, y, direction)
+function Bullet:initialize(x, y, direction, hudObj)
 	self.boundedBox = {
 		x = x - BULLET_WIDTH / 2,
 		y = y - BULLET_HEIGHT / 2,
@@ -22,6 +22,8 @@ function Bullet:initialize(x, y, direction)
 		x = math.cos(direction) * BULLET_SPEED,
 		y = math.sin(direction) * BULLET_SPEED
 	}
+	
+	self.hudObj = hudObj
 end
 
 function Bullet:onCollision(dt, other, dx, dy)
@@ -30,7 +32,7 @@ function Bullet:onCollision(dt, other, dx, dy)
 			self.alive = false
 		elseif instanceOf(Enemy, other) or instanceOf(EnemySpawner, other) then
 			self.alive = false
-			-- hud.curScore = hud.curScore + 10
+			self.hudObj.curScore = self.hudObj.curScore + 10
 		end
 	end
 end

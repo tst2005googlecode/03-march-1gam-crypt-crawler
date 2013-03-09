@@ -10,9 +10,9 @@ function BulletManager:reset()
 	self.bullets = {}
 end
 
-function BulletManager:fireBullet(x, y, direction)
+function BulletManager:fireBullet(x, y, direction, hudObj)
 	if #self.bullets == 0 then
-		table.insert(self.bullets, Bullet:new(x, y, direction))
+		table.insert(self.bullets, Bullet:new(x, y, direction, hudObj))
 	end
 end
 
