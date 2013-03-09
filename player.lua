@@ -62,7 +62,7 @@ function Player:onCollision(dt, other, dx, dy)
 		self.numKeys = self.numKeys + 1
 		other:pickup()
 	elseif instanceOf(Enemy, other) then
-		-- Reduce Health
+		self.curHealth = self.curHealth - 5
 	end
 end
 

@@ -173,10 +173,10 @@ function Enemy:draw()
 	love.graphics.setColor(255, 255, 255)
 	-- love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
 	local quad = love.graphics.newQuad(
-		(self.level - 1) * ENEMY_WIDTH,
+		(self.level - 1) * 32,
 		0,
-		ENEMY_WIDTH,
-		ENEMY_HEIGHT,
+		32,
+		32,
 		ENEMY_SPRITESHEET:getWidth(),
 		ENEMY_SPRITESHEET:getHeight()
 	)
