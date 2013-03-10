@@ -59,6 +59,9 @@ function Player:onCollision(dt, other, dx, dy)
 	elseif instanceOf(RiceBall, other) and self.curHealth < PLAYER_HEALTH_MAX then
 		self:setHealth(self.curHealth + RICE_BALL_HEALTH_VALUE)
 		other:pickup()
+	elseif instanceOf(PoisonRiceBall, other) then
+		self:setHealth(self.curHealth - POISON_RICE_BALL_HEALTH_VALUE)
+		other:pickup()
 	elseif instanceOf(Enemy, other) then
 		self:setHealth(self.curHealth - 5)
 	end

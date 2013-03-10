@@ -6,6 +6,7 @@ require "wallManager"
 require "lockedDoor"
 require "key"
 require "riceBall"
+require "poisonRiceBall"
 require "enemyManager"
 require "levelTiles"
 require "camera"
@@ -18,6 +19,7 @@ function Game:initialize()
 	self.lockedDoors = {}
 	self.keys = {}
 	self.riceBalls = {}
+	self.poisonRiceBalls = {}
 	self.bulletManager = BulletManager:new()
 	self.enemyManager = EnemyManager:new()
 	
@@ -36,6 +38,7 @@ function Game:reset()
 	self.lockedDoors = {}
 	self.keys = {}
 	self.riceBalls = {}
+	self.poisonRiceBalls = {}
 	self.bulletManager:reset()
 	self.enemyManager:reset()
 	self.levelTiles:reset()
@@ -88,6 +91,11 @@ function Game:loadLevel(levelNum)
 			-- Health
 			if string.find(value, "H") ~= nil then
 				table.insert(self.riceBalls, RiceBall:new(sx, sy))
+			end
+			
+			-- Poison
+			if string.find(value, "O") ~= nil then
+				table.insert(self.poisonRiceBalls, PoisonRiceBall:new(sx, sy))
 			end
 			
 			-- Enemy
@@ -243,6 +251,10 @@ function Game:draw()
 	
 	for i, riceBall in ipairs(self.riceBalls) do
 		riceBall:draw()
+	end
+	
+	for i, poisonRiceBall in ipairs(self.poisonRiceBalls) do
+		poisonRiceBall:draw()
 	end
 	
 	self.camera:unset()
