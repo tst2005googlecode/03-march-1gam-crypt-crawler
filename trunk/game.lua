@@ -254,8 +254,14 @@ function Game:update(dt)
 		if nextLevel > LAST_LEVEL then
 			self.gameBeaten = true
 		else
+			local playerHealth = self.player.curHealth
+			local playerScore = self.hud.curScore
+			
 			self:reset()
 			self:loadLevel(nextLevel)
+			
+			self.player.curHealth = playerHealth
+			self.hud.curScore = playerScore
 		end
 	end
 end
