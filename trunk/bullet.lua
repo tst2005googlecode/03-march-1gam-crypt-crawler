@@ -35,6 +35,9 @@ function Bullet:onCollision(dt, other, dx, dy)
 		elseif instanceOf(Enemy, other) or instanceOf(EnemySpawner, other) then
 			self.alive = false
 			self.hudObj.curScore = self.hudObj.curScore + 10
+		elseif instanceOf(RiceBall, other) then
+			self.alive = false
+			other:pickup()
 		end
 	end
 end

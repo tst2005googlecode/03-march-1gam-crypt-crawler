@@ -7,6 +7,7 @@ PLAYER_SPEED = 100
 
 PLAYER_HEALTH_TIMER = 5
 PLAYER_HEALTH_DRAIN = 3
+PLAYER_HEALTH_MAX = 100
 
 function Player:initialize()
 	self.boundedBox = {
@@ -18,20 +19,9 @@ function Player:initialize()
 	}
 	bump.add(self.boundedBox)
 	
-	self.velocity = { x = 0, y = 0 }
-	self.rotation = 0
 	self.image = love.graphics.newImage("Graphic/Player.png")
 	
-	self.curHealth = 100
-	self.healthTimer = PLAYER_HEALTH_TIMER
-	self.numKeys = 0
-	
-	self.leftPressed = false;
-	self.rightPressed = false;
-	self.upPressed = false;
-	self.downPressed = false;
-	
-	self.solidCollisions = {}
+	self:reset()
 end
 
 function Player:reset()
@@ -39,7 +29,7 @@ function Player:reset()
 	self.boundedBox.y = 150
 	self.velocity = { x = 0, y = 0 }
 	self.rotation = 0
-	self.curHealth = 100
+	self.curHealth = PLAYER_HEALTH_MAX
 	self.healthTimer = PLAYER_HEALTH_TIMER
 	self.numKeys = 0
 	
@@ -66,9 +56,16 @@ function Player:onCollision(dt, other, dx, dy)
 	elseif instanceOf(Key, other) then
 		self.numKeys = self.numKeys + 1
 		other:pickup()
+	elseif instanceOf(RiceBall, other) and self.curHealth < PLAYER_HEALTH_MAX then
+		self:setHealth(self.curHealth + RICE_BALL_HEALTH_VALUE)
+		other:pickup()
 	elseif instanceOf(Enemy, other) then
-		self.curHealth = self.curHealth - 5
+		self:setHealth(self.curHealth - 5)
 	end
+end
+
+function Player:setHealth(newHealth)
+	self.curHealth = math.clamp(newHealth, 0, PLAYER_HEALTH_MAX)
 end
 
 function Player:update(dt)
@@ -121,7 +118,7 @@ end
 function Player:updateHealthDrain(dt)
 	self.healthTimer = self.healthTimer - dt
 	if self.healthTimer <= 0 then
-		self.curHealth = self.curHealth - PLAYER_HEALTH_DRAIN
+		self:setHealth(self.curHealth - PLAYER_HEALTH_DRAIN)
 		self.healthTimer = PLAYER_HEALTH_TIMER
 	end
 end
@@ -176,6 +173,7 @@ end
 function Player:draw()
 	love.graphics.setColor(255, 255, 255)
 	--love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
+	
 	love.graphics.draw(
 		self.image,
 		self.boundedBox.x + PLAYER_WIDTH / 2,
