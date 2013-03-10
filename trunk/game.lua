@@ -89,21 +89,6 @@ function Game:loadLevel(levelNum)
 			if string.find(value, "E5") ~= nil then
 				self.enemyManager:addEnemy(sx, sy, 5)
 			end
-			if string.find(value, "E6") ~= nil then
-				self.enemyManager:addEnemy(sx, sy, 6)
-			end
-			if string.find(value, "E7") ~= nil then
-				self.enemyManager:addEnemy(sx, sy, 7)
-			end
-			if string.find(value, "E8") ~= nil then
-				self.enemyManager:addEnemy(sx, sy, 8)
-			end
-			if string.find(value, "E9") ~= nil then
-				self.enemyManager:addEnemy(sx, sy, 9)
-			end
-			if string.find(value, "E10") ~= nil then
-				self.enemyManager:addEnemy(sx, sy, 10)
-			end
 			
 			if string.find(value, "S1") ~= nil then
 				self.enemyManager:addSpawner(sx, sy, 1)
@@ -119,21 +104,6 @@ function Game:loadLevel(levelNum)
 			end
 			if string.find(value, "S5") ~= nil then
 				self.enemyManager:addSpawner(sx, sy, 5)
-			end
-			if string.find(value, "S6") ~= nil then
-				self.enemyManager:addSpawner(sx, sy, 6)
-			end
-			if string.find(value, "S7") ~= nil then
-				self.enemyManager:addSpawner(sx, sy, 7)
-			end
-			if string.find(value, "S8") ~= nil then
-				self.enemyManager:addSpawner(sx, sy, 8)
-			end
-			if string.find(value, "S9") ~= nil then
-				self.enemyManager:addSpawner(sx, sy, 9)
-			end
-			if string.find(value, "S10") ~= nil then
-				self.enemyManager:addSpawner(sx, sy, 10)
 			end
 		end
 	end
