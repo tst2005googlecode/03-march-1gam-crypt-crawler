@@ -9,6 +9,9 @@ function WallManager:initialize()
 end
 
 function WallManager:reset()
+	for index, wall in ipairs(self.walls) do
+		bump.remove(wall.boundedBox)
+	end
 	self.walls = {}
 	self.width = 0
 	self.height = 0
