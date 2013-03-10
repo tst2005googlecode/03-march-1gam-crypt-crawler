@@ -30,6 +30,7 @@ end
 
 function Key:draw()
 	if self.alive then
+		love.graphics.setColor(255, 255, 255)
 		love.graphics.draw(KEY_IMAGE, self.boundedBox.x, self.boundedBox.y)
 	end
 end
