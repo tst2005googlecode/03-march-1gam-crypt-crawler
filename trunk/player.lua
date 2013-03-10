@@ -32,6 +32,7 @@ function Player:reset()
 	self.curHealth = PLAYER_HEALTH_MAX
 	self.healthTimer = PLAYER_HEALTH_TIMER
 	self.numKeys = 0
+	self.goToNextLevel = false
 	
 	self.leftPressed = false;
 	self.rightPressed = false;
@@ -64,6 +65,8 @@ function Player:onCollision(dt, other, dx, dy)
 		other:pickup()
 	elseif instanceOf(Enemy, other) then
 		self:setHealth(self.curHealth - 5)
+	elseif instanceOf(LevelExit, other) then
+		self.goToNextLevel = true
 	end
 end
 

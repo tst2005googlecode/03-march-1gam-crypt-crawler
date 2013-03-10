@@ -8,9 +8,12 @@ require "key"
 require "riceBall"
 require "poisonRiceBall"
 require "enemyManager"
+require "levelExit"
 require "levelTiles"
 require "camera"
 require "hud"
+
+LAST_LEVEL = 5
 
 function Game:initialize()
 	self.levelNames = { "A", "B", "C", "D", "E" }
@@ -22,12 +25,14 @@ function Game:initialize()
 	self.poisonRiceBalls = {}
 	self.bulletManager = BulletManager:new()
 	self.enemyManager = EnemyManager:new()
+	self.levelExit = LevelExit:new()
 	
 	self.levelTiles = LevelTiles:new()
 	self.hud = HUD:new(love.graphics.newFont("Font/8bitlim.ttf", 32))
 	self.camera = Camera:new()
 	
-	self.curLevel = ""
+	self.gameBeaten = false
+	self.curLevel = 1
 	
 	self.bulletPressed = false;
 end
@@ -41,10 +46,14 @@ function Game:reset()
 	self.poisonRiceBalls = {}
 	self.bulletManager:reset()
 	self.enemyManager:reset()
+	self.levelExit.boundedBox.x = 0
+	self.levelExit.boundedBox.y = 0
+	bump.remove(self.levelExit.boundedBox)
 	self.levelTiles:reset()
 	self.hud:reset()
 	self.camera:reset()
-	self.curLevel = ""
+	self.gameBeaten = false
+	self.curLevel = 1
 	
 	bump.reset()
 	
@@ -52,7 +61,7 @@ function Game:reset()
 end
 
 function Game:loadLevel(levelNum)
-	self.curLevel = self.levelNames[levelNum]
+	self.curLevel = levelNum
 	levelFile = love.filesystem.newFile("Data/Level" .. levelNum .. ".csv")
 	levelFile:open('r')
 	fileContents = levelFile:read()
@@ -132,6 +141,13 @@ function Game:loadLevel(levelNum)
 				self.enemyManager:addSpawner(sx, sy, 5)
 			end
 			
+			-- Exit
+			if string.find(value, "X") ~= nil then
+				self.levelExit.boundedBox.x = sx
+				self.levelExit.boundedBox.y = sy
+				bump.add(self.levelExit.boundedBox)
+			end
+			
 			-- Tiles
 			self.levelTiles:addTile(sx, sy, value)
 		end
@@ -146,6 +162,8 @@ end
 function Game:getNextState()
 	if self.player.curHealth <= 0 then
 		return 2
+	elseif self.gameBeaten then
+		return 3
 	else
 		return nil
 	end
@@ -229,6 +247,17 @@ function Game:update(dt)
 	if cameraMoved then
 		self.levelTiles:update(self.camera.x, self.camera.y)
 	end
+	
+	if self.player.goToNextLevel then
+		local nextLevel = self.curLevel + 1
+		
+		if nextLevel > LAST_LEVEL then
+			self.gameBeaten = true
+		else
+			self:reset()
+			self:loadLevel(nextLevel)
+		end
+	end
 end
 
 function Game:draw()
@@ -238,7 +267,7 @@ function Game:draw()
 	
 	self.player:draw()
 	-- self.wallManager:draw()
-	self.bulletManager:draw()
+	self.levelExit:draw()
 	self.enemyManager:draw({ x = self.camera.x, y = self.camera.y, width = SCREEN_WIDTH, height = SCREEN_HEIGHT })
 	
 	for i, lockedDoor in ipairs(self.lockedDoors) do
@@ -257,7 +286,9 @@ function Game:draw()
 		poisonRiceBall:draw()
 	end
 	
+	self.bulletManager:draw()
+	
 	self.camera:unset()
 	
-	self.hud:draw(self.player.curHealth, self.curLevel)
+	self.hud:draw(self.player.curHealth, self.levelNames[self.curLevel])
 end
