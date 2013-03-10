@@ -186,6 +186,4 @@ function Player:draw()
 		PLAYER_WIDTH / 2 + PLAYER_SPRITE_OFFSET,
 		PLAYER_HEIGHT / 2 + PLAYER_SPRITE_OFFSET
 	)
-	
-	
 end
