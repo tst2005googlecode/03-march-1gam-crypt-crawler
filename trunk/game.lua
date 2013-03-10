@@ -198,10 +198,11 @@ function Game:update(dt)
 end
 
 function Game:draw()
-	self.camera:set()
-	
 	love.graphics.setColor(20,20,20)
 	love.graphics.rectangle("fill", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+	
+	self.camera:set()
+	
 	self.player:draw()
 	self.wallManager:draw()
 	self.bulletManager:draw()
