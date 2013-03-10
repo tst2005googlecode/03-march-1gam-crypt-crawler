@@ -3,7 +3,8 @@ Bullet = class("Bullet")
 BULLET_WIDTH = 16
 BULLET_HEIGHT = 16
 
-BULLET_SPEED = 500
+BULLET_SPEED = 400
+BULLET_ROTATION_SPEED = 10
 BULLET_IMAGE = love.graphics.newImage("Graphic/Bullet.png")
 
 function Bullet:initialize(x, y, direction, hudObj)
@@ -22,6 +23,7 @@ function Bullet:initialize(x, y, direction, hudObj)
 		x = math.cos(direction) * BULLET_SPEED,
 		y = math.sin(direction) * BULLET_SPEED
 	}
+	self.rotation = 0
 	
 	self.hudObj = hudObj
 end
@@ -46,10 +48,26 @@ function Bullet:update(dt, screenX, screenY, screenWidth, screenHeight)
 		self.boundedBox.y + BULLET_HEIGHT < screenY or self.boundedBox.y > screenY + screenHeight then
 			self.alive = false
 		end
+		
+		self.rotation = self.rotation + BULLET_ROTATION_SPEED * dt
+		if self.rotation > 360 then
+			self.rotation = self.rotation - 360
+		end
 	end
 end
 
 function Bullet:draw()
 	love.graphics.setColor(255, 255, 255)
-	love.graphics.draw(BULLET_IMAGE, self.boundedBox.x, self.boundedBox.y)
+	
+	local rotation = math.rad(self.rotation)
+	love.graphics.draw(
+		BULLET_IMAGE,
+		self.boundedBox.x + BULLET_WIDTH / 2,
+		self.boundedBox.y + BULLET_HEIGHT / 2,
+		self.rotation,
+		1,
+		1,
+		BULLET_WIDTH / 2,
+		BULLET_HEIGHT / 2
+	)
 end
