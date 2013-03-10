@@ -6,6 +6,7 @@ require "wallManager"
 require "lockedDoor"
 require "key"
 require "enemyManager"
+require "levelTiles"
 require "camera"
 require "hud"
 
@@ -17,9 +18,11 @@ function Game:initialize()
 	self.keys = {}
 	self.bulletManager = BulletManager:new()
 	self.enemyManager = EnemyManager:new()
-	self.hud = HUD:new(love.graphics.newFont("Font/8bitlim.ttf", 32))
 	
+	self.levelTiles = LevelTiles:new()
+	self.hud = HUD:new(love.graphics.newFont("Font/8bitlim.ttf", 32))
 	self.camera = Camera:new()
+	
 	self.curLevel = ""
 	
 	self.bulletPressed = false;
@@ -32,6 +35,7 @@ function Game:reset()
 	self.keys = {}
 	self.bulletManager:reset()
 	self.enemyManager:reset()
+	self.levelTiles:reset()
 	self.hud:reset()
 	self.camera:reset()
 	self.curLevel = ""
@@ -57,23 +61,28 @@ function Game:loadLevel(levelNum)
 			local sx = (x - 1) * TILE_SIZE
 			local sy = (y - 1) * TILE_SIZE
 			
+			-- Player
 			if string.find(value, "P") ~= nil then
 				self.player.boundedBox.x = sx + PLAYER_SPRITE_OFFSET
 				self.player.boundedBox.y = sy + PLAYER_SPRITE_OFFSET
 			end
 			
+			-- Solid Wall
 			if string.find(value, "W") ~= nil then
 				self.wallManager:addWall(sx, sy)
 			end
 			
+			-- Locked Door
 			if string.find(value, "L") ~= nil then
 				table.insert(self.lockedDoors, LockedDoor:new(sx, sy))
 			end
 			
+			-- Key
 			if string.find(value, "K") ~= nil then
 				table.insert(self.keys, Key:new(sx, sy))
 			end
 			
+			-- Enemy
 			if string.find(value, "E1") ~= nil then
 				self.enemyManager:addEnemy(sx, sy, 1)
 			end
@@ -90,6 +99,7 @@ function Game:loadLevel(levelNum)
 				self.enemyManager:addEnemy(sx, sy, 5)
 			end
 			
+			-- Spawner
 			if string.find(value, "S1") ~= nil then
 				self.enemyManager:addSpawner(sx, sy, 1)
 			end
@@ -105,9 +115,13 @@ function Game:loadLevel(levelNum)
 			if string.find(value, "S5") ~= nil then
 				self.enemyManager:addSpawner(sx, sy, 5)
 			end
+			
+			-- Tiles
+			self.levelTiles:addTile(sx, sy, value)
 		end
 	end
 	
+	self.levelTiles:update(0, 0)
 	self.camera:setBounds(self.width, self.height)
 	
 	levelFile:close()
@@ -174,7 +188,6 @@ function Game:update(dt)
 	}
 	
 	self.player:update(dt)
-	self.camera:update(self.player.boundedBox.x, self.player.boundedBox.y)
 	self.bulletManager:update(dt, self.camera.x, self.camera.y, SCREEN_WIDTH, SCREEN_HEIGHT)
 	self.enemyManager:update(
 		dt,
@@ -195,16 +208,20 @@ function Game:update(dt)
 	
 	self.player:updateSolidCollisions(dt)
 	self.enemyManager:updateSolidCollisions(dt, cameraBox)
+	
+	local cameraMoved = self.camera:update(self.player.boundedBox.x, self.player.boundedBox.y)
+	if cameraMoved then
+		self.levelTiles:update(self.camera.x, self.camera.y)
+	end
 end
 
 function Game:draw()
-	love.graphics.setColor(20,20,20)
-	love.graphics.rectangle("fill", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+	self.levelTiles:draw()
 	
 	self.camera:set()
 	
 	self.player:draw()
-	self.wallManager:draw()
+	-- self.wallManager:draw()
 	self.bulletManager:draw()
 	self.enemyManager:draw({ x = self.camera.x, y = self.camera.y, width = SCREEN_WIDTH, height = SCREEN_HEIGHT })
 	

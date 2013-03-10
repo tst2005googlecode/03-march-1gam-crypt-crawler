@@ -93,21 +93,29 @@ function Camera:setY(value)
 end
 
 function Camera:update(followX, followY)
+	local cameraMoved = false
+	
 	if self.x + self.followBox.left > followX then --Target is too far left
 		self:setX(followX - self.followBox.left)
+		cameraMoved = true
 	end
 	
 	if self.x + self.followBox.right < followX then --Target is too far right
 		self:setX(followX - self.followBox.right)
+		cameraMoved = true
 	end
 	
 	if self.y + self.followBox.top > followY then --Target is too far up
 		self:setY(followY - self.followBox.top)
+		cameraMoved = true
 	end
 	
 	if self.y + self.followBox.bottom < followY then --Target is too far down
 		self:setY(followY - self.followBox.bottom)
+		cameraMoved = true
 	end
+	
+	return cameraMoved
 end
 
 function Camera:draw()
