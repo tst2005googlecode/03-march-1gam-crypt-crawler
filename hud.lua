@@ -12,11 +12,17 @@ function HUD:reset()
 	self.curScore = 0
 end
 
-function HUD:draw(playerHealth, curLevel)
+function HUD:draw(playerHealth, playerNumKeys, curLevel)
 	love.graphics.setColor(0, 0, 0)
 	love.graphics.rectangle("fill", 0, 0, HUD_WIDTH, HUD_HEIGHT)
 	
 	-- Draw Items
+	
+	-- Draw Keys
+	love.graphics.setColor(255, 255, 255)
+	for i = 0, playerNumKeys - 1 do
+		love.graphics.draw(KEY_IMAGE, 32 + i * 40, 14)
+	end
 	
 	-- Draw Health
 	love.graphics.setColor(85, 0, 0)
