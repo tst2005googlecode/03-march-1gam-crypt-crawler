@@ -5,7 +5,7 @@ PLAYER_HEIGHT = 26
 PLAYER_SPRITE_OFFSET = 3
 PLAYER_SPEED = 100
 
-PLAYER_HEALTH_TIMER = 5
+PLAYER_HEALTH_TIMER = 7
 PLAYER_HEALTH_DRAIN = 3
 PLAYER_HEALTH_MAX = 100
 
@@ -64,7 +64,7 @@ function Player:onCollision(dt, other, dx, dy)
 		self:setHealth(self.curHealth - POISON_RICE_BALL_HEALTH_VALUE)
 		other:pickup()
 	elseif instanceOf(Enemy, other) then
-		self:setHealth(self.curHealth - 5)
+		self:setHealth(self.curHealth - ENEMY_HEALTH_DRAIN_VALUE)
 	elseif instanceOf(LevelExit, other) then
 		self.goToNextLevel = true
 	end
