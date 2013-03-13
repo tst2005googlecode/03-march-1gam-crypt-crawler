@@ -38,6 +38,18 @@ function Game:initialize()
 end
 
 function Game:reset()
+	for i, key in ipairs(self.keys) do
+		bump.remove(key.boundedBox)
+	end
+	
+	for i, riceBall in ipairs(self.riceBalls) do
+		bump.remove(riceBall.boundedBox)
+	end
+	
+	for i, poisonRiceBall in ipairs(self.riceBalls) do
+		bump.remove(poisonRiceBall.boundedBox)
+	end
+	
 	self.player:reset()
 	self.wallManager:reset()
 	self.lockedDoors = {}
@@ -49,6 +61,7 @@ function Game:reset()
 	self.levelExit.boundedBox.x = 0
 	self.levelExit.boundedBox.y = 0
 	bump.remove(self.levelExit.boundedBox)
+	
 	self.levelTiles:reset()
 	self.hud:reset()
 	self.camera:reset()
