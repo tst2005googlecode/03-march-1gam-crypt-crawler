@@ -1,6 +1,6 @@
-bump = require "lib/bump"
-require "lib/middleclass"
-require "lib/general"
+bump = require "Lib/bump"
+require "Lib/middleclass"
+require "Lib/general"
 require "gameState"
 require "game"
 
@@ -53,7 +53,7 @@ function love.update(dt)
 		if nextState == 0 then
 			currentState = game
 			game:reset()
-			game:loadLevel(5)
+			game:loadLevel(1)
 		else
 			currentState = gameStates[nextState]
 			currentState:reset()
