@@ -17,8 +17,8 @@ function Enemy:initialize(x, y, level)
 	self.boundedBox = {
 		x = x + ENEMY_SPRITE_OFFSET,
 		y = y + ENEMY_SPRITE_OFFSET,
-		width = PLAYER_WIDTH,
-		height = PLAYER_HEIGHT,
+		width = ENEMY_WIDTH,
+		height = ENEMY_HEIGHT,
 		parent = self
 	}
 	bump.add(self.boundedBox)
@@ -172,7 +172,7 @@ end
 
 function Enemy:draw()
 	love.graphics.setColor(255, 255, 255)
-	-- love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
+	--love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
 	local quad = love.graphics.newQuad(
 		(self.level - 1) * 32,
 		0,
