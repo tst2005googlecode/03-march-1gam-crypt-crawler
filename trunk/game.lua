@@ -168,6 +168,9 @@ function Game:loadLevel(levelNum)
 	
 	self.levelTiles:update(0, 0)
 	self.camera:setBounds(self.width, self.height)
+	self.camera:setX(self.player.boundedBox.x - SCREEN_WIDTH / 2)
+	self.camera:setY(self.player.boundedBox.y - SCREEN_HEIGHT / 2)
+	self.levelTiles:update(self.camera.x, self.camera.y)
 	
 	levelFile:close()
 end
