@@ -23,7 +23,7 @@ function LevelTiles:initialize()
 	
 	-- Wall
 	self.tileQuads[1] = love.graphics.newQuad(
-		1 * TILE_SIZE,
+		1 * TILE_SIZE + 1,
 		0 * TILE_SIZE,
 		TILE_SIZE,
 		TILE_SIZE,
