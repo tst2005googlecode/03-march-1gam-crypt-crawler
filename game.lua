@@ -30,7 +30,6 @@ function Game:initialize()
 	self.levelTiles = LevelTiles:new()
 	self.hud = HUD:new(love.graphics.newFont("Font/8bitlim.ttf", 32))
 	self.camera = Camera:new()
-	--self.camera:setScale(0.5, 0.5)
 	
 	self.gameBeaten = false
 	self.curLevel = 1
