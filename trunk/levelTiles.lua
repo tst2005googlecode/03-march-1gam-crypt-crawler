@@ -15,18 +15,18 @@ function LevelTiles:initialize()
 	self.tileQuads[0] = love.graphics.newQuad(
 		0 * TILE_SIZE,
 		0 * TILE_SIZE,
-		TILE_SIZE,
-		TILE_SIZE,
+		TILE_SIZE + 1,
+		TILE_SIZE + 1,
 		self.tilesetImage:getWidth(),
 		self.tilesetImage:getHeight()
 	)
 	
 	-- Wall
 	self.tileQuads[1] = love.graphics.newQuad(
-		1 * TILE_SIZE + 1,
+		1 * TILE_SIZE + 2,
 		0 * TILE_SIZE,
-		TILE_SIZE,
-		TILE_SIZE,
+		TILE_SIZE + 1,
+		TILE_SIZE + 1,
 		self.tilesetImage:getWidth(),
 		self.tilesetImage:getHeight()
 	)
