@@ -3,8 +3,8 @@ EnemySpawner = class("EnemySpawner")
 ENEMY_SPAWNER_WIDTH = 32
 ENEMY_SPAWNER_HEIGHT = 32
 
-SPAWN_TIMER_MIN = 2.0
-SPAWN_TIMER_MAX = 4.0
+SPAWN_TIMER_MIN = 4.0
+SPAWN_TIMER_MAX = 6.0
 
 SPAWNER_IMAGE = love.graphics.newImage("Graphic/Spawner.png")
 
