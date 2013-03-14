@@ -30,6 +30,7 @@ function Game:initialize()
 	self.levelTiles = LevelTiles:new()
 	self.hud = HUD:new(love.graphics.newFont("Font/8bitlim.ttf", 32))
 	self.camera = Camera:new()
+	--self.camera:setScale(0.5, 0.5)
 	
 	self.gameBeaten = false
 	self.curLevel = 1
@@ -166,11 +167,9 @@ function Game:loadLevel(levelNum)
 		end
 	end
 	
-	self.levelTiles:update(0, 0)
 	self.camera:setBounds(self.width, self.height)
 	self.camera:setX(self.player.boundedBox.x - SCREEN_WIDTH / 2)
 	self.camera:setY(self.player.boundedBox.y - SCREEN_HEIGHT / 2)
-	self.levelTiles:update(self.camera.x, self.camera.y)
 	
 	levelFile:close()
 end
@@ -259,10 +258,7 @@ function Game:update(dt)
 	self.player:updateSolidCollisions(dt)
 	self.enemyManager:updateSolidCollisions(dt, cameraBox)
 	
-	local cameraMoved = self.camera:update(self.player.boundedBox.x, self.player.boundedBox.y)
-	if cameraMoved then
-		self.levelTiles:update(self.camera.x, self.camera.y)
-	end
+	self.camera:update(self.player.boundedBox.x, self.player.boundedBox.y)
 	
 	if self.player.goToNextLevel then
 		local nextLevel = self.curLevel + 1
@@ -283,10 +279,9 @@ function Game:update(dt)
 end
 
 function Game:draw()
-	self.levelTiles:draw()
-	
 	self.camera:set()
 	
+	self.levelTiles:draw()
 	self.player:draw()
 	-- self.wallManager:draw()
 	self.levelExit:draw()

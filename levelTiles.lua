@@ -6,16 +6,6 @@ NUM_TILES_VERTICAL = 32
 NUM_TILE_SPRITES = NUM_TILES_HORIZONTAL * NUM_TILES_VERTICAL
 
 function LevelTiles:initialize()
-	self:initializeMapView()
-	self:initializeTileset()
-end
-
-function LevelTiles:initializeMapView()
-	self.mapX = 0
-	self.mapY = 0
-end
-
-function LevelTiles:initializeTileset()
 	self.tilesetImage = love.graphics.newImage("Graphic/LevelTiles.png")
 	self.tilesetImage:setFilter("nearest", "linear")
 	
@@ -45,8 +35,6 @@ function LevelTiles:initializeTileset()
 end
 
 function LevelTiles:reset()
-	self.mapX = 0
-	self.mapY = 0
 	self.tilesetBatch:clear()
 end
 
@@ -59,11 +47,6 @@ function LevelTiles:addTile(x, y, value)
 	end
 end
 
-function LevelTiles:update(viewx, viewy)
-	self.mapX = -viewx
-	self.mapY = -viewy
-end
-
 function LevelTiles:draw()
-	love.graphics.draw(self.tilesetBatch, self.mapX, self.mapY)
+	love.graphics.draw(self.tilesetBatch, 0, 0)
 end
