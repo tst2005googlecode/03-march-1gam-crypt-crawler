@@ -9,6 +9,14 @@ function EnemyManager:initialize()
 end
 
 function EnemyManager:reset()
+	for i, enemy in ipairs(self.enemies) do
+		bump.remove(enemy.boundedBox)
+	end
+	
+	for i, spawner in ipairs(self.spawners) do
+		bump.remove(spawner.boundedBox)
+	end
+	
 	self.enemies = {}
 	self.spawners = {}
 end
