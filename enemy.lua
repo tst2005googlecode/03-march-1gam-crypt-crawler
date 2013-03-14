@@ -7,6 +7,7 @@ ENEMY_SPRITE_OFFSET = 0
 ENEMY_SPEED = 50
 ENEMY_STATE_TIMER_MIN = 1.0
 ENEMY_STATE_TIMER_MAX = 1.5
+ENEMY_ONSCREEN_TIMER = 4
 
 ENEMY_PURSUE_PLAYER_DISTANCE = 96
 ENEMY_HEALTH_DRAIN_VALUE = 2
@@ -32,6 +33,8 @@ function Enemy:initialize(x, y, level)
 	self.solidCollisions = {}
 	
 	self.changeStateTimer = 0
+	self.hasBeenSeen = false
+	self.onScreenTimer = 0
 	
 	self.level = level
 	self.alive = true
@@ -48,11 +51,12 @@ function Enemy:onCollision(dt, other, dx, dy)
 	end
 end
 
-function Enemy:update(dt, playerPosition)
+function Enemy:update(dt, playerPosition, onScreen)
 	self.solidCollisions = {}
 	self:updateVelocity(dt, playerPosition)
 	self:updateRotation()
 	self:updatePosition(dt)
+	self:updateOnScreenTimers(dt, onScreen)
 end
 
 function Enemy:updateVelocity(dt, playerPosition)
@@ -166,6 +170,20 @@ function Enemy:updateSolidCollisions(dt)
 			elseif self.velocity.y < 0 then --Moving Left
 				self.boundedBox.y = otherCollision.y + otherCollision.height
 			end
+		end
+	end
+end
+
+function Enemy:updateOnScreenTimers(dt, onScreen)
+	-- The enemy has been seen, get the timer ready
+	if onScreen then
+		self.onScreenTimer = ENEMY_ONSCREEN_TIMER
+		self.hasBeenSeen = true
+	-- The enemy has been seen, but is no longer in view. Countdown and despawn
+	elseif self.hasBeenSeen then
+		self.onScreenTimer = self.onScreenTimer - dt
+		if self.onScreenTimer <= 0 then
+			self.alive = false;
 		end
 	end
 end
