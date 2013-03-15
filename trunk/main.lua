@@ -3,6 +3,7 @@ require "Lib/middleclass"
 require "Lib/general"
 require "gameState"
 require "game"
+require "soundLibrary"
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
