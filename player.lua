@@ -1,3 +1,5 @@
+require "soundLibrary"
+
 Player = class("Player")
 
 PLAYER_WIDTH = 26
@@ -49,23 +51,33 @@ function Player:onCollision(dt, other, dx, dy)
 		table.insert(self.solidCollisions, other.boundedBox)
 	elseif instanceOf(LockedDoor, other) then
 		if self.numKeys > 0 then
+			SFX_DOOR_UNLOCK:rewind()
+			SFX_DOOR_UNLOCK:play()
 			self.numKeys = self.numKeys - 1
 			other:unlock()
 		else
 			table.insert(self.solidCollisions, other.boundedBox)
 		end
 	elseif instanceOf(Key, other) then
+		SFX_KEY_PICKUP:rewind()
+		SFX_KEY_PICKUP:play()
 		self.numKeys = self.numKeys + 1
 		other:pickup()
 	elseif instanceOf(RiceBall, other) and self.curHealth < PLAYER_HEALTH_MAX then
+		SFX_HEALTH_PICKUP:rewind()
+		SFX_HEALTH_PICKUP:play()
 		self:setHealth(self.curHealth + RICE_BALL_HEALTH_VALUE)
 		other:pickup()
 	elseif instanceOf(PoisonRiceBall, other) then
+		SFX_POISON_PICKUP:rewind()
+		SFX_POISON_PICKUP:play()
 		self:setHealth(self.curHealth - POISON_RICE_BALL_HEALTH_VALUE)
 		other:pickup()
 	elseif instanceOf(Enemy, other) then
 		self:setHealth(self.curHealth - ENEMY_HEALTH_DRAIN_VALUE)
 	elseif instanceOf(LevelExit, other) then
+		SFX_LEVEL_PROGRESS:rewind()
+		SFX_LEVEL_PROGRESS:play()
 		self.goToNextLevel = true
 	end
 end

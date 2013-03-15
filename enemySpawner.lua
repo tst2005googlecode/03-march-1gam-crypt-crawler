@@ -1,3 +1,5 @@
+require "soundLibrary"
+
 EnemySpawner = class("EnemySpawner")
 
 ENEMY_SPAWNER_WIDTH = 32
@@ -25,6 +27,8 @@ end
 
 function EnemySpawner:onCollision(dt, other, dx, dy)
 	if instanceOf(Bullet, other) then
+		SFX_SPAWNER_HIT:rewind()
+		SFX_SPAWNER_HIT:play()
 		self.level = self.level - 1
 		if self.level <= 0 then
 			self.alive = false

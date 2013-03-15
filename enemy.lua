@@ -1,3 +1,5 @@
+require "soundLibrary"
+
 Enemy = class("Enemy")
 
 ENEMY_WIDTH = 32
@@ -44,6 +46,8 @@ function Enemy:onCollision(dt, other, dx, dy)
 	if instanceOf(Wall, other) or instanceOf(Enemy, other) or instanceOf(EnemySpawner, other) or instanceOf(LockedDoor, other) then
 		table.insert(self.solidCollisions, other.boundedBox)
 	elseif instanceOf(Bullet, other) or instanceOf(Player, other) then
+		SFX_ENEMY_HIT:rewind()
+		SFX_ENEMY_HIT:play()
 		self.level = self.level - 1
 		if self.level <= 0 then
 			self.alive = false
