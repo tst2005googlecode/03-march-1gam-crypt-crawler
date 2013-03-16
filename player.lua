@@ -165,6 +165,8 @@ function Player:updateSolidCollisions(dt)
 			elseif self.velocity.x < 0 then --Moving Left
 				self.boundedBox.x = otherCollision.x + otherCollision.width
 			end
+			
+			self.velocity.x = 0
 		end
 		
 		-- Check Y Direction
@@ -184,6 +186,8 @@ function Player:updateSolidCollisions(dt)
 			elseif self.velocity.y < 0 then --Moving Left
 				self.boundedBox.y = otherCollision.y + otherCollision.height
 			end
+			
+			self.velocity.y = 0
 		end
 	end
 end
