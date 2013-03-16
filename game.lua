@@ -46,7 +46,7 @@ function Game:reset()
 		bump.remove(riceBall.boundedBox)
 	end
 	
-	for i, poisonRiceBall in ipairs(self.riceBalls) do
+	for i, poisonRiceBall in ipairs(self.poisonRiceBalls) do
 		bump.remove(poisonRiceBall.boundedBox)
 	end
 	
