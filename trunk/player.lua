@@ -1,3 +1,4 @@
+require "Lib/AnAL"
 require "soundLibrary"
 
 Player = class("Player")
@@ -11,6 +12,8 @@ PLAYER_HEALTH_TIMER = 7
 PLAYER_HEALTH_DRAIN = 3
 PLAYER_HEALTH_MAX = 100
 
+PLAYER_ANIMATION_DELAY = 0.2
+
 function Player:initialize()
 	self.boundedBox = {
 		x = 100,
@@ -21,7 +24,17 @@ function Player:initialize()
 	}
 	bump.add(self.boundedBox)
 	
-	self.image = love.graphics.newImage("Graphic/Player.png")
+	self.image = love.graphics.newImage("Graphic/PlayerAnimation.png")
+	self.animations = {}
+	self.animations[0] = newAnimation(self.image, 0, 32 * 0, 32, 32, PLAYER_ANIMATION_DELAY, 4)
+	self.animations[45] = newAnimation(self.image, 0, 32 * 1, 32, 32, PLAYER_ANIMATION_DELAY, 4)
+	self.animations[90] = newAnimation(self.image, 0, 32 * 2, 32, 32, PLAYER_ANIMATION_DELAY, 4)
+	self.animations[135] = newAnimation(self.image, 0, 32 * 3, 32, 32, PLAYER_ANIMATION_DELAY, 4)
+	self.animations[180] = newAnimation(self.image, 0, 32 * 4, 32, 32, PLAYER_ANIMATION_DELAY, 4)
+	self.animations[225] = newAnimation(self.image, 0, 32 * 5, 32, 32, PLAYER_ANIMATION_DELAY, 4)
+	self.animations[270] = newAnimation(self.image, 0, 32 * 6, 32, 32, PLAYER_ANIMATION_DELAY, 4)
+	self.animations[315] = newAnimation(self.image, 0, 32 * 7, 32, 32, PLAYER_ANIMATION_DELAY, 4)
+	self.animations[360] = newAnimation(self.image, 0, 32 * 0, 32, 32, PLAYER_ANIMATION_DELAY, 4)
 	
 	self:reset()
 end
@@ -36,10 +49,11 @@ function Player:reset()
 	self.numKeys = 0
 	self.goToNextLevel = false
 	
-	self.leftPressed = false;
-	self.rightPressed = false;
-	self.upPressed = false;
-	self.downPressed = false;
+	self.leftPressed = false
+	self.rightPressed = false
+	self.upPressed = false
+	self.downPressed = false
+	self.doAnimation = false
 	
 	self.solidCollisions = {}
 	
@@ -92,26 +106,36 @@ function Player:update(dt)
 	self:updateRotation()
 	self:updatePosition(dt)
 	self:updateHealthDrain(dt)
+	
+	if self.doAnimation then
+		self.animations[self.rotation]:play()
+		self.animations[self.rotation]:update(dt)
+	end
 end
 
 function Player:updateVelocity()
 	local vx = 0
 	local vy = 0
+	self.doAnimation = false
 	
 	if self.leftPressed then
 		vx = vx - 1
+		self.doAnimation = true
 	end
 	
 	if self.rightPressed then
 		vx = vx + 1
+		self.doAnimation = true
 	end
 	
 	if self.upPressed then
 		vy = vy - 1
+		self.doAnimation = true
 	end
 	
 	if self.downPressed then
 		vy = vy + 1
+		self.doAnimation = true
 	end
 	
 	if vx ~= 0 or vy ~= 0 then
@@ -124,7 +148,10 @@ end
 
 function Player:updateRotation()
 	if self.velocity.x ~= 0 or self.velocity.y ~= 0 then
-		self.rotation = math.atan2(self.velocity.y, self.velocity.x)
+		self.rotation = math.deg(math.atan2(self.velocity.y, self.velocity.x))
+		if self.rotation < 0 then
+			self.rotation = self.rotation + 360
+		end
 	end
 end
 
@@ -194,16 +221,7 @@ end
 
 function Player:draw()
 	love.graphics.setColor(255, 255, 255)
-	--love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
+	-- love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
 	
-	love.graphics.draw(
-		self.image,
-		self.boundedBox.x + PLAYER_WIDTH / 2,
-		self.boundedBox.y + PLAYER_HEIGHT / 2,
-		self.rotation,
-		1,
-		1,
-		PLAYER_WIDTH / 2 + PLAYER_SPRITE_OFFSET,
-		PLAYER_HEIGHT / 2 + PLAYER_SPRITE_OFFSET
-	)
+	self.animations[self.rotation]:draw(self.boundedBox.x - PLAYER_SPRITE_OFFSET, self.boundedBox.y - PLAYER_SPRITE_OFFSET)
 end
