@@ -1,3 +1,4 @@
+require "Lib/AnAL"
 require "soundLibrary"
 
 Enemy = class("Enemy")
@@ -14,7 +15,14 @@ ENEMY_ONSCREEN_TIMER = 4
 ENEMY_PURSUE_PLAYER_DISTANCE = 96
 ENEMY_HEALTH_DRAIN_VALUE = 2
 
-ENEMY_SPRITESHEET = love.graphics.newImage("Graphic/EnemySpriteSheet.png")
+ENEMY_ANIMATION_DELAY = 0.1
+
+ENEMY_SPRITESHEET = {}
+ENEMY_SPRITESHEET[1] = love.graphics.newImage("Graphic/Enemy/EnemySpriteSheetLevel1.png")
+ENEMY_SPRITESHEET[2] = love.graphics.newImage("Graphic/Enemy/EnemySpriteSheetLevel2.png")
+ENEMY_SPRITESHEET[3] = love.graphics.newImage("Graphic/Enemy/EnemySpriteSheetLevel3.png")
+ENEMY_SPRITESHEET[4] = love.graphics.newImage("Graphic/Enemy/EnemySpriteSheetLevel4.png")
+ENEMY_SPRITESHEET[5] = love.graphics.newImage("Graphic/Enemy/EnemySpriteSheetLevel5.png")
 
 function Enemy:initialize(x, y, level)
 	self.boundedBox = {
@@ -37,9 +45,29 @@ function Enemy:initialize(x, y, level)
 	self.changeStateTimer = 0
 	self.hasBeenSeen = false
 	self.onScreenTimer = 0
+	self.doAnimation = false
 	
 	self.level = level
 	self.alive = true
+	
+	self:initializeAnimations()
+end
+
+function Enemy:initializeAnimations()
+	self.animations = {}
+	
+	for level = 1, 5 do
+		self.animations[level] = {}
+		self.animations[level][0] = newAnimation(ENEMY_SPRITESHEET[level], 0, 32 * 0, 32, 32, ENEMY_ANIMATION_DELAY, 4)
+		self.animations[level][45] = newAnimation(ENEMY_SPRITESHEET[level], 0, 32 * 1, 32, 32, ENEMY_ANIMATION_DELAY, 4)
+		self.animations[level][90] = newAnimation(ENEMY_SPRITESHEET[level], 0, 32 * 2, 32, 32, ENEMY_ANIMATION_DELAY, 4)
+		self.animations[level][135] = newAnimation(ENEMY_SPRITESHEET[level], 0, 32 * 3, 32, 32, ENEMY_ANIMATION_DELAY, 4)
+		self.animations[level][180] = newAnimation(ENEMY_SPRITESHEET[level], 0, 32 * 4, 32, 32, ENEMY_ANIMATION_DELAY, 4)
+		self.animations[level][225] = newAnimation(ENEMY_SPRITESHEET[level], 0, 32 * 5, 32, 32, ENEMY_ANIMATION_DELAY, 4)
+		self.animations[level][270] = newAnimation(ENEMY_SPRITESHEET[level], 0, 32 * 6, 32, 32, ENEMY_ANIMATION_DELAY, 4)
+		self.animations[level][315] = newAnimation(ENEMY_SPRITESHEET[level], 0, 32 * 7, 32, 32, ENEMY_ANIMATION_DELAY, 4)
+		self.animations[level][360] = newAnimation(ENEMY_SPRITESHEET[level], 0, 32 * 0, 32, 32, ENEMY_ANIMATION_DELAY, 4)
+	end
 end
 
 function Enemy:onCollision(dt, other, dx, dy)
@@ -56,11 +84,18 @@ function Enemy:onCollision(dt, other, dx, dy)
 end
 
 function Enemy:update(dt, playerPosition, onScreen)
+	self.doAnimation = false
+	
 	self.solidCollisions = {}
 	self:updateVelocity(dt, playerPosition)
 	self:updateRotation()
 	self:updatePosition(dt)
 	self:updateOnScreenTimers(dt, onScreen)
+	
+	if self.doAnimation and self.alive then
+		self.animations[self.level][self.rotation]:play()
+		self.animations[self.level][self.rotation]:update(dt)
+	end
 end
 
 function Enemy:updateVelocity(dt, playerPosition)
@@ -122,7 +157,11 @@ end
 
 function Enemy:updateRotation()
 	if self.velocity.x ~= 0 or self.velocity.y ~= 0 then
-		self.rotation = math.atan2(self.velocity.y, self.velocity.x)
+		self.doAnimation = true
+		self.rotation = math.ceil(math.deg(math.atan2(self.velocity.y, self.velocity.x)))
+		if self.rotation < 0 then
+			self.rotation = self.rotation + 360
+		end
 	end
 end
 
@@ -198,25 +237,9 @@ end
 
 function Enemy:draw()
 	love.graphics.setColor(255, 255, 255)
-	--love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
-	local quad = love.graphics.newQuad(
-		(self.level - 1) * 32,
-		0,
-		32,
-		32,
-		ENEMY_SPRITESHEET:getWidth(),
-		ENEMY_SPRITESHEET:getHeight()
-	)
+	-- love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
 	
-	love.graphics.drawq(
-		ENEMY_SPRITESHEET,
-		quad,
-		self.boundedBox.x + ENEMY_WIDTH / 2,
-		self.boundedBox.y + ENEMY_HEIGHT / 2,
-		self.rotation,
-		1,
-		1,
-		ENEMY_WIDTH / 2 + ENEMY_SPRITE_OFFSET,
-		ENEMY_HEIGHT / 2 + ENEMY_SPRITE_OFFSET
-	)
+	if self.alive then
+		self.animations[self.level][self.rotation]:draw(self.boundedBox.x - ENEMY_SPRITE_OFFSET, self.boundedBox.y - ENEMY_SPRITE_OFFSET)
+	end
 end

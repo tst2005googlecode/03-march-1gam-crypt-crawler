@@ -101,6 +101,7 @@ function Player:setHealth(newHealth)
 end
 
 function Player:update(dt)
+	self.doAnimation = false
 	self.solidCollisions = {}
 	self:updateVelocity()
 	self:updateRotation()
@@ -116,26 +117,21 @@ end
 function Player:updateVelocity()
 	local vx = 0
 	local vy = 0
-	self.doAnimation = false
 	
 	if self.leftPressed then
 		vx = vx - 1
-		self.doAnimation = true
 	end
 	
 	if self.rightPressed then
 		vx = vx + 1
-		self.doAnimation = true
 	end
 	
 	if self.upPressed then
 		vy = vy - 1
-		self.doAnimation = true
 	end
 	
 	if self.downPressed then
 		vy = vy + 1
-		self.doAnimation = true
 	end
 	
 	if vx ~= 0 or vy ~= 0 then
@@ -148,7 +144,8 @@ end
 
 function Player:updateRotation()
 	if self.velocity.x ~= 0 or self.velocity.y ~= 0 then
-		self.rotation = math.deg(math.atan2(self.velocity.y, self.velocity.x))
+		self.doAnimation = true
+		self.rotation = math.ceil(math.deg(math.atan2(self.velocity.y, self.velocity.x)))
 		if self.rotation < 0 then
 			self.rotation = self.rotation + 360
 		end
