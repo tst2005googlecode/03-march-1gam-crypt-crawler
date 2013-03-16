@@ -41,7 +41,23 @@ function EnemyManager:spawnEnemies(dt, cameraBox)
 			
 			if spawner.spawnTimer <= 0 then
 				local x, y = spawner:getRandomSpawnPosition()
-				table.insert(self.enemies, Enemy:new(x, y, spawner.level))
+				local testBox = {
+					x = x,
+					y = y,
+					width = ENEMY_WIDTH,
+					height = ENEMY_HEIGHT
+				}
+				local isFree = true
+				
+				for i, enemy in ipairs(self.enemies) do
+					if bump.doesCollide(testBox, enemy.boundedBox) then
+						isFree = false
+					end
+				end
+				
+				if isFree then
+					table.insert(self.enemies, Enemy:new(x, y, spawner.level))
+				end
 				
 				spawner:resetTimer()
 			end
