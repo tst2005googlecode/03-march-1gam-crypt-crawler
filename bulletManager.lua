@@ -15,7 +15,7 @@ function BulletManager:fireBullet(x, y, direction, hudObj)
 	if #self.bullets == 0 then
 		SFX_BULLET_FIRE:rewind()
 		SFX_BULLET_FIRE:play()
-		table.insert(self.bullets, Bullet:new(x, y, direction, hudObj))
+		table.insert(self.bullets, Bullet:new(x, y, math.rad(direction), hudObj))
 	end
 end
 
