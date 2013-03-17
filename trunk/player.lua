@@ -42,16 +42,17 @@ function Player:initialize()
 end
 
 function Player:initializeDamageParticle()
-	local bloodImage = love.graphics.newImage("Asset/Particle/Blank.png")
+	local bloodImage = love.graphics.newImage("Asset/Particle/PlayerBlood.png")
 	
-	local p = love.graphics.newParticleSystem(bloodImage, 10)
+	local p = love.graphics.newParticleSystem(bloodImage, 30)
 	
-	p:setEmissionRate(300)
-	p:setLifetime(0.3)
-	p:setParticleLife(0.2, 0.3)
+	p:setEmissionRate(2000)
+	p:setLifetime(0.5)
+	p:setParticleLife(0.5)
 	p:setSpread(2 * math.pi)
-	p:setSpeed(150, 300)
-	p:setSizes(3, 6)
+	p:setSpeed(10, 150)
+	p:setSizes(0.1, 0.2)
+	p:setGravity(400)
 	p:setColors(
 		255, 0, 0, 255,
 		255, 0, 0, 0
@@ -85,6 +86,7 @@ end
 function Player:onCollision(dt, other, dx, dy)
 	if instanceOf(Wall, other) or instanceOf(EnemySpawner, other) then
 		table.insert(self.solidCollisions, other.boundedBox)
+		self.bloodParticleSystem:start()
 	elseif instanceOf(LockedDoor, other) then
 		if self.numKeys > 0 then
 			SFX_DOOR_UNLOCK:rewind()
@@ -136,10 +138,10 @@ function Player:update(dt)
 		self.animations[self.rotation]:update(dt)
 	end
 	
-	if self.bloodParticleSystem:isActive() then
-		self.bloodParticleSystem:setPosition(self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2)
-		self.bloodParticleSystem:update(dt)
-	else
+	self.bloodParticleSystem:update(dt)
+	self.bloodParticleSystem:setPosition(self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2)
+	
+	if not self.bloodParticleSystem:isActive() then
 		self.bloodParticleSystem:reset()
 	end
 end
