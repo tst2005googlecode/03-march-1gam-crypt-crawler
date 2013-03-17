@@ -19,6 +19,7 @@ function Bullet:initialize(x, y, direction, hudObj)
 	bump.add(self.boundedBox)
 	self.alive = true
 	
+	self.direction = direction
 	self.velocity = {
 		x = math.cos(direction) * BULLET_SPEED,
 		y = math.sin(direction) * BULLET_SPEED
@@ -46,7 +47,14 @@ function Bullet:onCollision(dt, other, dx, dy)
 		end
 		
 		if impact then
-			BULLET_SPARK_SYSTEM:setPosition(self.boundedBox.x + BULLET_WIDTH / 2, self.boundedBox.y + BULLET_HEIGHT / 2)
+			local px = self.boundedBox.x + BULLET_WIDTH / 2
+			local py = self.boundedBox.y + BULLET_HEIGHT / 2
+			
+			px = px + math.cos(self.direction) * BULLET_WIDTH / 2
+			py = py + math.sin(self.direction) * BULLET_HEIGHT / 2
+			
+			BULLET_SPARK_SYSTEM:setDirection(self.direction - math.pi)
+			BULLET_SPARK_SYSTEM:setPosition(px, py)
 			BULLET_SPARK_SYSTEM:start()
 		end
 	end

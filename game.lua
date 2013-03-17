@@ -257,9 +257,9 @@ function Game:update(dt)
 	self.player:updateSolidCollisions(dt)
 	self.enemyManager:updateSolidCollisions(dt, cameraBox)
 	
-	if BULLET_SPARK_SYSTEM:isActive() then
-		BULLET_SPARK_SYSTEM:update(dt)
-	else
+	BULLET_SPARK_SYSTEM:update(dt)
+	
+	if not BULLET_SPARK_SYSTEM:isActive() then
 		BULLET_SPARK_SYSTEM:reset()
 	end
 	
