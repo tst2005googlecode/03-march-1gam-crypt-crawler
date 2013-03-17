@@ -12,7 +12,7 @@ function initializeBulletParticleSystem()
 	p:setParticleLife(0, 0.1)
 	p:setSpread(2 * math.pi)
 	p:setSpeed(200, 100)
-	p:setSizes(3)
+	p:setSizes(0.2, 1)
 	p:setColors(
 		255, 110, 110, 255,
 		255, 255, 0, 0
