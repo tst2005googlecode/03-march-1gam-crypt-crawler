@@ -5,16 +5,16 @@ BulletManager = class("BulletManager")
 
 function initializeBulletParticleSystem()
 	BULLET_SPARK_IMAGE = love.graphics.newImage("Asset/Particle/BulletSpark.png")
-	local p = love.graphics.newParticleSystem(BULLET_SPARK_IMAGE, 50)
+	local p = love.graphics.newParticleSystem(BULLET_SPARK_IMAGE, 10)
 	
-	p:setEmissionRate(500)
+	p:setEmissionRate(2000)
 	p:setLifetime(0.1)
-	p:setParticleLife(0, 0.1)
-	p:setSpread(2 * math.pi)
+	p:setParticleLife(0.1)
+	p:setSpread(math.pi * 2 / 3)
 	p:setSpeed(200, 300)
-	p:setSizes(0.2, 1)
+	p:setSizes(0.2, 0.4)
 	p:setColors(
-		255, 110, 110, 255,
+		255, 255, 0, 255,
 		255, 255, 0, 0
 	)
 	p:stop()
