@@ -11,6 +11,7 @@ function initializeBulletParticleSystem()
 	p:setLifetime(0.1)
 	p:setParticleLife(0.1)
 	p:setSpread(math.pi * 2 / 3)
+	p:setRotation(0, math.pi * 2)
 	p:setSpeed(200, 300)
 	p:setSizes(0.2, 0.4)
 	p:setColors(
