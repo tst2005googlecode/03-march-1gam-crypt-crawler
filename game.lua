@@ -309,10 +309,7 @@ function Game:draw()
 	end
 	
 	self.bulletManager:draw()
-	
-	if BULLET_SPARK_SYSTEM:isActive() then
-		love.graphics.draw(BULLET_SPARK_SYSTEM)
-	end
+	love.graphics.draw(BULLET_SPARK_SYSTEM)
 	
 	self.camera:unset()
 	
