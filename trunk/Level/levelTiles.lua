@@ -6,7 +6,7 @@ NUM_TILES_VERTICAL = 32
 NUM_TILE_SPRITES = NUM_TILES_HORIZONTAL * NUM_TILES_VERTICAL
 
 function LevelTiles:initialize()
-	self.tilesetImage = love.graphics.newImage("Graphic/LevelTiles.png")
+	self.tilesetImage = love.graphics.newImage("Asset/Graphic/LevelTiles.png")
 	self.tilesetImage:setFilter("nearest", "linear")
 	
 	self.tileQuads = {}

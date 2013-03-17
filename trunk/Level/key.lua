@@ -3,7 +3,7 @@ Key = class("Key")
 KEY_WIDTH = 32
 KEY_HEIGHT = 13
 
-KEY_IMAGE = love.graphics.newImage("Graphic/Key.png")
+KEY_IMAGE = love.graphics.newImage("Asset/Graphic/Key.png")
 
 function Key:initialize(x, y)
 	self.boundedBox = {

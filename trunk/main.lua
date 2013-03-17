@@ -14,9 +14,9 @@ function love.load()
 	defaultFont = love.graphics.newFont(12)
 	
 	gameStates = {}
-	gameStates[1] = GameState:new(love.graphics.newImage("Graphic/Screen/TitleScreen.png"), 0)
-	gameStates[2] = GameState:new(love.graphics.newImage("Graphic/Screen/GameOverScreen.png"), 3)
-	gameStates[3] = GameState:new(love.graphics.newImage("Graphic/Screen/CreditsScreen.png"), 1)
+	gameStates[1] = GameState:new(love.graphics.newImage("Asset/Graphic/Screen/TitleScreen.png"), 0)
+	gameStates[2] = GameState:new(love.graphics.newImage("Asset/Graphic/Screen/GameOverScreen.png"), 3)
+	gameStates[3] = GameState:new(love.graphics.newImage("Asset/Graphic/Screen/CreditsScreen.png"), 1)
 	
 	game = Game:new()
 	

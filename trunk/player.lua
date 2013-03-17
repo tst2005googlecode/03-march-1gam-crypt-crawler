@@ -24,7 +24,7 @@ function Player:initialize()
 	}
 	bump.add(self.boundedBox)
 	
-	self.image = love.graphics.newImage("Graphic/PlayerAnimation.png")
+	self.image = love.graphics.newImage("Asset/Graphic/PlayerAnimation.png")
 	self.animations = {}
 	self.animations[0] = newAnimation(self.image, 0, 32 * 0, 32, 32, PLAYER_ANIMATION_DELAY, 4)
 	self.animations[45] = newAnimation(self.image, 0, 32 * 1, 32, 32, PLAYER_ANIMATION_DELAY, 4)

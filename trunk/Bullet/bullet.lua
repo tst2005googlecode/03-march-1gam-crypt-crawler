@@ -5,7 +5,7 @@ BULLET_HEIGHT = 16
 
 BULLET_SPEED = 400
 BULLET_ROTATION_SPEED = 10
-BULLET_IMAGE = love.graphics.newImage("Graphic/Bullet.png")
+BULLET_IMAGE = love.graphics.newImage("Asset/Graphic/Bullet.png")
 
 function Bullet:initialize(x, y, direction, hudObj)
 	self.boundedBox = {
@@ -30,14 +30,24 @@ end
 
 function Bullet:onCollision(dt, other, dx, dy)
 	if self.alive then
+		local impact = false
+		
 		if instanceOf(Wall, other) then
 			self.alive = false
+			impact = true
 		elseif instanceOf(Enemy, other) or instanceOf(EnemySpawner, other) then
 			self.alive = false
 			self.hudObj.curScore = self.hudObj.curScore + 10
+			impact = true
 		elseif instanceOf(RiceBall, other) then
 			self.alive = false
 			other:pickup()
+			impact = true
+		end
+		
+		if impact then
+			BULLET_SPARK_SYSTEM:setPosition(self.boundedBox.x + BULLET_WIDTH / 2, self.boundedBox.y + BULLET_HEIGHT / 2)
+			BULLET_SPARK_SYSTEM:start()
 		end
 	end
 end

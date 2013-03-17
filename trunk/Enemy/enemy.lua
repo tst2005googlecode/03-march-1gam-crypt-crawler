@@ -18,11 +18,11 @@ ENEMY_HEALTH_DRAIN_VALUE = 2
 ENEMY_ANIMATION_DELAY = 0.1
 
 ENEMY_SPRITESHEET = {}
-ENEMY_SPRITESHEET[1] = love.graphics.newImage("Graphic/Enemy/EnemySpriteSheetLevel1.png")
-ENEMY_SPRITESHEET[2] = love.graphics.newImage("Graphic/Enemy/EnemySpriteSheetLevel2.png")
-ENEMY_SPRITESHEET[3] = love.graphics.newImage("Graphic/Enemy/EnemySpriteSheetLevel3.png")
-ENEMY_SPRITESHEET[4] = love.graphics.newImage("Graphic/Enemy/EnemySpriteSheetLevel4.png")
-ENEMY_SPRITESHEET[5] = love.graphics.newImage("Graphic/Enemy/EnemySpriteSheetLevel5.png")
+ENEMY_SPRITESHEET[1] = love.graphics.newImage("Asset/Graphic/Enemy/EnemySpriteSheetLevel1.png")
+ENEMY_SPRITESHEET[2] = love.graphics.newImage("Asset/Graphic/Enemy/EnemySpriteSheetLevel2.png")
+ENEMY_SPRITESHEET[3] = love.graphics.newImage("Asset/Graphic/Enemy/EnemySpriteSheetLevel3.png")
+ENEMY_SPRITESHEET[4] = love.graphics.newImage("Asset/Graphic/Enemy/EnemySpriteSheetLevel4.png")
+ENEMY_SPRITESHEET[5] = love.graphics.newImage("Asset/Graphic/Enemy/EnemySpriteSheetLevel5.png")
 
 function Enemy:initialize(x, y, level)
 	self.boundedBox = {

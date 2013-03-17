@@ -1,6 +1,6 @@
 WallManager = class("WallManager")
 
-require "wall"
+require "Level/wall"
 
 function WallManager:initialize()
 	self.walls = {}
