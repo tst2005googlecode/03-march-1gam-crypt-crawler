@@ -36,16 +36,16 @@ function Player:initialize()
 	self.animations[315] = newAnimation(self.image, 0, 32 * 7, 32, 32, PLAYER_ANIMATION_DELAY, 4)
 	self.animations[360] = newAnimation(self.image, 0, 32 * 0, 32, 32, PLAYER_ANIMATION_DELAY, 4)
 	
-	self:initializeDamageParticle()
+	self:initializeParticles()
 	
 	self:reset()
 end
 
-function Player:initializeDamageParticle()
+function Player:initializeParticles()
+	-- Damage Effect
 	local bloodImage = love.graphics.newImage("Asset/Particle/PlayerBlood.png")
 	
 	local p = love.graphics.newParticleSystem(bloodImage, 30)
-	
 	p:setEmissionRate(2000)
 	p:setLifetime(0.5)
 	p:setParticleLife(0.5)
@@ -60,6 +60,25 @@ function Player:initializeDamageParticle()
 	p:stop()
 	
 	self.bloodParticleSystem = p
+	
+	-- Poison Pickup Effect
+	local poisonImage = love.graphics.newImage("Asset/Particle/PoisonPickup.png")
+	
+	local p2 = love.graphics.newParticleSystem(poisonImage, 1)
+	
+	p2:setEmissionRate(2000)
+	p2:setLifetime(0.75)
+	p2:setParticleLife(0.75)
+	p2:setDirection(math.pi * 1.5) -- Straight Up
+	p2:setSpeed(100)
+	p2:setSizes(0.75)
+	p2:setColors(
+		255, 255, 255, 255,
+		255, 255, 255, 0
+	)
+	p2:stop()
+	
+	self.poisonParticleSystem = p2
 end
 
 function Player:reset()
@@ -111,8 +130,13 @@ function Player:onCollision(dt, other, dx, dy)
 		SFX_POISON_PICKUP:play()
 		self:setHealth(self.curHealth - POISON_RICE_BALL_HEALTH_VALUE)
 		other:pickup()
+		
+		self.poisonParticleSystem:setPosition(self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2)
+		self.poisonParticleSystem:start()
 	elseif instanceOf(Enemy, other) then
 		self:setHealth(self.curHealth - ENEMY_HEALTH_DRAIN_VALUE)
+		
+		self.bloodParticleSystem:setPosition(self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2)
 		self.bloodParticleSystem:start()
 	elseif instanceOf(LevelExit, other) then
 		SFX_LEVEL_PROGRESS:rewind()
@@ -138,11 +162,15 @@ function Player:update(dt)
 		self.animations[self.rotation]:update(dt)
 	end
 	
+	-- Particle Effects
 	self.bloodParticleSystem:update(dt)
-	self.bloodParticleSystem:setPosition(self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2)
-	
 	if not self.bloodParticleSystem:isActive() then
 		self.bloodParticleSystem:reset()
+	end
+	
+	self.poisonParticleSystem:update(dt)
+	if not self.poisonParticleSystem:isActive() then
+		self.poisonParticleSystem:reset()
 	end
 end
 
@@ -255,4 +283,5 @@ function Player:draw()
 	self.animations[self.rotation]:draw(self.boundedBox.x - PLAYER_SPRITE_OFFSET, self.boundedBox.y - PLAYER_SPRITE_OFFSET)
 	
 	love.graphics.draw(self.bloodParticleSystem)
+	love.graphics.draw(self.poisonParticleSystem)
 end
