@@ -36,7 +36,29 @@ function Player:initialize()
 	self.animations[315] = newAnimation(self.image, 0, 32 * 7, 32, 32, PLAYER_ANIMATION_DELAY, 4)
 	self.animations[360] = newAnimation(self.image, 0, 32 * 0, 32, 32, PLAYER_ANIMATION_DELAY, 4)
 	
+	self:initializeDamageParticle()
+	
 	self:reset()
+end
+
+function Player:initializeDamageParticle()
+	local bloodImage = love.graphics.newImage("Asset/Particle/Blank.png")
+	
+	local p = love.graphics.newParticleSystem(bloodImage, 10)
+	
+	p:setEmissionRate(300)
+	p:setLifetime(0.3)
+	p:setParticleLife(0.1, 0.3)
+	p:setSpread(2 * math.pi)
+	p:setSpeed(150, 300)
+	p:setSizes(3, 6)
+	p:setColors(
+		255, 0, 0, 255,
+		255, 0, 0, 0
+	)
+	p:stop()
+	
+	self.bloodParticleSystem = p
 end
 
 function Player:reset()
@@ -63,6 +85,8 @@ end
 function Player:onCollision(dt, other, dx, dy)
 	if instanceOf(Wall, other) or instanceOf(EnemySpawner, other) then
 		table.insert(self.solidCollisions, other.boundedBox)
+		
+		self.bloodParticleSystem:start()
 	elseif instanceOf(LockedDoor, other) then
 		if self.numKeys > 0 then
 			SFX_DOOR_UNLOCK:rewind()
@@ -89,6 +113,9 @@ function Player:onCollision(dt, other, dx, dy)
 		other:pickup()
 	elseif instanceOf(Enemy, other) then
 		self:setHealth(self.curHealth - ENEMY_HEALTH_DRAIN_VALUE)
+		
+		self.bloodParticleSystem:setPosition(self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2)
+		self.bloodParticleSystem:start()
 	elseif instanceOf(LevelExit, other) then
 		SFX_LEVEL_PROGRESS:rewind()
 		SFX_LEVEL_PROGRESS:play()
@@ -111,6 +138,13 @@ function Player:update(dt)
 	if self.doAnimation then
 		self.animations[self.rotation]:play()
 		self.animations[self.rotation]:update(dt)
+	end
+	
+	if self.bloodParticleSystem:isActive() then
+		self.bloodParticleSystem:setPosition(self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2)
+		self.bloodParticleSystem:update(dt)
+	else
+		self.bloodParticleSystem:reset()
 	end
 end
 
@@ -221,4 +255,8 @@ function Player:draw()
 	-- love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
 	
 	self.animations[self.rotation]:draw(self.boundedBox.x - PLAYER_SPRITE_OFFSET, self.boundedBox.y - PLAYER_SPRITE_OFFSET)
+	
+	if self.bloodParticleSystem:isActive() then
+		love.graphics.draw(self.bloodParticleSystem)
+	end
 end
