@@ -5,7 +5,7 @@ RICE_BALL_HEIGHT = 32
 
 RICE_BALL_HEALTH_VALUE = 15
 
-RICE_BALL_IMAGE = love.graphics.newImage("Graphic/RiceBall.png")
+RICE_BALL_IMAGE = love.graphics.newImage("Asset/Graphic/RiceBall.png")
 
 function RiceBall:initialize(x, y)
 	self.boundedBox = {

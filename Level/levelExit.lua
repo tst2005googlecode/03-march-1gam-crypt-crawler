@@ -3,7 +3,7 @@ LevelExit = class("LevelExit")
 LEVEL_EXIT_WIDTH = 32
 LEVEL_EXIT_HEIGHT = 13
 
-LEVEL_EXIT_IMAGE = love.graphics.newImage("Graphic/LevelExit.png")
+LEVEL_EXIT_IMAGE = love.graphics.newImage("Asset/Graphic/LevelExit.png")
 
 function LevelExit:initialize()
 	self.boundedBox = {

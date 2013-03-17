@@ -3,7 +3,7 @@ LockedDoor = class("LockedDoor")
 LOCKED_DOOR_WIDTH = 32
 LOCKED_DOOR_HEIGHT = 32
 
-LOCKED_DOOR_IMAGE = love.graphics.newImage("Graphic/LockedDoor.png")
+LOCKED_DOOR_IMAGE = love.graphics.newImage("Asset/Graphic/LockedDoor.png")
 
 function LockedDoor:initialize(x, y)
 	self.boundedBox = {

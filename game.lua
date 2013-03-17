@@ -1,15 +1,15 @@
 Game = class("Game")
 
 require "player"
-require "bulletManager"
-require "wallManager"
-require "lockedDoor"
-require "key"
-require "riceBall"
-require "poisonRiceBall"
-require "enemyManager"
-require "levelExit"
-require "levelTiles"
+require "Bullet/bulletManager"
+require "Level/wallManager"
+require "Level/lockedDoor"
+require "Level/key"
+require "Level/riceBall"
+require "Level/poisonRiceBall"
+require "Enemy/enemyManager"
+require "Level/levelExit"
+require "Level/levelTiles"
 require "camera"
 require "hud"
 
@@ -28,7 +28,7 @@ function Game:initialize()
 	self.levelExit = LevelExit:new()
 	
 	self.levelTiles = LevelTiles:new()
-	self.hud = HUD:new(love.graphics.newFont("Font/8bitlim.ttf", 32))
+	self.hud = HUD:new(love.graphics.newFont("Asset/Font/8bitlim.ttf", 32))
 	self.camera = Camera:new()
 	
 	self.gameBeaten = false
@@ -75,7 +75,7 @@ end
 
 function Game:loadLevel(levelNum)
 	self.curLevel = levelNum
-	levelFile = love.filesystem.newFile("Data/Level" .. levelNum .. ".csv")
+	levelFile = love.filesystem.newFile("Asset/Data/Level" .. levelNum .. ".csv")
 	levelFile:open('r')
 	fileContents = levelFile:read()
 	
@@ -257,6 +257,12 @@ function Game:update(dt)
 	self.player:updateSolidCollisions(dt)
 	self.enemyManager:updateSolidCollisions(dt, cameraBox)
 	
+	if BULLET_SPARK_SYSTEM:isActive() then
+		BULLET_SPARK_SYSTEM:update(dt)
+	else
+		BULLET_SPARK_SYSTEM:reset()
+	end
+	
 	self.camera:update(self.player.boundedBox.x, self.player.boundedBox.y)
 	
 	if self.player.goToNextLevel then
@@ -303,6 +309,10 @@ function Game:draw()
 	end
 	
 	self.bulletManager:draw()
+	
+	if BULLET_SPARK_SYSTEM:isActive() then
+		love.graphics.draw(BULLET_SPARK_SYSTEM)
+	end
 	
 	self.camera:unset()
 	

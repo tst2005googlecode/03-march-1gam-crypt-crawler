@@ -8,7 +8,7 @@ ENEMY_SPAWNER_HEIGHT = 32
 SPAWN_TIMER_MIN = 4.0
 SPAWN_TIMER_MAX = 6.0
 
-SPAWNER_IMAGE = love.graphics.newImage("Graphic/Spawner.png")
+SPAWNER_IMAGE = love.graphics.newImage("Asset/Graphic/Spawner.png")
 
 function EnemySpawner:initialize(x, y, level)
 	self.boundedBox = {

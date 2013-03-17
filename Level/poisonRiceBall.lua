@@ -2,7 +2,7 @@ PoisonRiceBall = class("PoisonRiceBall")
 
 POISON_RICE_BALL_HEALTH_VALUE = 25
 
-POISON_RICE_BALL_IMAGE = love.graphics.newImage("Graphic/PoisonRiceBall.png")
+POISON_RICE_BALL_IMAGE = love.graphics.newImage("Asset/Graphic/PoisonRiceBall.png")
 
 function PoisonRiceBall:initialize(x, y)
 	self.boundedBox = {

@@ -1,5 +1,5 @@
-require "enemySpawner"
-require "enemy"
+require "Enemy/enemySpawner"
+require "Enemy/enemy"
 
 EnemyManager = class("EnemyManager")
 
