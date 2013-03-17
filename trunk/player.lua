@@ -48,7 +48,7 @@ function Player:initializeDamageParticle()
 	
 	p:setEmissionRate(300)
 	p:setLifetime(0.3)
-	p:setParticleLife(0.1, 0.3)
+	p:setParticleLife(0.2, 0.3)
 	p:setSpread(2 * math.pi)
 	p:setSpeed(150, 300)
 	p:setSizes(3, 6)
@@ -252,7 +252,5 @@ function Player:draw()
 	
 	self.animations[self.rotation]:draw(self.boundedBox.x - PLAYER_SPRITE_OFFSET, self.boundedBox.y - PLAYER_SPRITE_OFFSET)
 	
-	if self.bloodParticleSystem:isActive() then
-		love.graphics.draw(self.bloodParticleSystem)
-	end
+	love.graphics.draw(self.bloodParticleSystem)
 end
