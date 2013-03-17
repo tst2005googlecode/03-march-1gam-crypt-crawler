@@ -85,8 +85,6 @@ end
 function Player:onCollision(dt, other, dx, dy)
 	if instanceOf(Wall, other) or instanceOf(EnemySpawner, other) then
 		table.insert(self.solidCollisions, other.boundedBox)
-		
-		self.bloodParticleSystem:start()
 	elseif instanceOf(LockedDoor, other) then
 		if self.numKeys > 0 then
 			SFX_DOOR_UNLOCK:rewind()
@@ -113,8 +111,6 @@ function Player:onCollision(dt, other, dx, dy)
 		other:pickup()
 	elseif instanceOf(Enemy, other) then
 		self:setHealth(self.curHealth - ENEMY_HEALTH_DRAIN_VALUE)
-		
-		self.bloodParticleSystem:setPosition(self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2)
 		self.bloodParticleSystem:start()
 	elseif instanceOf(LevelExit, other) then
 		SFX_LEVEL_PROGRESS:rewind()
