@@ -152,7 +152,6 @@ end
 function Player:onCollision(dt, other, dx, dy)
 	if instanceOf(Wall, other) or instanceOf(EnemySpawner, other) then
 		table.insert(self.solidCollisions, other.boundedBox)
-		self.bloodParticleSystem:start()
 	elseif instanceOf(LockedDoor, other) then
 		if self.numKeys > 0 then
 			SFX_DOOR_UNLOCK:rewind()
@@ -348,7 +347,7 @@ function Player:updateSolidCollisions(dt)
 end
 
 function Player:draw()
-	love.graphics.setColor(255, 255, 255)
+	-- love.graphics.setColor(255, 255, 255)
 	-- love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
 	
 	self.animations[self.rotation]:draw(self.boundedBox.x - PLAYER_SPRITE_OFFSET, self.boundedBox.y - PLAYER_SPRITE_OFFSET)
