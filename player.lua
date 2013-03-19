@@ -110,6 +110,22 @@ function Player:initializeParticles()
 	)
 	pK:stop()
 	self.keyParticleSystem = pK
+	
+	-- Door Unlock Effect
+	local doorUnlockImage = love.graphics.newImage("Asset/Particle/DoorUnlock.png")
+	local pU = love.graphics.newParticleSystem(doorUnlockImage, 1)
+	
+	pU:setEmissionRate(2000)
+	pU:setLifetime(0.3)
+	pU:setParticleLife(0.3)
+	pU:setSpeed(0)
+	pU:setSizes(1)
+	pU:setColors(
+		255, 255, 255, 255,
+		255, 255, 255, 0
+	)
+	pU:stop()
+	self.doorUnlockParticleSystem = pU
 end
 
 function Player:reset()
@@ -143,6 +159,9 @@ function Player:onCollision(dt, other, dx, dy)
 			SFX_DOOR_UNLOCK:play()
 			self.numKeys = self.numKeys - 1
 			other:unlock()
+			
+			self.doorUnlockParticleSystem:setPosition(other.boundedBox.x + LOCKED_DOOR_WIDTH / 2, other.boundedBox.y + LOCKED_DOOR_HEIGHT / 2)
+			self.doorUnlockParticleSystem:start()
 		else
 			table.insert(self.solidCollisions, other.boundedBox)
 		end
@@ -218,6 +237,11 @@ function Player:update(dt)
 	self.keyParticleSystem:update(dt)
 	if not self.keyParticleSystem:isActive() then
 		self.keyParticleSystem:reset()
+	end
+	
+	self.doorUnlockParticleSystem:update(dt)
+	if not self.doorUnlockParticleSystem:isActive() then
+		self.doorUnlockParticleSystem:reset()
 	end
 end
 
@@ -333,4 +357,5 @@ function Player:draw()
 	love.graphics.draw(self.healthParticleSystem)
 	love.graphics.draw(self.poisonParticleSystem)
 	love.graphics.draw(self.keyParticleSystem)
+	love.graphics.draw(self.doorUnlockParticleSystem)
 end
