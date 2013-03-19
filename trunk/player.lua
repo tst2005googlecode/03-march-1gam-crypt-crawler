@@ -44,8 +44,8 @@ end
 function Player:initializeParticles()
 	-- Damage Effect
 	local bloodImage = love.graphics.newImage("Asset/Particle/PlayerBlood.png")
-	
 	local p = love.graphics.newParticleSystem(bloodImage, 30)
+	
 	p:setEmissionRate(2000)
 	p:setLifetime(0.5)
 	p:setParticleLife(0.5)
@@ -58,12 +58,10 @@ function Player:initializeParticles()
 		255, 0, 0, 0
 	)
 	p:stop()
-	
 	self.bloodParticleSystem = p
 	
 	-- Poison Pickup Effect
 	local poisonImage = love.graphics.newImage("Asset/Particle/PoisonPickup.png")
-	
 	local p2 = love.graphics.newParticleSystem(poisonImage, 1)
 	
 	p2:setEmissionRate(2000)
@@ -77,8 +75,24 @@ function Player:initializeParticles()
 		255, 255, 255, 0
 	)
 	p2:stop()
-	
 	self.poisonParticleSystem = p2
+	
+	-- Key Pickup Effect
+	local keyPickupImage = love.graphics.newImage("Asset/Particle/KeyPickup.png")
+	local p3 = love.graphics.newParticleSystem(keyPickupImage, 1)
+	
+	p3:setEmissionRate(2000)
+	p3:setLifetime(0.75)
+	p3:setParticleLife(0.75)
+	p3:setDirection(math.pi * 1.5) -- Straight Up
+	p3:setSpeed(100)
+	p3:setSizes(1)
+	p3:setColors(
+		255, 196, 0, 255,
+		255, 196, 0, 0
+	)
+	p3:stop()
+	self.keyParticleSystem = p3
 end
 
 function Player:reset()
@@ -120,6 +134,9 @@ function Player:onCollision(dt, other, dx, dy)
 		SFX_KEY_PICKUP:play()
 		self.numKeys = self.numKeys + 1
 		other:pickup()
+		
+		self.keyParticleSystem:setPosition(other.boundedBox.x + KEY_WIDTH / 2, other.boundedBox.y + KEY_HEIGHT / 2)
+		self.keyParticleSystem:start()
 	elseif instanceOf(RiceBall, other) and self.curHealth < PLAYER_HEALTH_MAX then
 		SFX_HEALTH_PICKUP:rewind()
 		SFX_HEALTH_PICKUP:play()
@@ -171,6 +188,11 @@ function Player:update(dt)
 	self.poisonParticleSystem:update(dt)
 	if not self.poisonParticleSystem:isActive() then
 		self.poisonParticleSystem:reset()
+	end
+	
+	self.keyParticleSystem:update(dt)
+	if not self.keyParticleSystem:isActive() then
+		self.keyParticleSystem:reset()
 	end
 end
 
@@ -284,4 +306,5 @@ function Player:draw()
 	
 	love.graphics.draw(self.bloodParticleSystem)
 	love.graphics.draw(self.poisonParticleSystem)
+	love.graphics.draw(self.keyParticleSystem)
 end
