@@ -44,55 +44,72 @@ end
 function Player:initializeParticles()
 	-- Damage Effect
 	local bloodImage = love.graphics.newImage("Asset/Particle/PlayerBlood.png")
-	local p = love.graphics.newParticleSystem(bloodImage, 30)
+	local pD = love.graphics.newParticleSystem(bloodImage, 30)
 	
-	p:setEmissionRate(2000)
-	p:setLifetime(0.5)
-	p:setParticleLife(0.5)
-	p:setSpread(2 * math.pi)
-	p:setSpeed(10, 150)
-	p:setSizes(0.1, 0.2)
-	p:setGravity(400)
-	p:setColors(
+	pD:setEmissionRate(2000)
+	pD:setLifetime(0.5)
+	pD:setParticleLife(0.5)
+	pD:setSpread(2 * math.pi)
+	pD:setSpeed(10, 150)
+	pD:setSizes(0.1, 0.2)
+	pD:setGravity(400)
+	pD:setColors(
 		255, 0, 0, 255,
 		255, 0, 0, 0
 	)
-	p:stop()
-	self.bloodParticleSystem = p
+	pD:stop()
+	self.bloodParticleSystem = pD
 	
-	-- Poison Pickup Effect
-	local poisonImage = love.graphics.newImage("Asset/Particle/PoisonPickup.png")
-	local p2 = love.graphics.newParticleSystem(poisonImage, 1)
+	-- Health Pickup Effect
+	local pickupImage = love.graphics.newImage("Asset/Particle/HealthPickup.png")
+	local pH = love.graphics.newParticleSystem(pickupImage, 1)
 	
-	p2:setEmissionRate(2000)
-	p2:setLifetime(0.75)
-	p2:setParticleLife(0.75)
-	p2:setDirection(math.pi * 1.5) -- Straight Up
-	p2:setSpeed(100)
-	p2:setSizes(0.75)
-	p2:setColors(
+	pH:setEmissionRate(2000)
+	pH:setLifetime(0.75)
+	pH:setParticleLife(0.75)
+	pH:setDirection(math.pi * 1.5) -- Straight Up
+	pH:setSpeed(100)
+	pH:setSizes(1)
+	pH:setColors(
 		255, 255, 255, 255,
 		255, 255, 255, 0
 	)
-	p2:stop()
-	self.poisonParticleSystem = p2
+	pH:stop()
+	self.healthParticleSystem = pH
+	
+	-- Poison Pickup Effect
+	local poisonImage = love.graphics.newImage("Asset/Particle/PoisonPickup.png")
+	local pP = love.graphics.newParticleSystem(poisonImage, 1)
+	
+	pP:setEmissionRate(2000)
+	pP:setLifetime(0.75)
+	pP:setParticleLife(0.75)
+	pP:setDirection(math.pi * 1.5) -- Straight Up
+	pP:setSpeed(100)
+	pP:setSizes(0.75)
+	pP:setColors(
+		255, 255, 255, 255,
+		255, 255, 255, 0
+	)
+	pP:stop()
+	self.poisonParticleSystem = pP
 	
 	-- Key Pickup Effect
 	local keyPickupImage = love.graphics.newImage("Asset/Particle/KeyPickup.png")
-	local p3 = love.graphics.newParticleSystem(keyPickupImage, 1)
+	local pK = love.graphics.newParticleSystem(keyPickupImage, 1)
 	
-	p3:setEmissionRate(2000)
-	p3:setLifetime(0.75)
-	p3:setParticleLife(0.75)
-	p3:setDirection(math.pi * 1.5) -- Straight Up
-	p3:setSpeed(100)
-	p3:setSizes(1)
-	p3:setColors(
+	pK:setEmissionRate(2000)
+	pK:setLifetime(0.75)
+	pK:setParticleLife(0.75)
+	pK:setDirection(math.pi * 1.5) -- Straight Up
+	pK:setSpeed(100)
+	pK:setSizes(1)
+	pK:setColors(
 		255, 196, 0, 255,
 		255, 196, 0, 0
 	)
-	p3:stop()
-	self.keyParticleSystem = p3
+	pK:stop()
+	self.keyParticleSystem = pK
 end
 
 function Player:reset()
@@ -142,6 +159,9 @@ function Player:onCollision(dt, other, dx, dy)
 		SFX_HEALTH_PICKUP:play()
 		self:setHealth(self.curHealth + RICE_BALL_HEALTH_VALUE)
 		other:pickup()
+		
+		self.healthParticleSystem:setPosition(other.boundedBox.x + RICE_BALL_WIDTH / 2, other.boundedBox.y + RICE_BALL_HEIGHT / 2)
+		self.healthParticleSystem:start()
 	elseif instanceOf(PoisonRiceBall, other) then
 		SFX_POISON_PICKUP:rewind()
 		SFX_POISON_PICKUP:play()
@@ -183,6 +203,11 @@ function Player:update(dt)
 	self.bloodParticleSystem:update(dt)
 	if not self.bloodParticleSystem:isActive() then
 		self.bloodParticleSystem:reset()
+	end
+	
+	self.healthParticleSystem:update(dt)
+	if not self.healthParticleSystem:isActive() then
+		self.healthParticleSystem:reset()
 	end
 	
 	self.poisonParticleSystem:update(dt)
@@ -305,6 +330,7 @@ function Player:draw()
 	self.animations[self.rotation]:draw(self.boundedBox.x - PLAYER_SPRITE_OFFSET, self.boundedBox.y - PLAYER_SPRITE_OFFSET)
 	
 	love.graphics.draw(self.bloodParticleSystem)
+	love.graphics.draw(self.healthParticleSystem)
 	love.graphics.draw(self.poisonParticleSystem)
 	love.graphics.draw(self.keyParticleSystem)
 end
