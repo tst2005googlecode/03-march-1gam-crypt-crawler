@@ -5,8 +5,8 @@ require "Bullet/bulletManager"
 require "Level/wallManager"
 require "Level/lockedDoor"
 require "Level/key"
-require "Level/riceBall"
-require "Level/poisonRiceBall"
+require "Level/healthPickup"
+require "Level/poisonPickup"
 require "Enemy/enemyManager"
 require "Level/levelExit"
 require "Level/levelTiles"
@@ -21,8 +21,8 @@ function Game:initialize()
 	self.wallManager = WallManager:new()
 	self.lockedDoors = {}
 	self.keys = {}
-	self.riceBalls = {}
-	self.poisonRiceBalls = {}
+	self.healthPickups = {}
+	self.poisonPickups = {}
 	self.bulletManager = BulletManager:new()
 	self.enemyManager = EnemyManager:new()
 	self.levelExit = LevelExit:new()
@@ -42,20 +42,20 @@ function Game:reset()
 		bump.remove(key.boundedBox)
 	end
 	
-	for i, riceBall in ipairs(self.riceBalls) do
-		bump.remove(riceBall.boundedBox)
+	for i, healthPickup in ipairs(self.healthPickups) do
+		bump.remove(healthPickup.boundedBox)
 	end
 	
-	for i, poisonRiceBall in ipairs(self.poisonRiceBalls) do
-		bump.remove(poisonRiceBall.boundedBox)
+	for i, poisonPickup in ipairs(self.poisonPickups) do
+		bump.remove(poisonPickup.boundedBox)
 	end
 	
 	self.player:reset()
 	self.wallManager:reset()
 	self.lockedDoors = {}
 	self.keys = {}
-	self.riceBalls = {}
-	self.poisonRiceBalls = {}
+	self.healthPickups = {}
+	self.poisonPickups = {}
 	self.bulletManager:reset()
 	self.enemyManager:reset()
 	self.levelExit.boundedBox.x = 0
@@ -112,12 +112,12 @@ function Game:loadLevel(levelNum)
 			
 			-- Health
 			if string.find(value, "H") ~= nil then
-				table.insert(self.riceBalls, RiceBall:new(sx, sy))
+				table.insert(self.healthPickups, HealthPickup:new(sx, sy))
 			end
 			
 			-- Poison
 			if string.find(value, "O") ~= nil then
-				table.insert(self.poisonRiceBalls, PoisonRiceBall:new(sx, sy))
+				table.insert(self.poisonPickups, PoisonPickup:new(sx, sy))
 			end
 			
 			-- Enemy
@@ -300,12 +300,12 @@ function Game:draw()
 		key:draw()
 	end
 	
-	for i, riceBall in ipairs(self.riceBalls) do
-		riceBall:draw()
+	for i, healthPickup in ipairs(self.healthPickups) do
+		healthPickup:draw()
 	end
 	
-	for i, poisonRiceBall in ipairs(self.poisonRiceBalls) do
-		poisonRiceBall:draw()
+	for i, poisonPickup in ipairs(self.poisonPickups) do
+		poisonPickup:draw()
 	end
 	
 	self.bulletManager:draw()
