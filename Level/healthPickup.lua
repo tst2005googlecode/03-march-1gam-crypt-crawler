@@ -5,7 +5,9 @@ HEALTH_PICKUP_HEIGHT = 32
 
 HEALTH_PICKUP_HEALTH_VALUE = 15
 
-HEALTH_PICKUP_IMAGE = love.graphics.newImage("Asset/Graphic/HealthPickup.png")
+HEALTH_PICKUP_IMAGES = {}
+HEALTH_PICKUP_IMAGES[0] = love.graphics.newImage("Asset/Graphic/Item/HealthPickup1.png")
+HEALTH_PICKUP_IMAGES[1] = love.graphics.newImage("Asset/Graphic/Item/HealthPickup2.png")
 
 function HealthPickup:initialize(x, y)
 	self.boundedBox = {
@@ -32,6 +34,6 @@ end
 function HealthPickup:draw()
 	if self.alive then
 		love.graphics.setColor(255, 255, 255)
-		love.graphics.draw(HEALTH_PICKUP_IMAGE, self.boundedBox.x, self.boundedBox.y)
+		love.graphics.draw(HEALTH_PICKUP_IMAGES[0], self.boundedBox.x, self.boundedBox.y)
 	end
 end
