@@ -2,7 +2,9 @@ PoisonPickup = class("PoisonPickup")
 
 POISON_PICKUP_HEALTH_VALUE = 25
 
-POISON_IMAGE = love.graphics.newImage("Asset/Graphic/PoisonPickup.png")
+POISON_IMAGES = {}
+POISON_IMAGES[0] = love.graphics.newImage("Asset/Graphic/Item/PoisonPickup1.png")
+POISON_IMAGES[1] = love.graphics.newImage("Asset/Graphic/Item/PoisonPickup2.png")
 
 function PoisonPickup:initialize(x, y)
 	self.boundedBox = {
@@ -29,6 +31,6 @@ end
 function PoisonPickup:draw()
 	if self.alive then
 		love.graphics.setColor(255, 255, 255)
-		love.graphics.draw(POISON_IMAGE, self.boundedBox.x, self.boundedBox.y)
+		love.graphics.draw(POISON_IMAGES[0], self.boundedBox.x, self.boundedBox.y)
 	end
 end
