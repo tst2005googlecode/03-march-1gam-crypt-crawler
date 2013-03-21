@@ -61,7 +61,7 @@ function Player:initializeParticles()
 	self.bloodParticleSystem = pD
 	
 	-- Health Pickup Effect
-	local healthImage = love.graphics.newImage("Asset/Particle/HealthPickup.png")
+	local healthImage = love.graphics.newImage("Asset/Graphic/Item/HealthPickup1.png")
 	local pH = love.graphics.newParticleSystem(healthImage, 1)
 	
 	pH:setEmissionRate(2000)
