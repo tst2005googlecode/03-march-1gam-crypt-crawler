@@ -61,8 +61,8 @@ function Player:initializeParticles()
 	self.bloodParticleSystem = pD
 	
 	-- Health Pickup Effect
-	local pickupImage = love.graphics.newImage("Asset/Particle/HealthPickup.png")
-	local pH = love.graphics.newParticleSystem(pickupImage, 1)
+	local healthImage = love.graphics.newImage("Asset/Particle/HealthPickup.png")
+	local pH = love.graphics.newParticleSystem(healthImage, 1)
 	
 	pH:setEmissionRate(2000)
 	pH:setLifetime(0.75)
@@ -172,18 +172,18 @@ function Player:onCollision(dt, other, dx, dy)
 		
 		self.keyParticleSystem:setPosition(other.boundedBox.x + KEY_WIDTH / 2, other.boundedBox.y + KEY_HEIGHT / 2)
 		self.keyParticleSystem:start()
-	elseif instanceOf(RiceBall, other) and self.curHealth < PLAYER_HEALTH_MAX then
+	elseif instanceOf(HealthPickup, other) and self.curHealth < PLAYER_HEALTH_MAX then
 		SFX_HEALTH_PICKUP:rewind()
 		SFX_HEALTH_PICKUP:play()
-		self:setHealth(self.curHealth + RICE_BALL_HEALTH_VALUE)
+		self:setHealth(self.curHealth + HEALTH_PICKUP_HEALTH_VALUE)
 		other:pickup()
 		
-		self.healthParticleSystem:setPosition(other.boundedBox.x + RICE_BALL_WIDTH / 2, other.boundedBox.y + RICE_BALL_HEIGHT / 2)
+		self.healthParticleSystem:setPosition(other.boundedBox.x + HEALTH_PICKUP_WIDTH / 2, other.boundedBox.y + HEALTH_PICKUP_HEIGHT / 2)
 		self.healthParticleSystem:start()
-	elseif instanceOf(PoisonRiceBall, other) then
+	elseif instanceOf(PoisonPickup, other) then
 		SFX_POISON_PICKUP:rewind()
 		SFX_POISON_PICKUP:play()
-		self:setHealth(self.curHealth - POISON_RICE_BALL_HEALTH_VALUE)
+		self:setHealth(self.curHealth - POISON_PICKUP_HEALTH_VALUE)
 		other:pickup()
 		
 		self.poisonParticleSystem:setPosition(self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2)
