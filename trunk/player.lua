@@ -178,6 +178,7 @@ function Player:onCollision(dt, other, dx, dy)
 		self:setHealth(self.curHealth + HEALTH_PICKUP_HEALTH_VALUE)
 		other:pickup()
 		
+		self.healthParticleSystem:setSprite(other.image)
 		self.healthParticleSystem:setPosition(other.boundedBox.x + HEALTH_PICKUP_WIDTH / 2, other.boundedBox.y + HEALTH_PICKUP_HEIGHT / 2)
 		self.healthParticleSystem:start()
 	elseif instanceOf(PoisonPickup, other) then

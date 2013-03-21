@@ -40,7 +40,7 @@ function Bullet:onCollision(dt, other, dx, dy)
 			self.alive = false
 			self.hudObj.curScore = self.hudObj.curScore + 10
 			impact = true
-		elseif instanceOf(RiceBall, other) then
+		elseif instanceOf(HealthPickup, other) then
 			self.alive = false
 			other:pickup()
 			impact = true
