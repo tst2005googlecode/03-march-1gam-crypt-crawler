@@ -9,7 +9,7 @@ HEALTH_PICKUP_IMAGES = {}
 HEALTH_PICKUP_IMAGES[0] = love.graphics.newImage("Asset/Graphic/Item/HealthPickup1.png")
 HEALTH_PICKUP_IMAGES[1] = love.graphics.newImage("Asset/Graphic/Item/HealthPickup2.png")
 
-function HealthPickup:initialize(x, y)
+function HealthPickup:initialize(x, y, imageIndex)
 	self.boundedBox = {
 		x = x,
 		y = y,
@@ -19,6 +19,7 @@ function HealthPickup:initialize(x, y)
 	}
 	bump.addStatic(self.boundedBox)
 	
+	self.image = HEALTH_PICKUP_IMAGES[imageIndex]
 	self.alive = true
 end
 
@@ -34,6 +35,6 @@ end
 function HealthPickup:draw()
 	if self.alive then
 		love.graphics.setColor(255, 255, 255)
-		love.graphics.draw(HEALTH_PICKUP_IMAGES[0], self.boundedBox.x, self.boundedBox.y)
+		love.graphics.draw(self.image, self.boundedBox.x, self.boundedBox.y)
 	end
 end

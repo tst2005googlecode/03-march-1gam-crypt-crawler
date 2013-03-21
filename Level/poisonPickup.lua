@@ -6,7 +6,7 @@ POISON_IMAGES = {}
 POISON_IMAGES[0] = love.graphics.newImage("Asset/Graphic/Item/PoisonPickup1.png")
 POISON_IMAGES[1] = love.graphics.newImage("Asset/Graphic/Item/PoisonPickup2.png")
 
-function PoisonPickup:initialize(x, y)
+function PoisonPickup:initialize(x, y, imageIndex)
 	self.boundedBox = {
 		x = x,
 		y = y,
@@ -16,6 +16,7 @@ function PoisonPickup:initialize(x, y)
 	}
 	bump.addStatic(self.boundedBox)
 	
+	self.image = POISON_IMAGES[imageIndex]
 	self.alive = true
 end
 
@@ -31,6 +32,6 @@ end
 function PoisonPickup:draw()
 	if self.alive then
 		love.graphics.setColor(255, 255, 255)
-		love.graphics.draw(POISON_IMAGES[0], self.boundedBox.x, self.boundedBox.y)
+		love.graphics.draw(self.image, self.boundedBox.x, self.boundedBox.y)
 	end
 end
