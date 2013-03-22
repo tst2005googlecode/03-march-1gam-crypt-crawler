@@ -1,7 +1,8 @@
 GameState = class("GameState")
 
-function GameState:initialize(image, nextState)
+function GameState:initialize(image, musicTrack, nextState)
 	self.image = image
+	self.musicTrack = musicTrack
 	self.nextState = nextState
 	
 	self.doProgress = false;

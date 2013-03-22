@@ -15,7 +15,8 @@ require "hud"
 
 LAST_LEVEL = 5
 
-function Game:initialize()
+function Game:initialize(musicTrack)
+	self.musicTrack = musicTrack
 	self.levelNames = { "A", "B", "C", "D", "E" }
 	self.player = Player:new()
 	self.wallManager = WallManager:new()
