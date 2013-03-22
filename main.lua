@@ -13,14 +13,31 @@ function love.load()
 	bump.initialize(32)
 	defaultFont = love.graphics.newFont(12)
 	
-	gameStates = {}
-	gameStates[1] = GameState:new(love.graphics.newImage("Asset/Graphic/Screen/TitleScreen.png"), 0)
-	gameStates[2] = GameState:new(love.graphics.newImage("Asset/Graphic/Screen/GameOverScreen.png"), 3)
-	gameStates[3] = GameState:new(love.graphics.newImage("Asset/Graphic/Screen/CreditsScreen.png"), 1)
+	local titleMusic = love.audio.newSource("Asset/Music/TitleMusic.mp3")
+	local gamePlayMusic = love.audio.newSource("Asset/Music/GamePlayMusic.mp3")
+	local gameOverMusic = love.audio.newSource("Asset/Music/GameOverMusic.mp3")
+	local gameBeatenMusic = love.audio.newSource("Asset/Music/GameBeatenMusic.mp3")
 	
-	game = Game:new()
+	titleMusic:setLooping(true)
+	gamePlayMusic:setLooping(true)
+	gameOverMusic:setLooping(true)
+	gameBeatenMusic:setLooping(true)
+	
+	titleMusic:setVolume(0.7)
+	gamePlayMusic:setVolume(0.7)
+	gameOverMusic:setVolume(0.7)
+	gameBeatenMusic:setVolume(0.7)
+	
+	gameStates = {}
+	gameStates[1] = GameState:new(love.graphics.newImage("Asset/Graphic/Screen/TitleScreen.png"), titleMusic, 0)
+	gameStates[2] = GameState:new(love.graphics.newImage("Asset/Graphic/Screen/GameOverScreen.png"), gameOverMusic, 3)
+	gameStates[3] = GameState:new(love.graphics.newImage("Asset/Graphic/Screen/CreditsScreen.png"), gameBeatenMusic, 1)
+	
+	game = Game:new(gamePlayMusic)
 	
 	currentState = gameStates[1]
+	currentMusic = currentState.musicTrack
+	currentMusic:play()
 end
 
 function bump.collision(shapeA, shapeB, dx, dy)
@@ -51,6 +68,7 @@ function love.update(dt)
 	
 	local nextState = currentState:getNextState()
 	if nextState ~= nil then
+		currentMusic:stop()
 		if nextState == 0 then
 			currentState = game
 			game:reset()
@@ -59,6 +77,9 @@ function love.update(dt)
 			currentState = gameStates[nextState]
 			currentState:reset()
 		end
+		
+		currentMusic = currentState.musicTrack
+		currentMusic:play()
 	end
 end
 
