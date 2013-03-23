@@ -73,7 +73,10 @@ end
 function EnemyManager:updateEnemies(dt, cameraBox, playerPosition)
 	for index, enemy in ipairs(self.enemies) do
 		local onScreen = bump.doesCollide(enemy.boundedBox, cameraBox)
-		enemy:update(dt, playerPosition, onScreen)
+		
+		if enemy.alive and bump.doesCollide(enemy.boundedBox, cameraBox) then
+			enemy:update(dt, playerPosition, onScreen)
+		end
 		
 		if not enemy.alive then
 			table.remove(self.enemies, index)
