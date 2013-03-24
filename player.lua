@@ -11,6 +11,7 @@ PLAYER_SPEED = 100
 PLAYER_HEALTH_TIMER = 7
 PLAYER_HEALTH_DRAIN = 3
 PLAYER_HEALTH_MAX = 100
+PLAYER_HEALTH_START = 75
 
 PLAYER_ANIMATION_DELAY = 0.2
 
@@ -133,7 +134,7 @@ function Player:reset()
 	self.boundedBox.y = 150
 	self.velocity = { x = 0, y = 0 }
 	self.rotation = 0
-	self.curHealth = PLAYER_HEALTH_MAX
+	self.curHealth = PLAYER_HEALTH_START
 	self.healthTimer = PLAYER_HEALTH_TIMER
 	self.numKeys = 0
 	self.goToNextLevel = false
