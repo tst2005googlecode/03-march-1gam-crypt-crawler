@@ -105,8 +105,8 @@ function Player:initializeParticles()
 	pK:setSpeed(100)
 	pK:setSizes(1)
 	pK:setColors(
-		255, 196, 0, 255,
-		255, 196, 0, 0
+		255, 255, 255, 255,
+		255, 255, 255, 0
 	)
 	pK:stop()
 	self.keyParticleSystem = pK
