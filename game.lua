@@ -118,6 +118,9 @@ function Game:loadLevel(levelNum)
 			if string.find(value, "H1") ~= nil then
 				table.insert(self.healthPickups, HealthPickup:new(sx, sy, 1))
 			end
+			if string.find(value, "H2") ~= nil then
+				table.insert(self.healthPickups, HealthPickup:new(sx, sy, 2))
+			end
 			
 			-- Poison
 			if string.find(value, "O0") ~= nil then
@@ -125,6 +128,9 @@ function Game:loadLevel(levelNum)
 			end
 			if string.find(value, "O1") ~= nil then
 				table.insert(self.poisonPickups, PoisonPickup:new(sx, sy, 1))
+			end
+			if string.find(value, "O2") ~= nil then
+				table.insert(self.poisonPickups, PoisonPickup:new(sx, sy, 2))
 			end
 			
 			-- Enemy

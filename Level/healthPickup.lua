@@ -8,6 +8,7 @@ HEALTH_PICKUP_HEALTH_VALUE = 15
 HEALTH_PICKUP_IMAGES = {}
 HEALTH_PICKUP_IMAGES[0] = love.graphics.newImage("Asset/Graphic/Item/HealthPickup1.png")
 HEALTH_PICKUP_IMAGES[1] = love.graphics.newImage("Asset/Graphic/Item/HealthPickup2.png")
+HEALTH_PICKUP_IMAGES[2] = love.graphics.newImage("Asset/Graphic/Item/HealthPickup3.png")
 
 function HealthPickup:initialize(x, y, imageIndex)
 	self.boundedBox = {
