@@ -128,7 +128,7 @@ function Player:initializeParticles()
 		255, 255, 255, 0
 	)
 	pT:stop()
-	self.treasureParticleSystem = pK
+	self.treasureParticleSystem = pT
 	
 	-- Door Unlock Effect
 	local doorUnlockImage = love.graphics.newImage("Asset/Particle/DoorUnlock.png")
@@ -209,6 +209,8 @@ function Player:onCollision(dt, other, dx, dy)
 		self.poisonParticleSystem:setPosition(self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2)
 		self.poisonParticleSystem:start()
 	elseif instanceOf(TreasurePickup, other) then
+		SFX_TREASURE_PICKUP:rewind()
+		SFX_TREASURE_PICKUP:play()
 		self.hudObj.curScore = self.hudObj.curScore + TREASURE_PICKUP_POINT_VALUE
 		
 		other:pickup()
