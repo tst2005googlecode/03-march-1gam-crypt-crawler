@@ -15,7 +15,8 @@ PLAYER_HEALTH_START = 75
 
 PLAYER_ANIMATION_DELAY = 0.2
 
-function Player:initialize()
+function Player:initialize(hudObj)
+	self.hudObj = hudObj
 	self.boundedBox = {
 		x = 100,
 		y = 150,
@@ -112,6 +113,23 @@ function Player:initializeParticles()
 	pK:stop()
 	self.keyParticleSystem = pK
 	
+	-- Treasure Pickup Effect
+	local treasurePickupImage = love.graphics.newImage("Asset/Graphic/Item/TreasurePickup1.png")
+	local pT = love.graphics.newParticleSystem(treasurePickupImage, 1)
+	
+	pT:setEmissionRate(2000)
+	pT:setLifetime(0.75)
+	pT:setParticleLife(0.75)
+	pT:setDirection(math.pi * 1.5) -- Straight Up
+	pT:setSpeed(100)
+	pT:setSizes(1)
+	pT:setColors(
+		255, 255, 255, 255,
+		255, 255, 255, 0
+	)
+	pT:stop()
+	self.treasureParticleSystem = pK
+	
 	-- Door Unlock Effect
 	local doorUnlockImage = love.graphics.newImage("Asset/Particle/DoorUnlock.png")
 	local pU = love.graphics.newParticleSystem(doorUnlockImage, 1)
@@ -190,6 +208,14 @@ function Player:onCollision(dt, other, dx, dy)
 		
 		self.poisonParticleSystem:setPosition(self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2)
 		self.poisonParticleSystem:start()
+	elseif instanceOf(TreasurePickup, other) then
+		self.hudObj.curScore = self.hudObj.curScore + TREASURE_PICKUP_POINT_VALUE
+		
+		other:pickup()
+		
+		self.treasureParticleSystem:setSprite(other.image)
+		self.treasureParticleSystem:setPosition(other.boundedBox.x + TREASURE_PICKUP_WIDTH / 2, other.boundedBox.y + TREASURE_PICKUP_HEIGHT / 2)
+		self.treasureParticleSystem:start()
 	elseif instanceOf(LevelExit, other) then
 		SFX_LEVEL_PROGRESS:rewind()
 		SFX_LEVEL_PROGRESS:play()
@@ -235,6 +261,11 @@ function Player:update(dt)
 	self.poisonParticleSystem:update(dt)
 	if not self.poisonParticleSystem:isActive() then
 		self.poisonParticleSystem:reset()
+	end
+	
+	self.treasureParticleSystem:update(dt)
+	if not self.treasureParticleSystem:isActive() then
+		self.treasureParticleSystem:reset()
 	end
 	
 	self.keyParticleSystem:update(dt)
@@ -359,6 +390,7 @@ function Player:draw()
 	love.graphics.draw(self.bloodParticleSystem)
 	love.graphics.draw(self.healthParticleSystem)
 	love.graphics.draw(self.poisonParticleSystem)
+	love.graphics.draw(self.treasureParticleSystem)
 	love.graphics.draw(self.keyParticleSystem)
 	love.graphics.draw(self.doorUnlockParticleSystem)
 end

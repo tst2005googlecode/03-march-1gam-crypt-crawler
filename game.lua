@@ -7,6 +7,7 @@ require "Level/lockedDoor"
 require "Level/key"
 require "Level/healthPickup"
 require "Level/poisonPickup"
+require "Level/treasurePickup"
 require "Enemy/enemyManager"
 require "Level/levelExit"
 require "Level/levelTiles"
@@ -18,18 +19,19 @@ LAST_LEVEL = 5
 function Game:initialize(musicTrack)
 	self.musicTrack = musicTrack
 	self.levelNames = { "A", "B", "C", "D", "E" }
-	self.player = Player:new()
 	self.wallManager = WallManager:new()
 	self.lockedDoors = {}
 	self.keys = {}
 	self.healthPickups = {}
 	self.poisonPickups = {}
+	self.treasurePickups = {}
 	self.bulletManager = BulletManager:new()
 	self.enemyManager = EnemyManager:new()
 	self.levelExit = LevelExit:new()
 	
 	self.levelTiles = LevelTiles:new()
 	self.hud = HUD:new(love.graphics.newFont("Asset/Font/8bitlim.ttf", 32))
+	self.player = Player:new(self.hud)
 	self.camera = Camera:new()
 	
 	self.gameBeaten = false
@@ -51,12 +53,17 @@ function Game:reset()
 		bump.remove(poisonPickup.boundedBox)
 	end
 	
+	for i, treasurePickup in ipairs(self.treasurePickups) do
+		bump.remove(treasurePickup.boundedBox)
+	end
+	
 	self.player:reset()
 	self.wallManager:reset()
 	self.lockedDoors = {}
 	self.keys = {}
 	self.healthPickups = {}
 	self.poisonPickups = {}
+	self.treasurePickups = {}
 	self.bulletManager:reset()
 	self.enemyManager:reset()
 	self.levelExit.boundedBox.x = 0
@@ -109,6 +116,14 @@ function Game:loadLevel(levelNum)
 			-- Key
 			if string.find(value, "K") ~= nil then
 				table.insert(self.keys, Key:new(sx, sy))
+			end
+			
+			-- Treasure
+			if string.find(value, "R0") ~= nil then
+				table.insert(self.treasurePickups, TreasurePickup:new(sx, sy, 0))
+			end
+			if string.find(value, "R1") ~= nil then
+				table.insert(self.treasurePickups, TreasurePickup:new(sx, sy, 1))
 			end
 			
 			-- Health
@@ -319,6 +334,10 @@ function Game:draw()
 	
 	for i, poisonPickup in ipairs(self.poisonPickups) do
 		poisonPickup:draw()
+	end
+	
+	for i, treasurePickup in ipairs(self.treasurePickups) do
+		treasurePickup:draw()
 	end
 	
 	self.bulletManager:draw()
