@@ -71,6 +71,26 @@ function LevelTiles:initialize()
 		self.tilesetImage:getHeight()
 	)
 	
+	-- Floor 4
+	self.tileQuads[6] = love.graphics.newQuad(
+		6 * (TILE_SIZE + 1),
+		0 * TILE_SIZE,
+		TILE_SIZE + 1,
+		TILE_SIZE + 1,
+		self.tilesetImage:getWidth(),
+		self.tilesetImage:getHeight()
+	)
+	
+	-- Wall 4
+	self.tileQuads[7] = love.graphics.newQuad(
+		7 * (TILE_SIZE + 1),
+		0 * TILE_SIZE,
+		TILE_SIZE + 1,
+		TILE_SIZE + 1,
+		self.tilesetImage:getWidth(),
+		self.tilesetImage:getHeight()
+	)
+	
 	self.tilesetBatch = love.graphics.newSpriteBatch(self.tilesetImage, NUM_TILE_SPRITES)
 end
 
@@ -96,6 +116,12 @@ function LevelTiles:addTile(x, y, value)
 	end
 	if string.find(value, "T5") ~= nil then
 		self.tilesetBatch:addq(self.tileQuads[5], x, y)
+	end
+	if string.find(value, "T6") ~= nil then
+		self.tilesetBatch:addq(self.tileQuads[6], x, y)
+	end
+	if string.find(value, "T7") ~= nil then
+		self.tilesetBatch:addq(self.tileQuads[7], x, y)
 	end
 end
 
