@@ -15,6 +15,7 @@ require "camera"
 require "hud"
 
 LAST_LEVEL = 5
+TRANSITION_TIMER = 3
 
 function Game:initialize(musicTrack)
 	self.musicTrack = musicTrack
@@ -25,6 +26,9 @@ function Game:initialize(musicTrack)
 		"Headless Temple",
 		"The Last Crypt"
 	}
+	
+	self.transitionImage = love.graphics.newImage("Asset/Graphic/Screen/TransitionScreen.png")
+	self.gameFont = love.graphics.newFont("Asset/Font/8bitlim.ttf", 32)
 	
 	self.wallManager = WallManager:new()
 	self.lockedDoors = {}
@@ -43,6 +47,7 @@ function Game:initialize(musicTrack)
 	
 	self.gameBeaten = false
 	self.curLevel = 1
+	self.transitionTimer = TRANSITION_TIMER
 	
 	self.bulletPressed = false;
 end
@@ -90,6 +95,7 @@ end
 
 function Game:loadLevel(levelNum)
 	self.curLevel = levelNum
+	self.transitionTimer = TRANSITION_TIMER
 	levelFile = love.filesystem.newFile("Asset/Data/Level" .. levelNum .. ".csv")
 	levelFile:open('r')
 	fileContents = levelFile:read()
@@ -263,94 +269,105 @@ function Game:keyReleased(key)
 end
 
 function Game:update(dt)
-	local cameraBox = {
-		x = self.camera.x,
-		y = self.camera.y,
-		width = SCREEN_WIDTH,
-		height = SCREEN_HEIGHT
-	}
-	
-	self.player:update(dt)
-	self.bulletManager:update(dt, self.camera.x, self.camera.y, SCREEN_WIDTH, SCREEN_HEIGHT)
-	self.enemyManager:update(
-		dt,
-		cameraBox,
-		{ x = self.player.boundedBox.x, y = self.player.boundedBox.y }
-	)
-	
-	if self.bulletPressed then
-		self.bulletManager:fireBullet(
-			self.player.boundedBox.x + PLAYER_WIDTH / 2,
-			self.player.boundedBox.y + PLAYER_HEIGHT / 2,
-			self.player.rotation,
-			self.hud
-		)
-	end
-	
-	bump.collide()
-	
-	self.player:updateSolidCollisions(dt)
-	self.enemyManager:updateSolidCollisions(dt, cameraBox)
-	
-	BULLET_SPARK_SYSTEM:update(dt)
-	
-	if not BULLET_SPARK_SYSTEM:isActive() then
-		BULLET_SPARK_SYSTEM:reset()
-	end
-	
-	self.camera:update(self.player.boundedBox.x, self.player.boundedBox.y)
-	
-	if self.player.goToNextLevel then
-		local nextLevel = self.curLevel + 1
+	if self.transitionTimer > 0 then
+		self.transitionTimer = self.transitionTimer - dt
+	else
+		local cameraBox = {
+			x = self.camera.x,
+			y = self.camera.y,
+			width = SCREEN_WIDTH,
+			height = SCREEN_HEIGHT
+		}
 		
-		if nextLevel > LAST_LEVEL then
-			self.gameBeaten = true
-		else
-			local playerHealth = self.player.curHealth
-			local playerScore = self.hud.curScore
+		self.player:update(dt)
+		self.bulletManager:update(dt, self.camera.x, self.camera.y, SCREEN_WIDTH, SCREEN_HEIGHT)
+		self.enemyManager:update(
+			dt,
+			cameraBox,
+			{ x = self.player.boundedBox.x, y = self.player.boundedBox.y }
+		)
+		
+		if self.bulletPressed then
+			self.bulletManager:fireBullet(
+				self.player.boundedBox.x + PLAYER_WIDTH / 2,
+				self.player.boundedBox.y + PLAYER_HEIGHT / 2,
+				self.player.rotation,
+				self.hud
+			)
+		end
+		
+		bump.collide()
+		
+		self.player:updateSolidCollisions(dt)
+		self.enemyManager:updateSolidCollisions(dt, cameraBox)
+		
+		BULLET_SPARK_SYSTEM:update(dt)
+		
+		if not BULLET_SPARK_SYSTEM:isActive() then
+			BULLET_SPARK_SYSTEM:reset()
+		end
+		
+		self.camera:update(self.player.boundedBox.x, self.player.boundedBox.y)
+		
+		if self.player.goToNextLevel then
+			local nextLevel = self.curLevel + 1
 			
-			self:reset()
-			self:loadLevel(nextLevel)
-			
-			self.player.curHealth = playerHealth
-			self.hud.curScore = playerScore
+			if nextLevel > LAST_LEVEL then
+				self.gameBeaten = true
+			else
+				local playerHealth = self.player.curHealth
+				local playerScore = self.hud.curScore
+				
+				self:reset()
+				self:loadLevel(nextLevel)
+				
+				self.player.curHealth = playerHealth
+				self.hud.curScore = playerScore
+			end
 		end
 	end
 end
 
 function Game:draw()
-	self.camera:set()
+	if self.transitionTimer > 0 then
+		love.graphics.draw(self.transitionImage, 0, 0)
+		love.graphics.setColor(0, 0, 0)
+		love.graphics.setFont(self.gameFont)
+		love.graphics.print(self.levelNames[self.curLevel], 520, 80)
+	else
+		self.camera:set()
 	
-	self.levelTiles:draw()
-	self.player:draw()
-	-- self.wallManager:draw()
-	self.levelExit:draw()
-	self.enemyManager:draw({ x = self.camera.x, y = self.camera.y, width = SCREEN_WIDTH, height = SCREEN_HEIGHT })
-	
-	for i, lockedDoor in ipairs(self.lockedDoors) do
-		lockedDoor:draw()
+		self.levelTiles:draw()
+		self.player:draw()
+		-- self.wallManager:draw()
+		self.levelExit:draw()
+		self.enemyManager:draw({ x = self.camera.x, y = self.camera.y, width = SCREEN_WIDTH, height = SCREEN_HEIGHT })
+		
+		for i, lockedDoor in ipairs(self.lockedDoors) do
+			lockedDoor:draw()
+		end
+		
+		for i, key in ipairs(self.keys) do
+			key:draw()
+		end
+		
+		for i, healthPickup in ipairs(self.healthPickups) do
+			healthPickup:draw()
+		end
+		
+		for i, poisonPickup in ipairs(self.poisonPickups) do
+			poisonPickup:draw()
+		end
+		
+		for i, treasurePickup in ipairs(self.treasurePickups) do
+			treasurePickup:draw()
+		end
+		
+		self.bulletManager:draw()
+		love.graphics.draw(BULLET_SPARK_SYSTEM)
+		
+		self.camera:unset()
+		
+		self.hud:draw(self.player.curHealth, self.player.numKeys, self.levelNames[self.curLevel])
 	end
-	
-	for i, key in ipairs(self.keys) do
-		key:draw()
-	end
-	
-	for i, healthPickup in ipairs(self.healthPickups) do
-		healthPickup:draw()
-	end
-	
-	for i, poisonPickup in ipairs(self.poisonPickups) do
-		poisonPickup:draw()
-	end
-	
-	for i, treasurePickup in ipairs(self.treasurePickups) do
-		treasurePickup:draw()
-	end
-	
-	self.bulletManager:draw()
-	love.graphics.draw(BULLET_SPARK_SYSTEM)
-	
-	self.camera:unset()
-	
-	self.hud:draw(self.player.curHealth, self.player.numKeys, self.levelNames[self.curLevel])
 end
