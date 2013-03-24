@@ -5,6 +5,7 @@ POISON_PICKUP_HEALTH_VALUE = 25
 POISON_IMAGES = {}
 POISON_IMAGES[0] = love.graphics.newImage("Asset/Graphic/Item/PoisonPickup1.png")
 POISON_IMAGES[1] = love.graphics.newImage("Asset/Graphic/Item/PoisonPickup2.png")
+POISON_IMAGES[2] = love.graphics.newImage("Asset/Graphic/Item/PoisonPickup3.png")
 
 function PoisonPickup:initialize(x, y, imageIndex)
 	self.boundedBox = {
