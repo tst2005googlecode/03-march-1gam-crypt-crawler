@@ -18,7 +18,14 @@ LAST_LEVEL = 5
 
 function Game:initialize(musicTrack)
 	self.musicTrack = musicTrack
-	self.levelNames = { "A", "B", "C", "D", "E" }
+	self.levelNames = {
+		"Mistfall Castle",
+		"Vinespire Jungle",
+		"Crest Dungeon",
+		"Headless Temple",
+		"The Last Crypt"
+	}
+	
 	self.wallManager = WallManager:new()
 	self.lockedDoors = {}
 	self.keys = {}
