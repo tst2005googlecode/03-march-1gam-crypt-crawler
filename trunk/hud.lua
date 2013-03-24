@@ -33,7 +33,7 @@ function HUD:draw(playerHealth, playerNumKeys, curLevel)
 	-- Draw Level
 	love.graphics.setFont(self.hudFont)
 	love.graphics.setColor(185, 100, 0)
-	love.graphics.print("Level " .. curLevel, 340, 18)
+	love.graphics.print(curLevel, 280, 18)
 	
 	-- Draw Score
 	love.graphics.setColor(0, 130, 255)
