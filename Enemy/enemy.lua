@@ -16,6 +16,7 @@ ENEMY_PURSUE_PLAYER_DISTANCE = 96
 ENEMY_HEALTH_DRAIN_VALUE = 2
 
 ENEMY_ANIMATION_DELAY = 0.2
+ENEMY_DEATH_ANIMATION_DELAY = 0.05
 
 ENEMY_SPRITESHEET = {}
 ENEMY_SPRITESHEET[1] = love.graphics.newImage("Asset/Graphic/Enemy/EnemySpriteSheetLevel1.png")
@@ -23,6 +24,8 @@ ENEMY_SPRITESHEET[2] = love.graphics.newImage("Asset/Graphic/Enemy/EnemySpriteSh
 ENEMY_SPRITESHEET[3] = love.graphics.newImage("Asset/Graphic/Enemy/EnemySpriteSheetLevel3.png")
 ENEMY_SPRITESHEET[4] = love.graphics.newImage("Asset/Graphic/Enemy/EnemySpriteSheetLevel4.png")
 ENEMY_SPRITESHEET[5] = love.graphics.newImage("Asset/Graphic/Enemy/EnemySpriteSheetLevel5.png")
+
+ENEMY_DEATH_SPRITESHEET = love.graphics.newImage("Asset/Graphic/Enemy/EnemyDeath.png")
 
 function Enemy:initialize(x, y, level)
 	self.boundedBox = {
@@ -48,6 +51,7 @@ function Enemy:initialize(x, y, level)
 	self.doAnimation = false
 	
 	self.level = level
+	self.isDying = false
 	self.alive = true
 	
 	self:initializeAnimations()
@@ -68,33 +72,53 @@ function Enemy:initializeAnimations()
 		self.animations[level][315] = newAnimation(ENEMY_SPRITESHEET[level], 0, 32 * 7, 32, 32, ENEMY_ANIMATION_DELAY, 4)
 		self.animations[level][360] = newAnimation(ENEMY_SPRITESHEET[level], 0, 32 * 0, 32, 32, ENEMY_ANIMATION_DELAY, 4)
 	end
+	
+	self.deathAnimation = newAnimation(ENEMY_DEATH_SPRITESHEET, 0, 0, 32, 32, ENEMY_DEATH_ANIMATION_DELAY, 3)
+	self.deathAnimation:setMode("once")
 end
 
 function Enemy:onCollision(dt, other, dx, dy)
 	if instanceOf(Wall, other) or instanceOf(Enemy, other) or instanceOf(EnemySpawner, other) or instanceOf(LockedDoor, other) then
 		table.insert(self.solidCollisions, other.boundedBox)
-	elseif instanceOf(Bullet, other) or instanceOf(Player, other) then
+	elseif (instanceOf(Bullet, other) or instanceOf(Player, other)) and not self.isDying then
 		SFX_ENEMY_HIT:rewind()
 		SFX_ENEMY_HIT:play()
+		
+		self.isDying = true
+		self.deathAnimation:reset()
+		self.deathAnimation:play()
 		self.level = self.level - 1
-		if self.level <= 0 then
-			self.alive = false
+		
+		if instanceOf(Player, other) then
+			other:hitByEnemy()
 		end
 	end
 end
 
 function Enemy:update(dt, playerPosition, onScreen)
-	self.doAnimation = false
+	if self.isDying then
+		self.deathAnimation:update(dt)
+		
+		if not self.deathAnimation.playing then
+			if self.level <= 0 then
+				self.alive = false
+			else
+				self.isDying = false
+			end
+		end
+	else
+		self.doAnimation = false
 	
-	self.solidCollisions = {}
-	self:updateVelocity(dt, playerPosition)
-	self:updateRotation()
-	self:updatePosition(dt)
-	self:updateOnScreenTimers(dt, onScreen)
-	
-	if self.doAnimation and self.alive then
-		self.animations[self.level][self.rotation]:play()
-		self.animations[self.level][self.rotation]:update(dt)
+		self.solidCollisions = {}
+		self:updateVelocity(dt, playerPosition)
+		self:updateRotation()
+		self:updatePosition(dt)
+		self:updateOnScreenTimers(dt, onScreen)
+		
+		if self.doAnimation and self.alive then
+			self.animations[self.level][self.rotation]:play()
+			self.animations[self.level][self.rotation]:update(dt)
+		end
 	end
 end
 
@@ -240,6 +264,10 @@ function Enemy:draw()
 	-- love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
 	
 	if self.alive then
-		self.animations[self.level][self.rotation]:draw(self.boundedBox.x - ENEMY_SPRITE_OFFSET, self.boundedBox.y - ENEMY_SPRITE_OFFSET)
+		if self.isDying then
+			self.deathAnimation:draw(self.boundedBox.x - ENEMY_SPRITE_OFFSET, self.boundedBox.y - ENEMY_SPRITE_OFFSET)
+		else
+			self.animations[self.level][self.rotation]:draw(self.boundedBox.x - ENEMY_SPRITE_OFFSET, self.boundedBox.y - ENEMY_SPRITE_OFFSET)
+		end
 	end
 end

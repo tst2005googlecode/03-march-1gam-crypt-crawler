@@ -189,16 +189,18 @@ function Player:onCollision(dt, other, dx, dy)
 		
 		self.poisonParticleSystem:setPosition(self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2)
 		self.poisonParticleSystem:start()
-	elseif instanceOf(Enemy, other) then
-		self:setHealth(self.curHealth - ENEMY_HEALTH_DRAIN_VALUE)
-		
-		self.bloodParticleSystem:setPosition(self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2)
-		self.bloodParticleSystem:start()
 	elseif instanceOf(LevelExit, other) then
 		SFX_LEVEL_PROGRESS:rewind()
 		SFX_LEVEL_PROGRESS:play()
 		self.goToNextLevel = true
 	end
+end
+
+function Player:hitByEnemy()
+	self:setHealth(self.curHealth - ENEMY_HEALTH_DRAIN_VALUE)
+	
+	self.bloodParticleSystem:setPosition(self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2)
+	self.bloodParticleSystem:start()
 end
 
 function Player:setHealth(newHealth)
