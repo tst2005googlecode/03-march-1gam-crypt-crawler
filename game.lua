@@ -17,6 +17,10 @@ require "hud"
 LAST_LEVEL = 5
 TRANSITION_TIMER = 3
 
+CAMERA_HMARGIN = 250
+CAMERA_VMARGIN = 175
+CAMERA_SCALE = 0.8
+
 function Game:initialize(musicTrack)
 	self.musicTrack = musicTrack
 	self.levelNames = {
@@ -44,6 +48,8 @@ function Game:initialize(musicTrack)
 	self.hud = HUD:new(love.graphics.newFont("Asset/Font/8bitlim.ttf", 32))
 	self.player = Player:new(self.hud)
 	self.camera = Camera:new()
+	
+	self.camera:setScale(CAMERA_SCALE, CAMERA_SCALE)
 	
 	self.gameBeaten = false
 	self.curLevel = 1
@@ -367,6 +373,7 @@ function Game:draw()
 		love.graphics.draw(BULLET_SPARK_SYSTEM)
 		
 		self.camera:unset()
+		
 		
 		self.hud:draw(self.player.curHealth, self.player.numKeys, self.levelNames[self.curLevel])
 	end
