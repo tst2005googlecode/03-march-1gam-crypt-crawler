@@ -13,20 +13,20 @@ function Camera:initialize()
 		y2 = 0
 	}
 	
-	local followBoxHMargin = 300
-	local followBoxVMargin = 250
+	local followBoxHMargin = CAMERA_HMARGIN
+	local followBoxVMargin = CAMERA_VMARGIN
 	
 	self.followBox = {
 		left = followBoxHMargin,
 		top = followBoxVMargin,
-		right = SCREEN_WIDTH - followBoxHMargin,
-		bottom = SCREEN_HEIGHT - followBoxVMargin
+		right = SCREEN_WIDTH * CAMERA_SCALE - followBoxHMargin,
+		bottom = SCREEN_HEIGHT * CAMERA_SCALE - followBoxVMargin
 	}
 end
 
 function Camera:setBounds(x, y)
-	self.bounds.x2 = x * TILE_SIZE - SCREEN_WIDTH
-	self.bounds.y2 = y * TILE_SIZE - SCREEN_HEIGHT
+	self.bounds.x2 = x * TILE_SIZE - SCREEN_WIDTH * CAMERA_SCALE
+	self.bounds.y2 = y * TILE_SIZE - SCREEN_HEIGHT * CAMERA_SCALE
 end
 
 function Camera:reset()
