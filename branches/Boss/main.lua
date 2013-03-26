@@ -72,7 +72,7 @@ function love.update(dt)
 		if nextState == 0 then
 			currentState = game
 			game:reset()
-			game:loadLevel(1)
+			game:loadLevel(6)
 		else
 			currentState = gameStates[nextState]
 			currentState:reset()

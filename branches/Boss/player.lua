@@ -242,7 +242,7 @@ function Player:update(dt)
 	self:updateVelocity()
 	self:updateRotation()
 	self:updatePosition(dt)
-	self:updateHealthDrain(dt)
+	-- self:updateHealthDrain(dt)
 	
 	if self.doAnimation then
 		self.animations[self.rotation]:play()

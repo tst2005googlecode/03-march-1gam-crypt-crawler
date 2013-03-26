@@ -9,12 +9,13 @@ require "Level/healthPickup"
 require "Level/poisonPickup"
 require "Level/treasurePickup"
 require "Enemy/enemyManager"
+require "Enemy/boss"
 require "Level/levelExit"
 require "Level/levelTiles"
 require "camera"
 require "hud"
 
-LAST_LEVEL = 5
+LAST_LEVEL = 6
 TRANSITION_TIMER = 3
 
 CAMERA_HMARGIN = 250
@@ -28,7 +29,8 @@ function Game:initialize(musicTrack)
 		"Vinespire Jungle",
 		"Crest Dungeon",
 		"Headless Temple",
-		"The Last Crypt"
+		"The Last Crypt",
+		"Dark Chamber"
 	}
 	
 	self.transitionImage = love.graphics.newImage("Asset/Graphic/Screen/TransitionScreen.png")
@@ -47,6 +49,7 @@ function Game:initialize(musicTrack)
 	self.levelTiles = LevelTiles:new()
 	self.hud = HUD:new(love.graphics.newFont("Asset/Font/8bitlim.ttf", 32))
 	self.player = Player:new(self.hud)
+	self.boss = Boss:new(self.enemyManager)
 	self.camera = Camera:new()
 	
 	self.camera:setScale(CAMERA_SCALE, CAMERA_SCALE)
@@ -84,6 +87,7 @@ function Game:reset()
 	self.treasurePickups = {}
 	self.bulletManager:reset()
 	self.enemyManager:reset()
+	self.boss:reset()
 	self.levelExit.boundedBox.x = 0
 	self.levelExit.boundedBox.y = 0
 	bump.remove(self.levelExit.boundedBox)
@@ -102,6 +106,11 @@ end
 function Game:loadLevel(levelNum)
 	self.curLevel = levelNum
 	self.transitionTimer = TRANSITION_TIMER
+	
+	if levelNum == LAST_LEVEL then
+		self.boss:activate()
+	end
+	
 	levelFile = love.filesystem.newFile("Asset/Data/Level" .. levelNum .. ".csv")
 	levelFile:open('r')
 	fileContents = levelFile:read()
@@ -293,6 +302,10 @@ function Game:update(dt)
 			{ x = self.player.boundedBox.x, y = self.player.boundedBox.y }
 		)
 		
+		if self.boss.active then
+			self.boss:update(dt)
+		end
+		
 		if self.bulletPressed then
 			self.bulletManager:fireBullet(
 				self.player.boundedBox.x + PLAYER_WIDTH / 2,
@@ -348,6 +361,10 @@ function Game:draw()
 		-- self.wallManager:draw()
 		self.levelExit:draw()
 		self.enemyManager:draw({ x = self.camera.x, y = self.camera.y, width = SCREEN_WIDTH, height = SCREEN_HEIGHT })
+		
+		if self.boss.active then
+			self.boss:draw()
+		end
 		
 		for i, lockedDoor in ipairs(self.lockedDoors) do
 			lockedDoor:draw()

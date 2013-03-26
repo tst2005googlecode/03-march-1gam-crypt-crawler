@@ -56,7 +56,7 @@ function EnemyManager:spawnEnemies(dt, cameraBox)
 				end
 				
 				if isFree then
-					table.insert(self.enemies, Enemy:new(x, y, spawner.level))
+					self:addEnemy(x, y, spawner.level)
 				end
 				
 				spawner:resetTimer()
