@@ -280,9 +280,9 @@ function Game:update(dt)
 	else
 		local cameraBox = {
 			x = self.camera.x,
-			y = self.camera.y,
-			width = SCREEN_WIDTH,
-			height = SCREEN_HEIGHT
+			y = self.camera.y + HUD_HEIGHT * CAMERA_SCALE,
+			width = SCREEN_WIDTH * CAMERA_SCALE,
+			height = SCREEN_HEIGHT * CAMERA_SCALE - HUD_HEIGHT * CAMERA_SCALE
 		}
 		
 		self.player:update(dt)
@@ -373,7 +373,6 @@ function Game:draw()
 		love.graphics.draw(BULLET_SPARK_SYSTEM)
 		
 		self.camera:unset()
-		
 		
 		self.hud:draw(self.player.curHealth, self.player.numKeys, self.levelNames[self.curLevel])
 	end
