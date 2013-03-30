@@ -38,7 +38,6 @@ function Bullet:onCollision(dt, other, dx, dy)
 			impact = true
 		elseif instanceOf(Enemy, other) or instanceOf(EnemySpawner, other) then
 			self.alive = false
-			self.hudObj.curScore = self.hudObj.curScore + 10
 			impact = true
 		elseif instanceOf(HealthPickup, other) then
 			self.alive = false
@@ -58,6 +57,10 @@ function Bullet:onCollision(dt, other, dx, dy)
 			BULLET_SPARK_SYSTEM:start()
 		end
 	end
+end
+
+function Bullet:hitEnemyIncreaseScore()
+	self.hudObj.curScore = self.hudObj.curScore + 10
 end
 
 function Bullet:update(dt, cameraBox)
