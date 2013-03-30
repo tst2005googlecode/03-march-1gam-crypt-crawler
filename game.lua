@@ -16,11 +16,11 @@ require "camera"
 require "hud"
 
 LAST_LEVEL = 6
-TRANSITION_TIMER = 3
+TRANSITION_TIMER = 0.2
 
 CAMERA_HMARGIN = 250
 CAMERA_VMARGIN = 175
-CAMERA_SCALE = 0.8
+CAMERA_SCALE = 2.0
 
 function Game:initialize(musicTrack)
 	self.musicTrack = musicTrack
