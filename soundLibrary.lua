@@ -7,3 +7,4 @@ SFX_HEALTH_PICKUP = love.audio.newSource("Asset/Sound/healthPickup.wav", "static
 SFX_POISON_PICKUP = love.audio.newSource("Asset/Sound/poisonPickup.wav", "static")
 SFX_LEVEL_PROGRESS = love.audio.newSource("Asset/Sound/levelProgress.wav", "static")
 SFX_TREASURE_PICKUP = love.audio.newSource("Asset/Sound/treasurePickup.wav", "static")
+SFX_BOSS_BULLET_FIRE = love.audio.newSource("Asset/Sound/bossBulletFire.wav", "static")
