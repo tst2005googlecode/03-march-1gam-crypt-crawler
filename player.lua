@@ -12,7 +12,7 @@ PLAYER_HEALTH_TIMER = 10
 PLAYER_HEALTH_DRAIN = 3
 PLAYER_HEALTH_MAX = 100
 PLAYER_HEALTH_START = 75
-PLAYER_DEATH_TIMER = 2
+PLAYER_DEATH_TIMER = 4
 
 PLAYER_ANIMATION_DELAY = 0.2
 
@@ -254,43 +254,43 @@ function Player:update(dt)
 			self.animations[self.rotation]:play()
 			self.animations[self.rotation]:update(dt)
 		end
-		
-		-- Particle Effects
-		self.bloodParticleSystem:update(dt)
-		if not self.bloodParticleSystem:isActive() then
-			self.bloodParticleSystem:reset()
-		end
-		
-		self.healthParticleSystem:update(dt)
-		if not self.healthParticleSystem:isActive() then
-			self.healthParticleSystem:reset()
-		end
-		
-		self.poisonParticleSystem:update(dt)
-		if not self.poisonParticleSystem:isActive() then
-			self.poisonParticleSystem:reset()
-		end
-		
-		self.treasureParticleSystem:update(dt)
-		if not self.treasureParticleSystem:isActive() then
-			self.treasureParticleSystem:reset()
-		end
-		
-		self.keyParticleSystem:update(dt)
-		if not self.keyParticleSystem:isActive() then
-			self.keyParticleSystem:reset()
-		end
-		
-		self.doorUnlockParticleSystem:update(dt)
-		if not self.doorUnlockParticleSystem:isActive() then
-			self.doorUnlockParticleSystem:reset()
-		end
 	elseif self.deathTimer > 0 then
 		self.deathTimer = self.deathTimer - dt
 		
 		if self.deathTimer <= 0 then
 			self.isDead = true
 		end
+	end
+	
+	-- Particle Effects
+	self.bloodParticleSystem:update(dt)
+	if not self.bloodParticleSystem:isActive() then
+		self.bloodParticleSystem:reset()
+	end
+	
+	self.healthParticleSystem:update(dt)
+	if not self.healthParticleSystem:isActive() then
+		self.healthParticleSystem:reset()
+	end
+	
+	self.poisonParticleSystem:update(dt)
+	if not self.poisonParticleSystem:isActive() then
+		self.poisonParticleSystem:reset()
+	end
+	
+	self.treasureParticleSystem:update(dt)
+	if not self.treasureParticleSystem:isActive() then
+		self.treasureParticleSystem:reset()
+	end
+	
+	self.keyParticleSystem:update(dt)
+	if not self.keyParticleSystem:isActive() then
+		self.keyParticleSystem:reset()
+	end
+	
+	self.doorUnlockParticleSystem:update(dt)
+	if not self.doorUnlockParticleSystem:isActive() then
+		self.doorUnlockParticleSystem:reset()
 	end
 end
 
