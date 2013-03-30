@@ -391,7 +391,6 @@ function Game:draw()
 		
 		self.camera:unset()
 		
-		
 		self.hud:draw(self.player.curHealth, self.player.numKeys, self.levelNames[self.curLevel])
 	end
 end

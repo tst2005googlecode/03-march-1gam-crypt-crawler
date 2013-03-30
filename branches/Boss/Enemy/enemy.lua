@@ -90,7 +90,7 @@ function Enemy:onCollision(dt, other, dx, dy)
 		self.level = self.level - 1
 		
 		if instanceOf(Player, other) then
-			other:hitByEnemy()
+			other:hitByEnemy(ENEMY_HEALTH_DRAIN_VALUE)
 		end
 	end
 end

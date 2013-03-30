@@ -9,6 +9,8 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 TILE_SIZE = 32
 
+DRAW_DEBUG = true
+
 function love.load()
 	bump.initialize(32)
 	defaultFont = love.graphics.newFont(12)
@@ -87,7 +89,10 @@ function love.draw()
 	currentState:draw()
 	
 	-- Debug Stuff
-	love.graphics.setColor(255, 255, 255)
-	love.graphics.setFont(defaultFont)
-	love.graphics.print(love.mouse.getX() .. ", " .. love.mouse.getY(), 0, 0)
+	if DRAW_DEBUG then
+		love.graphics.setColor(255, 255, 255)
+		love.graphics.setFont(defaultFont)
+		love.graphics.print(love.mouse.getX() .. ", " .. love.mouse.getY(), 0, 0)
+		love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 90, 0)
+	end
 end

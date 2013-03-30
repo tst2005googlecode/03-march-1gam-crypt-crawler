@@ -1,5 +1,7 @@
 Boss = class("Boss")
 
+require "Enemy/bossBullet"
+
 BOSS_WIDTH = 128
 BOSS_HEIGHT = 128
 BOSS_SPRITE_OFFSET_X = 0
@@ -8,11 +10,14 @@ BOSS_SPRITE_OFFSET_Y = 0
 BOSS_START_X = 100
 BOSS_START_Y = 100
 
-BOSS_INVULN_TIMER = 3
+BOSS_INVULN_TIMER = 1
 BOSS_MAX_HEALTH = 100
 BOSS_HEALTH_DECREMENT = 5
 BOSS_MOVEMENT_SPEED = 150
 BOSS_MIN_DISTANCE_TO_TARGET = 30
+
+BOSS_ATTACK_TIMER_MIN = 1
+BOSS_ATTACK_TIMER_MAX = 5
 
 function Boss:initialize(enemyManager)
 	self.enemyManager = enemyManager
@@ -59,7 +64,10 @@ function Boss:initialize(enemyManager)
 	
 	self.curTarget = self.targetPoints[1]
 	
-	self.solidCollisions = {}
+	self.bossBullets = {}
+	self.bossEnemies = {}
+	
+	self.attackTimer = math.random() * (BOSS_ATTACK_TIMER_MAX - BOSS_ATTACK_TIMER_MIN) + BOSS_ATTACK_TIMER_MIN
 end
 
 function Boss:reset()
@@ -68,6 +76,16 @@ function Boss:reset()
 	
 	bump.remove(self.boundedBox)
 	self.curTarget = self.targetPoints[1]
+	
+	for i, bullet in ipairs(self.bossBullets) do
+		bump.remove(bullet.boundedBox)
+	end
+	for i, enemy in ipairs(self.bossEnemies) do
+		bump.remove(enemy.boundedBox)
+	end
+	
+	self.bossBullets = {}
+	self.bossEnemies = {}
 	
 	self.active = false
 	self.alive = true
@@ -110,6 +128,24 @@ function Boss:update(dt, playerX, playerY)
 		self:checkMovementTarget()
 		
 		self:tryAttack(dt, playerX, playerY)
+		
+		for index, enemy in ipairs(self.bossEnemies) do
+			enemy:update(dt, {x = playerX, y = playerY}, true)
+			
+			if not enemy.alive then
+				table.remove(self.bossEnemies, index)
+				bump.remove(enemy.boundedBox)
+			end
+		end
+		
+		for index, bullet in ipairs(self.bossBullets) do
+			bullet:update(dt)
+			
+			if not bullet.alive then
+				table.remove(self.bossBullets, index)
+				bump.remove(bullet.boundedBox)
+			end
+		end
 	end
 end
 
@@ -137,7 +173,19 @@ function Boss:checkMovementTarget()
 end
 
 function Boss:tryAttack(dt, playerX, playerY)
+	self.attackTimer = self.attackTimer - dt
 	
+	if self.attackTimer <= 0 then
+		self.attackTimer = math.random() * (BOSS_ATTACK_TIMER_MAX - BOSS_ATTACK_TIMER_MIN) + BOSS_ATTACK_TIMER_MIN
+		
+		table.insert(self.bossBullets, BossBullet:new(
+			self.boundedBox.x + self.boundedBox.width / 2,
+			self.boundedBox.y + self.boundedBox.height / 2,
+			playerX,
+			playerY
+		))
+	end
+	-- spawn enemy or shoot player
 end
 
 function Boss:draw()
@@ -145,8 +193,12 @@ function Boss:draw()
 		love.graphics.setColor(255, 255, 255)
 		love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
 		
+		for index, enemy in ipairs(self.bossEnemies) do
+			enemy:draw()
+		end
 		
-		
-		
+		for index, bullet in ipairs(self.bossBullets) do
+			bullet:draw()
+		end
 	end
 end
