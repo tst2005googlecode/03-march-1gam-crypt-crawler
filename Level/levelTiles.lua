@@ -3,7 +3,7 @@ LevelTiles = class("LevelTiles")
 NUM_TILES_HORIZONTAL = 32
 NUM_TILES_VERTICAL = 32
 
-NUM_TILE_SPRITES = NUM_TILES_HORIZONTAL * NUM_TILES_VERTICAL
+NUM_TILE_SPRITES = NUM_TILES_HORIZONTAL * NUM_TILES_VERTICAL + 10
 
 function LevelTiles:initialize()
 	self.tilesetImage = love.graphics.newImage("Asset/Graphic/LevelTiles.png")
@@ -111,6 +111,16 @@ function LevelTiles:initialize()
 		self.tilesetImage:getHeight()
 	)
 	
+	-- Set Piece - Skull
+	self.tileQuads[10] = love.graphics.newQuad(
+		0 * (TILE_SIZE + 1),
+		1 * TILE_SIZE + 2, 
+		TILE_SIZE,
+		TILE_SIZE,
+		self.tilesetImage:getWidth(),
+		self.tilesetImage:getHeight()
+	)
+	
 	self.tilesetBatch = love.graphics.newSpriteBatch(self.tilesetImage, NUM_TILE_SPRITES)
 end
 
@@ -119,6 +129,7 @@ function LevelTiles:reset()
 end
 
 function LevelTiles:addTile(x, y, value)
+	-- Base Tiles
 	if string.find(value, "T0") ~= nil then
 		self.tilesetBatch:addq(self.tileQuads[0], x, y)
 	end
@@ -148,6 +159,11 @@ function LevelTiles:addTile(x, y, value)
 	end
 	if string.find(value, "T9") ~= nil then
 		self.tilesetBatch:addq(self.tileQuads[9], x, y)
+	end
+	
+	-- Set Pieces
+	if string.find(value, "I0") ~= nil then
+		self.tilesetBatch:addq(self.tileQuads[10], x, y)
 	end
 end
 
