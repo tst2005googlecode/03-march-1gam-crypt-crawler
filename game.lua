@@ -221,7 +221,7 @@ function Game:loadLevel(levelNum)
 end
 
 function Game:getNextState()
-	if self.player.curHealth <= 0 then
+	if self.player.isDead then
 		return 2
 	elseif self.gameBeaten then
 		return 3
