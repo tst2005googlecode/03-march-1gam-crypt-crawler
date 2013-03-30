@@ -286,7 +286,7 @@ function Game:update(dt)
 		}
 		
 		self.player:update(dt)
-		self.bulletManager:update(dt, self.camera.x, self.camera.y, SCREEN_WIDTH, SCREEN_HEIGHT)
+		self.bulletManager:update(dt, cameraBox)
 		self.enemyManager:update(
 			dt,
 			cameraBox,

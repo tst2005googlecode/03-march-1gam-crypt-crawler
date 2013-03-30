@@ -41,9 +41,9 @@ function BulletManager:fireBullet(x, y, direction, hudObj)
 	end
 end
 
-function BulletManager:update(dt, cameraX, cameraY, cameraWidth, cameraHeight)
+function BulletManager:update(dt, cameraBox)
 	for index, bullet in ipairs(self.bullets) do
-		bullet:update(dt, cameraX, cameraY, cameraWidth, cameraHeight)
+		bullet:update(dt, cameraBox)
 		
 		if not bullet.alive then
 			table.remove(self.bullets, index)
