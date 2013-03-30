@@ -91,6 +91,8 @@ function Enemy:onCollision(dt, other, dx, dy)
 		
 		if instanceOf(Player, other) then
 			other:hitByEnemy()
+		elseif instanceOf(Bullet, other) then
+			other:hitEnemyIncreaseScore()
 		end
 	end
 end
