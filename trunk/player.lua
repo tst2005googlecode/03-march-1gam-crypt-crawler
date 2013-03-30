@@ -12,6 +12,7 @@ PLAYER_HEALTH_TIMER = 10
 PLAYER_HEALTH_DRAIN = 3
 PLAYER_HEALTH_MAX = 100
 PLAYER_HEALTH_START = 75
+PLAYER_DEATH_TIMER = 2
 
 PLAYER_ANIMATION_DELAY = 0.2
 
@@ -27,6 +28,8 @@ function Player:initialize(hudObj)
 	bump.add(self.boundedBox)
 	
 	self.image = love.graphics.newImage("Asset/Graphic/PlayerAnimation.png")
+	self.deadImage = love.graphics.newImage("Asset/Graphic/PlayerDead.png")
+	
 	self.animations = {}
 	self.animations[0] = newAnimation(self.image, 0, 32 * 0, 32, 32, PLAYER_ANIMATION_DELAY, 4)
 	self.animations[45] = newAnimation(self.image, 0, 32 * 1, 32, 32, PLAYER_ANIMATION_DELAY, 4)
@@ -155,6 +158,8 @@ function Player:reset()
 	self.curHealth = PLAYER_HEALTH_START
 	self.healthTimer = PLAYER_HEALTH_TIMER
 	self.numKeys = 0
+	self.deathTimer = PLAYER_DEATH_TIMER
+	self.isDead = false
 	self.goToNextLevel = false
 	
 	self.leftPressed = false
@@ -237,47 +242,55 @@ function Player:setHealth(newHealth)
 end
 
 function Player:update(dt)
-	self.doAnimation = false
-	self.solidCollisions = {}
-	self:updateVelocity()
-	self:updateRotation()
-	self:updatePosition(dt)
-	self:updateHealthDrain(dt)
-	
-	if self.doAnimation then
-		self.animations[self.rotation]:play()
-		self.animations[self.rotation]:update(dt)
-	end
-	
-	-- Particle Effects
-	self.bloodParticleSystem:update(dt)
-	if not self.bloodParticleSystem:isActive() then
-		self.bloodParticleSystem:reset()
-	end
-	
-	self.healthParticleSystem:update(dt)
-	if not self.healthParticleSystem:isActive() then
-		self.healthParticleSystem:reset()
-	end
-	
-	self.poisonParticleSystem:update(dt)
-	if not self.poisonParticleSystem:isActive() then
-		self.poisonParticleSystem:reset()
-	end
-	
-	self.treasureParticleSystem:update(dt)
-	if not self.treasureParticleSystem:isActive() then
-		self.treasureParticleSystem:reset()
-	end
-	
-	self.keyParticleSystem:update(dt)
-	if not self.keyParticleSystem:isActive() then
-		self.keyParticleSystem:reset()
-	end
-	
-	self.doorUnlockParticleSystem:update(dt)
-	if not self.doorUnlockParticleSystem:isActive() then
-		self.doorUnlockParticleSystem:reset()
+	if self.curHealth > 0 then
+		self.doAnimation = false
+		self.solidCollisions = {}
+		self:updateVelocity()
+		self:updateRotation()
+		self:updatePosition(dt)
+		self:updateHealthDrain(dt)
+		
+		if self.doAnimation then
+			self.animations[self.rotation]:play()
+			self.animations[self.rotation]:update(dt)
+		end
+		
+		-- Particle Effects
+		self.bloodParticleSystem:update(dt)
+		if not self.bloodParticleSystem:isActive() then
+			self.bloodParticleSystem:reset()
+		end
+		
+		self.healthParticleSystem:update(dt)
+		if not self.healthParticleSystem:isActive() then
+			self.healthParticleSystem:reset()
+		end
+		
+		self.poisonParticleSystem:update(dt)
+		if not self.poisonParticleSystem:isActive() then
+			self.poisonParticleSystem:reset()
+		end
+		
+		self.treasureParticleSystem:update(dt)
+		if not self.treasureParticleSystem:isActive() then
+			self.treasureParticleSystem:reset()
+		end
+		
+		self.keyParticleSystem:update(dt)
+		if not self.keyParticleSystem:isActive() then
+			self.keyParticleSystem:reset()
+		end
+		
+		self.doorUnlockParticleSystem:update(dt)
+		if not self.doorUnlockParticleSystem:isActive() then
+			self.doorUnlockParticleSystem:reset()
+		end
+	elseif self.deathTimer > 0 then
+		self.deathTimer = self.deathTimer - dt
+		
+		if self.deathTimer <= 0 then
+			self.isDead = true
+		end
 	end
 end
 
@@ -387,7 +400,11 @@ function Player:draw()
 	-- love.graphics.setColor(255, 255, 255)
 	-- love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
 	
-	self.animations[self.rotation]:draw(self.boundedBox.x - PLAYER_SPRITE_OFFSET, self.boundedBox.y - PLAYER_SPRITE_OFFSET)
+	if self.curHealth > 0 then
+		self.animations[self.rotation]:draw(self.boundedBox.x - PLAYER_SPRITE_OFFSET, self.boundedBox.y - PLAYER_SPRITE_OFFSET)
+	else
+		love.graphics.draw(self.deadImage, self.boundedBox.x, self.boundedBox.y)
+	end
 	
 	love.graphics.draw(self.bloodParticleSystem)
 	love.graphics.draw(self.healthParticleSystem)
