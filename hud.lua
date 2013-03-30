@@ -21,7 +21,7 @@ function HUD:draw(playerHealth, playerNumKeys, curLevel)
 	-- Draw Keys
 	love.graphics.setColor(255, 255, 255)
 	for i = 0, playerNumKeys - 1 do
-		love.graphics.draw(KEY_IMAGE, 32 + i * 40, 14)
+		love.graphics.draw(KEY_IMAGE, 32 + i * 40, 10)
 	end
 	
 	-- Draw Health
