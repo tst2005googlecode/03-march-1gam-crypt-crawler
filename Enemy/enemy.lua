@@ -107,17 +107,20 @@ function Enemy:update(dt, playerPosition, onScreen)
 			end
 		end
 	else
-		self.doAnimation = false
-	
-		self.solidCollisions = {}
-		self:updateVelocity(dt, playerPosition)
-		self:updateRotation()
-		self:updatePosition(dt)
 		self:updateOnScreenTimers(dt, onScreen)
 		
-		if self.doAnimation and self.alive then
-			self.animations[self.level][self.rotation]:play()
-			self.animations[self.level][self.rotation]:update(dt)
+		if onScreen then
+			self.doAnimation = false
+			
+			self.solidCollisions = {}
+			self:updateVelocity(dt, playerPosition)
+			self:updateRotation()
+			self:updatePosition(dt)
+			
+			if self.doAnimation and self.alive then
+				self.animations[self.level][self.rotation]:play()
+				self.animations[self.level][self.rotation]:update(dt)
+			end
 		end
 	end
 end
