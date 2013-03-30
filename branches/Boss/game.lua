@@ -20,7 +20,7 @@ TRANSITION_TIMER = 0.2
 
 CAMERA_HMARGIN = 250
 CAMERA_VMARGIN = 175
-CAMERA_SCALE = 2.0
+CAMERA_SCALE = 0.8
 
 function Game:initialize(musicTrack)
 	self.musicTrack = musicTrack
@@ -303,7 +303,7 @@ function Game:update(dt)
 		)
 		
 		if self.boss.active then
-			self.boss:update(dt)
+			self.boss:update(dt, self.player.boundedBox.x, self.player.boundedBox.y)
 		end
 		
 		if self.bulletPressed then
@@ -328,7 +328,7 @@ function Game:update(dt)
 		
 		self.camera:update(self.player.boundedBox.x, self.player.boundedBox.y)
 		
-		if self.player.goToNextLevel then
+		if self.player.goToNextLevel or (self.boss.active and not self.boss.alive) then
 			local nextLevel = self.curLevel + 1
 			
 			if nextLevel > LAST_LEVEL then
