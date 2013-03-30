@@ -225,8 +225,8 @@ function Player:onCollision(dt, other, dx, dy)
 	end
 end
 
-function Player:hitByEnemy()
-	self:setHealth(self.curHealth - ENEMY_HEALTH_DRAIN_VALUE)
+function Player:hitByEnemy(value)
+	self:setHealth(self.curHealth - value)
 	
 	self.bloodParticleSystem:setPosition(self.boundedBox.x + PLAYER_WIDTH / 2, self.boundedBox.y + PLAYER_HEIGHT / 2)
 	self.bloodParticleSystem:start()
