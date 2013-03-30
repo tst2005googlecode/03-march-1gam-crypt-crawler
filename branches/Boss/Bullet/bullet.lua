@@ -36,10 +36,18 @@ function Bullet:onCollision(dt, other, dx, dy)
 		if instanceOf(Wall, other) then
 			self.alive = false
 			impact = true
-		elseif instanceOf(Enemy, other) or instanceOf(EnemySpawner, other) then
+		elseif instanceOf(Enemy, other) or instanceOf(EnemySpawner, other) or instanceOf(Boss, other) then
 			self.alive = false
-			self.hudObj.curScore = self.hudObj.curScore + 10
-			impact = true
+			
+			if instanceOf(Boss, other) then
+				if other.invulnTimer <= 0 then
+					self.hudObj.curScore = self.hudObj.curScore + 10
+					impact = true
+				end
+			else
+				self.hudObj.curScore = self.hudObj.curScore + 10
+				impact = true
+			end
 		elseif instanceOf(HealthPickup, other) then
 			self.alive = false
 			other:pickup()
