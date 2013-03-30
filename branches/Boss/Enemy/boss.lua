@@ -184,6 +184,9 @@ function Boss:tryAttack(dt, playerX, playerY)
 			playerX,
 			playerY
 		))
+		
+		SFX_BOSS_BULLET_FIRE:rewind()
+		SFX_BOSS_BULLET_FIRE:play()
 	end
 	-- spawn enemy or shoot player
 end

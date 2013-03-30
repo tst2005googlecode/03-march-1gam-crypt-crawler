@@ -1,8 +1,10 @@
 BossBullet = class("BossBullet")
 
-BOSS_BULLET_WIDTH = 64
-BOSS_BULLET_HEIGHT = 64
+BOSS_BULLET_WIDTH = 32
+BOSS_BULLET_HEIGHT = 32
 BOSS_BULLET_OFFSET = 0
+BOSS_BULLET_SPRITE_WIDTH = 64
+BOSS_BULLET_SPRITE_HEIGHT = 64
 
 BOSS_BULLET_SPEED = 300
 BOSS_BULLET_HEALTH_DRAIN_VALUE = 10
@@ -11,8 +13,8 @@ BOSS_BULLET_IMAGE = love.graphics.newImage("Asset/Graphic/Enemy/BossBullet.png")
 
 function BossBullet:initialize(startX, startY, targetX, targetY)
 	self.boundedBox = {
-		x = startX,
-		y = startY,
+		x = startX - BOSS_BULLET_WIDTH / 2,
+		y = startY - BOSS_BULLET_HEIGHT / 2,
 		width = BOSS_BULLET_WIDTH,
 		height = BOSS_BULLET_HEIGHT,
 		parent = self
@@ -54,13 +56,16 @@ function BossBullet:draw()
 	if self.alive then
 		love.graphics.draw(
 			BOSS_BULLET_IMAGE,
-			self.boundedBox.x - BOSS_BULLET_OFFSET,
-			self.boundedBox.y - BOSS_BULLET_OFFSET,
+			self.boundedBox.x - BOSS_BULLET_OFFSET + BOSS_BULLET_WIDTH / 2,
+			self.boundedBox.y - BOSS_BULLET_OFFSET + BOSS_BULLET_HEIGHT / 2,
 			self.rotation,
 			1,
 			1,
-			BOSS_BULLET_WIDTH / 2,
-			BOSS_BULLET_HEIGHT / 2
+			BOSS_BULLET_SPRITE_WIDTH / 2,
+			BOSS_BULLET_SPRITE_HEIGHT / 2
 		)
+		
+		love.graphics.setColor(255, 0, 255, 150)
+		love.graphics.rectangle("fill", self.boundedBox.x, self.boundedBox.y, self.boundedBox.width, self.boundedBox.height)
 	end
 end
