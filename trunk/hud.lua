@@ -26,9 +26,9 @@ function HUD:draw(playerHealth, playerNumKeys, curLevel)
 	
 	-- Draw Health
 	love.graphics.setColor(85, 0, 0)
-	love.graphics.rectangle("fill", 31, 31, 202, 18)
+	love.graphics.rectangle("fill", 31, 25, 202, 18)
 	love.graphics.setColor(0, 90, 0)
-	love.graphics.rectangle("fill", 32, 32, playerHealth * 2, 16)
+	love.graphics.rectangle("fill", 32, 26, playerHealth * 2, 16)
 	
 	-- Draw Level
 	love.graphics.setFont(self.hudFont)
