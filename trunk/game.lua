@@ -343,9 +343,6 @@ end
 function Game:draw()
 	if self.transitionTimer > 0 then
 		love.graphics.draw(self.transitionImage[self.curLevel], 0, 0)
-		love.graphics.setColor(0, 0, 0)
-		love.graphics.setFont(self.gameFont)
-		love.graphics.print(self.levelNames[self.curLevel], 520, 80)
 	else
 		self.camera:set()
 	
