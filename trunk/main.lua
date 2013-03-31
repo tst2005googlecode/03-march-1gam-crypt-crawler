@@ -32,7 +32,7 @@ function love.load()
 	
 	gameStates = {}
 	gameStates[1] = GameState:new(love.graphics.newImage("Asset/Graphic/Screen/TitleScreen.png"), titleMusic, 0)
-	gameStates[2] = GameState:new(love.graphics.newImage("Asset/Graphic/Screen/GameOverScreen.png"), gameOverMusic, 3)
+	gameStates[2] = GameState:new(love.graphics.newImage("Asset/Graphic/Screen/GameOverScreen.png"), gameOverMusic, 1)
 	gameStates[3] = GameState:new(love.graphics.newImage("Asset/Graphic/Screen/CreditsScreen.png"), gameBeatenMusic, 1)
 	
 	game = Game:new(gamePlayMusic)
