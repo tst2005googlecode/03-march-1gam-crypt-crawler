@@ -31,7 +31,13 @@ function Game:initialize(musicTrack)
 		"The Last Crypt"
 	}
 	
-	self.transitionImage = love.graphics.newImage("Asset/Graphic/Screen/TransitionScreen.png")
+	self.transitionImage = {}
+	self.transitionImage[1] = love.graphics.newImage("Asset/Graphic/Screen/Level Transitions/Level1.png")
+	self.transitionImage[2] = love.graphics.newImage("Asset/Graphic/Screen/Level Transitions/Level2.png")
+	self.transitionImage[3] = love.graphics.newImage("Asset/Graphic/Screen/Level Transitions/Level3.png")
+	self.transitionImage[4] = love.graphics.newImage("Asset/Graphic/Screen/Level Transitions/Level4.png")
+	self.transitionImage[5] = love.graphics.newImage("Asset/Graphic/Screen/Level Transitions/Level5.png")
+	
 	self.gameFont = love.graphics.newFont("Asset/Font/8bitlim.ttf", 32)
 	
 	self.wallManager = WallManager:new()
@@ -336,7 +342,7 @@ end
 
 function Game:draw()
 	if self.transitionTimer > 0 then
-		love.graphics.draw(self.transitionImage, 0, 0)
+		love.graphics.draw(self.transitionImage[self.curLevel], 0, 0)
 		love.graphics.setColor(0, 0, 0)
 		love.graphics.setFont(self.gameFont)
 		love.graphics.print(self.levelNames[self.curLevel], 520, 80)
